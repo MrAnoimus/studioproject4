@@ -39,6 +39,9 @@
     <ClCompile Include="PlayState.cpp">
       <Filter>Source Files\GameState_CPP</Filter>
     </ClCompile>
+    <ClCompile Include="Citizen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -64,6 +67,9 @@
     </ClInclude>
     <ClInclude Include="PlayState.h">
       <Filter>Header Files\GameState_H</Filter>
+    </ClInclude>
+    <ClInclude Include="Citizen.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
