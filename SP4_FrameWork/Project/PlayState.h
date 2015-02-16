@@ -5,6 +5,11 @@
 #include <mmsystem.h>
 #include "GameState.h"
 #include "freeType.h"
+
+//sound
+#include <irrKlang.h>
+using namespace irrklang;
+
 class CPlayState : public CGameState
 {
 	//Mouse Info
@@ -69,6 +74,12 @@ class CPlayState : public CGameState
 
 		freetype::font_data our_font;
 		int value;
+
+		// The sound engine vroom vroom
+		ISoundEngine* theSoundEngine;
+		//game sounds
+		ISound* mouseLC;
+
 
 };
 #endif
