@@ -142,6 +142,7 @@ void CPlayState::KeyboardUp(unsigned char key, int x, int y)
 
 bool CPlayState::Init()
 {
+	TheCitizen=new Citizen();
 	//camera data and init
 	theCamera = new Camera( Camera::LAND_CAM );
 	theCamera->SetPosition( 400, 300, -500.0 );
@@ -210,7 +211,7 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 
 void CPlayState::Update(CGameStateManager* theGSM) 
 {
-
+	TheCitizen->MoodUpdate(Citizen::EATINGPLACE,Citizen::FOOD);
 }
 void CPlayState::DrawQuad(float x , float y ,float z,int R,int G, int B,float Alpha)
 {

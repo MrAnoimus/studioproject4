@@ -84,6 +84,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Citizen.cpp" />
     <ClCompile Include="FreeType.cpp" />
     <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="IntroState.cpp" />
@@ -92,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Citizen.h" />
     <ClInclude Include="FreeType.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateManager.h" />
