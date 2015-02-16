@@ -229,20 +229,20 @@ void CIntroState::Draw(CGameStateManager* theGSM)
 
 	//able to use push pop to move rotate change color if you want
 	glPushMatrix();
-		if(hoverStart){glScalef(1.05,1,1);glColor3f(0,1,0);}
-		else{glScalef(1,1,1);glColor3f(1,1,1);}
+		if(hoverStart){glColor3f(0,1,0);}
+		else{glColor3f(1,1,1);}
 		print(our_font, 250, 150, "Start Game", cnt1);
 	glPopMatrix();
 
 	glPushMatrix();
-		if(hoverSet){glScalef(1.05,1,1);glColor3f(0,1,0);}
-		else{glScalef(1,1,1);glColor3f(1,1,1);}
+		if(hoverSet){glColor3f(0,1,0);}
+		else{glColor3f(1,1,1);}
 		print(our_font, 300, 100, "Setting", cnt1);
 	glPopMatrix();
 
 	glPushMatrix();
-		if(hoverExit){glScalef(1.05,1,1);glColor3f(0,1,0);}
-		else{glScalef(1,1,1);glColor3f(1,1,1);}
+		if(hoverExit){glColor3f(0,1,0);}
+		else{glColor3f(1,1,1);}
 		print(our_font, 350, 40, "Exit", cnt1);
 	glPopMatrix();
 
