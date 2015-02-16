@@ -92,28 +92,21 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				//int randnum = rand()%3;
 
 				if(mouseLC == NULL)
-				{
-					mouseLC = theSoundEngine->play2D ("SFX/click.mp3", false, true);
-				}
-
-				else
-				{
-					mouseLC == NULL;
-					mouseLC = theSoundEngine->play2D ("SFX/click.mp3", false, true);	
-				}
-					if(mouseLC->getIsPaused() == true)
-				{
-				mouseLC->setIsPaused(false);
-				}
-
-				else if(mouseLC->isFinished() == true)
-				{
-				mouseLC = NULL;
-				}
+				{mouseLC = theSoundEngine->play2D ("SFX/LMBdown.wav", false, true);}
+				else{mouseLC == NULL;
+					mouseLC = theSoundEngine->play2D ("SFX/LMBdown.wav", false, true);}
+				if(mouseLC->getIsPaused() == true){mouseLC->setIsPaused(false);}
+				else if(mouseLC->isFinished() == true){mouseLC = NULL;}
 			}
 			else
 			{
 				cout << "LMB is up" << endl;
+				if(mouseLC == NULL)
+				{mouseLC = theSoundEngine->play2D ("SFX/LMBup.wav", false, true);}
+				else{mouseLC == NULL;
+					mouseLC = theSoundEngine->play2D ("SFX/LMBup.wav", false, true);}
+				if(mouseLC->getIsPaused() == true){mouseLC->setIsPaused(false);}
+				else if(mouseLC->isFinished() == true){mouseLC = NULL;}
 			}
 		}
 
