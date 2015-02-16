@@ -71,11 +71,38 @@ void CIntroState::MouseMove(int x , int y)
 		glutWarpPointer(mouseInfo.lastX, mouseInfo.lastY);
 	}
 
-	if (mouseInfo.lastX >=240 && mouseInfo.lastX <= 563 && mouseInfo.lastY >= 410 && mouseInfo.lastY <=450){hoverStart = true;}
+	if (mouseInfo.lastX >=240 && mouseInfo.lastX <= 563 && mouseInfo.lastY >= 410 && mouseInfo.lastY <=450)
+	{hoverStart = true;
+		if(menuGUIstart == NULL)
+			{menuGUIstart = theSoundEngine->play2D ("SFX/misc_menu_2.wav", false, true);}		
+		else{menuGUIstart == NULL;
+			 menuGUIstart = theSoundEngine->play2D ("SFX/misc_menu_2.wav", false, true);}
+		if(menuGUIstart->getIsPaused() == true){menuGUIstart->setIsPaused(false);}
+		else if(menuGUIstart->isFinished() == true){menuGUIstart = NULL;}
+	}
 	else{hoverStart = false;}
-	if (mouseInfo.lastX >=300 && mouseInfo.lastX <= 500 && mouseInfo.lastY >= 460 && mouseInfo.lastY <=500){hoverSet = true;}
+
+	if (mouseInfo.lastX >=300 && mouseInfo.lastX <= 500 && mouseInfo.lastY >= 460 && mouseInfo.lastY <=500)
+	{hoverSet = true;
+		if(menuGUIset == NULL)
+			{menuGUIset = theSoundEngine->play2D ("SFX/misc_menu_3.wav", false, true);}		
+		else{menuGUIset == NULL;
+			 menuGUIset = theSoundEngine->play2D ("SFX/misc_menu_3.wav", false, true);}
+		if(menuGUIset->getIsPaused() == true){menuGUIset->setIsPaused(false);}
+		else if(menuGUIset->isFinished() == true){menuGUIset = NULL;}
+	}
 	else{hoverSet = false;}
-	if (mouseInfo.lastX >=350 && mouseInfo.lastX <= 465 && mouseInfo.lastY >= 520 && mouseInfo.lastY <=560){hoverExit = true;}
+
+
+	if (mouseInfo.lastX >=350 && mouseInfo.lastX <= 465 && mouseInfo.lastY >= 520 && mouseInfo.lastY <=560)
+	{hoverExit = true;
+		if(menuGUIexit == NULL)
+			{menuGUIexit = theSoundEngine->play2D ("SFX/misc_menu_4.wav", false, true);}		
+		else{menuGUIexit == NULL;
+			 menuGUIexit = theSoundEngine->play2D ("SFX/misc_menu_4.wav", false, true);}
+		if(menuGUIexit->getIsPaused() == true){menuGUIexit->setIsPaused(false);}
+		else if(menuGUIexit->isFinished() == true){menuGUIexit = NULL;}
+	}
 	else{hoverExit = false;}
 }
 void CIntroState::MouseClick(int button , int state , int x , int y)
@@ -136,15 +163,22 @@ bool CIntroState::Init()
 	//mouseInfo.lastX = glutGet(GLUT_WINDOW_WIDTH) >> 1;
 	//mouseInfo.lastY = glutGet(GLUT_WINDOW_HEIGHT) >> 1;
 
+	//Sound Engine init
+	theSoundEngine = createIrrKlangDevice();
+	if (!theSoundEngine){return false;}
+
 	hoverStart = false;
 	hoverSet = false;
 	hoverExit = false;
+
 
 	return true;
 }
 void CIntroState::Cleanup()
 {
 	//cout << "CIntroState::Cleanup\n" << endl;
+	//Delete sound engine
+	if (theSoundEngine != NULL){theSoundEngine->drop();}
 }
 
 void CIntroState::Pause()

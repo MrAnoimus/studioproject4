@@ -168,10 +168,7 @@ bool CPlayState::Init()
 
 	//Sound Engine init
 	theSoundEngine = createIrrKlangDevice();
-	if (!theSoundEngine)
-	{
-		return false;
-	}
+	if (!theSoundEngine){return false;}
 
 	return true;
 }
@@ -180,10 +177,7 @@ void CPlayState::Cleanup()
 	//cout << "CMenuState::Cleanup\n" << endl;
 
 	//Delete sound engine
-	if (theSoundEngine != NULL)
-	{
-		theSoundEngine->drop();
-	}
+	if (theSoundEngine != NULL){theSoundEngine->drop();}
 
 }
 void CPlayState::Pause()

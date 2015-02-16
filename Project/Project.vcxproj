@@ -104,11 +104,9 @@
     <ClInclude Include="IntroState.h" />
     <ClInclude Include="LoadTGA.h" />
     <ClInclude Include="PlayState.h" />
-
     <ClInclude Include="ResultState.h" />
     <ClInclude Include="SettingState.h" />
     <ClInclude Include="TextureImage.h" />
-
     <ClInclude Include="Tile.h" />
     <ClInclude Include="vector3D.h" />
   </ItemGroup>
