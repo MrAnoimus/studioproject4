@@ -5,6 +5,9 @@ using namespace std;
 //#include "introstate.h"
 #include "PlayState.h"
 
+//for random num
+#include <time.h>
+
 CPlayState CPlayState::thePlayState;
 void CPlayState::changeSize(int w, int h)
 {
@@ -19,7 +22,7 @@ void CPlayState::changeSize(int w, int h)
 	// Reset the coordinate system before modifying
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	
+
 	// Set the viewport to be the entire window
 	glViewport(0, 0, w, h);
 
@@ -67,15 +70,37 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 {
 	switch (button)
 	{
-		case GLUT_LEFT_BUTTON:
+	case GLUT_LEFT_BUTTON:
 		{
 			mouseInfo.mLButtonUp = state;
 			mouseInfo.lastX = x;
 			mouseInfo.lastY = y;
 			cout<<mouseInfo.lastX<<","<<mouseInfo.lastY<<endl;
+			//int randnum = rand()%3;
 
-		}break;
-		case GLUT_RIGHT_BUTTON:
+			if(mouseLC == NULL)
+			{
+				mouseLC = theSoundEngine->play2D ("SFX/click.mp3", false, true);
+			}
+
+			else
+			{
+				mouseLC == NULL;
+				mouseLC = theSoundEngine->play2D ("SFX/click.mp3", false, true);	
+			}
+				if(mouseLC->getIsPaused() == true)
+			{
+			mouseLC->setIsPaused(false);
+			}
+
+			else if(mouseLC->isFinished() == true)
+			{
+			mouseLC = NULL;
+			}
+		}
+
+		break;
+	case GLUT_RIGHT_BUTTON:
 		{
 			mouseInfo.mRButtonUp = state;
 			if(state == GLUT_DOWN)
@@ -88,10 +113,10 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				{
 					theCamera->isZoomIn = true;
 				}
-				
+
 			}
 		}break;
-		case GLUT_MIDDLE_BUTTON:
+	case GLUT_MIDDLE_BUTTON:
 		{
 
 		}break;
@@ -127,11 +152,27 @@ bool CPlayState::Init()
 		myKeys[i] = false;
 	}
 	//
+
+
+	//Sound Engine init
+	theSoundEngine = createIrrKlangDevice();
+	if (!theSoundEngine)
+	{
+		return false;
+	}
+
 	return true;
 }
 void CPlayState::Cleanup()
 {
 	//cout << "CMenuState::Cleanup\n" << endl;
+
+	//Delete sound engine
+	if (theSoundEngine != NULL)
+	{
+		theSoundEngine->drop();
+	}
+
 }
 void CPlayState::Pause()
 {
@@ -168,46 +209,46 @@ void CPlayState::DrawQuad(float x , float y ,float z,int R,int G, int B,float Al
 	glDisable(GL_TEXTURE_2D);
 	//outline
 	glPushMatrix();
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glPushMatrix();
-			glLineWidth(2);
-			glTranslatef(x,y,z);
-			glColor4f(0, 0, 0, 1.0f);
-			glBegin(GL_LINE_LOOP);
-				glTexCoord2f(0,0);
-				glVertex2f(-50,50);
-				glTexCoord2f(1,0);
-				glVertex2f(50,50);
-				glTexCoord2f(1,1);
-				glVertex2f(50,-50);
-				glTexCoord2f(0,1);
-				glVertex2f(-50,-50);				
-			glEnd();
-		glPopMatrix();
-		glDisable(GL_BLEND);
-		glColor3f(1,1,1);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glPushMatrix();
+	glLineWidth(2);
+	glTranslatef(x,y,z);
+	glColor4f(0, 0, 0, 1.0f);
+	glBegin(GL_LINE_LOOP);
+	glTexCoord2f(0,0);
+	glVertex2f(-50,50);
+	glTexCoord2f(1,0);
+	glVertex2f(50,50);
+	glTexCoord2f(1,1);
+	glVertex2f(50,-50);
+	glTexCoord2f(0,1);
+	glVertex2f(-50,-50);				
+	glEnd();
+	glPopMatrix();
+	glDisable(GL_BLEND);
+	glColor3f(1,1,1);
 	glPopMatrix();
 	//quad
 	glPushMatrix();
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glPushMatrix();
-			glTranslatef(x,y,z);
-			glColor4f(R,G,B,Alpha);
-			glBegin(GL_QUADS);
-				glTexCoord2f(0,0);
-				glVertex2f(-50,50);
-				glTexCoord2f(1,0);
-				glVertex2f(50,50);
-				glTexCoord2f(1,1);
-				glVertex2f(50,-50);
-				glTexCoord2f(0,1);
-				glVertex2f(-50,-50);			
-			glEnd();
-		glPopMatrix();
-		glDisable(GL_BLEND);
-		glColor3f(1,1,1);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glPushMatrix();
+	glTranslatef(x,y,z);
+	glColor4f(R,G,B,Alpha);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0,0);
+	glVertex2f(-50,50);
+	glTexCoord2f(1,0);
+	glVertex2f(50,50);
+	glTexCoord2f(1,1);
+	glVertex2f(50,-50);
+	glTexCoord2f(0,1);
+	glVertex2f(-50,-50);			
+	glEnd();
+	glPopMatrix();
+	glDisable(GL_BLEND);
+	glColor3f(1,1,1);
 	glPopMatrix();
 }
 
@@ -218,22 +259,22 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	theCamera->Update();
 
 	glPushMatrix();
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glBindTexture (GL_TEXTURE_2D, BackgroundTexture.texID);
-		glPushMatrix();
-			glBegin(GL_QUADS);
-				glTexCoord2f(1,1);
-				glVertex2f(0,600);
-				glTexCoord2f(0,1);
-				glVertex2f(800,600);
-				glTexCoord2f(0,0);
-				glVertex2f(800,0);
-				glTexCoord2f(1,0);
-				glVertex2f(0,0);				
-			glEnd();
-		glPopMatrix();
-		glDisable(GL_BLEND);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBindTexture (GL_TEXTURE_2D, BackgroundTexture.texID);
+	glPushMatrix();
+	glBegin(GL_QUADS);
+	glTexCoord2f(1,1);
+	glVertex2f(0,600);
+	glTexCoord2f(0,1);
+	glVertex2f(800,600);
+	glTexCoord2f(0,0);
+	glVertex2f(800,0);
+	glTexCoord2f(1,0);
+	glVertex2f(0,0);				
+	glEnd();
+	glPopMatrix();
+	glDisable(GL_BLEND);
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 
@@ -242,7 +283,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 
 	// Enable 2D text display and HUD
 	theCamera->SetHUD( true);
-		print(our_font,0,550,"Cam posX :%f\nCam posY :%f\nCam PosZ:%f",theCamera->GetPosition().x ,theCamera->GetPosition().y,theCamera->GetPosition().z);
+	print(our_font,0,550,"Cam posX :%f\nCam posY :%f\nCam PosZ:%f",theCamera->GetPosition().x ,theCamera->GetPosition().y,theCamera->GetPosition().z);
 	print(our_font,0,150,"BURDEN");
 	theCamera->SetHUD( false );
 	// Flush off any entity which is not drawn yet, so that we maintain the frame rate.
@@ -279,8 +320,8 @@ bool CPlayState::LoadTGA(TextureImage *texture, char *filename)			// Loads A TGA
 
 	texture->width  = header[1] * 256 + header[0];			// Determine The TGA Width	(highbyte*256+lowbyte)
 	texture->height = header[3] * 256 + header[2];			// Determine The TGA Height	(highbyte*256+lowbyte)
-    
- 	if(	texture->width	<=0	||								// Is The Width Less Than Or Equal To Zero
+
+	if(	texture->width	<=0	||								// Is The Width Less Than Or Equal To Zero
 		texture->height	<=0	||								// Is The Height Less Than Or Equal To Zero
 		(header[4]!=24 && header[4]!=32))					// Is The TGA 24 or 32 Bit?
 	{
@@ -319,7 +360,7 @@ bool CPlayState::LoadTGA(TextureImage *texture, char *filename)			// Loads A TGA
 	glBindTexture(GL_TEXTURE_2D, texture[0].texID);			// Bind Our Texture
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);	// Linear Filtered
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);	// Linear Filtered
-	
+
 	if (texture[0].bpp==24)									// Was The TGA 24 Bits
 	{
 		type=GL_RGB;										// If So Set The 'type' To GL_RGB
