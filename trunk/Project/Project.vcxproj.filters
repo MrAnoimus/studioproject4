@@ -1,40 +1,88 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="FreeType.cpp" />
-    <ClCompile Include="GameStateManager.cpp" />
-    <ClCompile Include="IntroState.cpp" />
-    <ClCompile Include="LoadTGA.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="PlayState.cpp" />
-    <ClCompile Include="ResultState.cpp" />
-    <ClCompile Include="SettingState.cpp" />
-    <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Citizen.cpp">
       <Filter>Citizen</Filter>
     </ClCompile>
+    <ClCompile Include="GameStateManager.cpp">
+      <Filter>GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="IntroState.cpp">
+      <Filter>GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayState.cpp">
+      <Filter>GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultState.cpp">
+      <Filter>GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingState.cpp">
+      <Filter>GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>MISC</Filter>
+    </ClCompile>
+    <ClCompile Include="FreeType.cpp">
+      <Filter>MISC</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadTGA.cpp">
+      <Filter>MISC</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>MISC</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="FreeType.h" />
-    <ClInclude Include="GameState.h" />
-    <ClInclude Include="GameStateManager.h" />
-    <ClInclude Include="IntroState.h" />
-    <ClInclude Include="LoadTGA.h" />
-    <ClInclude Include="PlayState.h" />
-    <ClInclude Include="ResultState.h" />
-    <ClInclude Include="SettingState.h" />
-    <ClInclude Include="TextureImage.h" />
-    <ClInclude Include="Tile.h" />
-    <ClInclude Include="vector3D.h" />
     <ClInclude Include="Citizen.h">
       <Filter>Citizen</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateManager.h">
+      <Filter>GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="IntroState.h">
+      <Filter>GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayState.h">
+      <Filter>GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultState.h">
+      <Filter>GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingState.h">
+      <Filter>GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="vector3D.h">
+      <Filter>MISC</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>MISC</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeType.h">
+      <Filter>MISC</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadTGA.h">
+      <Filter>MISC</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureImage.h">
+      <Filter>MISC</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>MISC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Citizen">
       <UniqueIdentifier>{1c1ab943-2ede-4d3e-af45-8deda7274bcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameState">
+      <UniqueIdentifier>{8230ef78-0748-4630-9d2e-55f031d71bfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MISC">
+      <UniqueIdentifier>{282c7d58-5ba7-44e6-b79e-bfae8230bda4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
