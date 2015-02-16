@@ -10,7 +10,7 @@
 #include <GL/glut.h>
 #include "vector3D.h"
 #include "Camera.h"
-#include "TextureImage.h"
+#include "LoadTGA.h"
 //#include "freeType.h"
 
 using namespace std;

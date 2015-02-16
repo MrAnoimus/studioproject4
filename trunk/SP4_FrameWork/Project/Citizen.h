@@ -1,7 +1,10 @@
 #include <iostream>
 #include <string>
+#include "LoadTGA.h"
+//#include "TextureImage.h"
 #pragma once
 
+using namespace std;
 class Citizen
 {
 
@@ -25,12 +28,15 @@ public:
 		WORKPLACE,
 		NOTHING
 	};
+	TextureImage Moody;
+	
 	void MoodUpdate( 
 		NearByBuilding TheBuildings,
 		Favourite TheFavourite);
 	std::string GetMood();
 	Citizen(void);
 	~Citizen(void);
+	void Draw(void);
 private:
 	bool happy;
 	float HappinessLevels;

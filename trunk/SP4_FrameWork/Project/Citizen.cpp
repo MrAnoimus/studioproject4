@@ -8,7 +8,8 @@ Citizen::Citizen(void)
 	,happy(false)
 	,HappinessLevels(0)
 {
-
+	glEnable(GL_TEXTURE_2D);
+	LoadTGA(&Moody,"Textures/Smiley.tga");
 }
 
 
@@ -16,8 +17,7 @@ Citizen::~Citizen(void)
 {
 }
 
-void Citizen::MoodUpdate(NearByBuilding TheBuilding, Favourite TheFavourite
-	)
+void Citizen::MoodUpdate(NearByBuilding TheBuilding, Favourite TheFavourite)
 {
 	switch(TheFavourite)
 	{
@@ -113,4 +113,25 @@ std::string Citizen::GetMood(void)
 		return "DEFAULT";
 		break;
 	}
+}
+
+void Citizen::Draw()
+{
+	glPushMatrix();
+	glTranslatef(0,0,-1);
+	
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D,Moody.id);
+	glBegin(GL_QUADS);
+				glTexCoord2f(0,0);
+				glVertex2f(-50,50);
+				glTexCoord2f(1,0);
+				glVertex2f(50,50);
+				glTexCoord2f(1,1);
+				glVertex2f(50,-50);
+				glTexCoord2f(0,1);
+				glVertex2f(-50,-50);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+	glPopMatrix();
 }

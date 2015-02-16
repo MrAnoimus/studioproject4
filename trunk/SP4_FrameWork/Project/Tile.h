@@ -1,6 +1,6 @@
 #pragma once
 #include "vector3D.h"
-#include "TextureImage.h"
+#include "LoadTGA.h"
 
 class Tile
 {
