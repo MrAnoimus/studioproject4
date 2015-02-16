@@ -67,7 +67,7 @@ class CPlayState : public CGameState
 
 	private:
 		static CPlayState thePlayState;
-		bool LoadTGA(TextureImage *texture, char *filename);
+		
 		// The camera
 		Camera* theCamera;
 		// Camera

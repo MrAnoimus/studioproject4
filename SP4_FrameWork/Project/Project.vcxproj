@@ -88,6 +88,7 @@
     <ClCompile Include="FreeType.cpp" />
     <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="IntroState.cpp" />
+    <ClCompile Include="LoadTGA.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PlayState.cpp" />
     <ClCompile Include="ResultState.cpp" />
@@ -101,10 +102,13 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateManager.h" />
     <ClInclude Include="IntroState.h" />
+    <ClInclude Include="LoadTGA.h" />
     <ClInclude Include="PlayState.h" />
+
     <ClInclude Include="ResultState.h" />
     <ClInclude Include="SettingState.h" />
     <ClInclude Include="TextureImage.h" />
+
     <ClInclude Include="Tile.h" />
     <ClInclude Include="vector3D.h" />
   </ItemGroup>

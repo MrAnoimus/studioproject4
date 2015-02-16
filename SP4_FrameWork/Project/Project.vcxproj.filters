@@ -19,6 +19,9 @@
     <Filter Include="Source Files\GameState_CPP">
       <UniqueIdentifier>{39d20145-061e-49b8-a4c8-dac5ec3a27e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Citizen">
+      <UniqueIdentifier>{dcf63062-0bce-4718-97c5-15b860edcf96}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -42,6 +45,14 @@
     <ClCompile Include="Tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< .mine
+    <ClCompile Include="Citizen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadTGA.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+=======
     <ClCompile Include="Citizen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -51,6 +62,7 @@
     <ClCompile Include="SettingState.cpp">
       <Filter>Source Files\GameState_CPP</Filter>
     </ClCompile>
+>>>>>>> .r13
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -60,9 +72,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FreeType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureImage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameStateManager.h">
@@ -80,6 +89,14 @@
     <ClInclude Include="Tile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< .mine
+    <ClInclude Include="Citizen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadTGA.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+=======
     <ClInclude Include="Citizen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -89,5 +106,6 @@
     <ClInclude Include="SettingState.h">
       <Filter>Header Files\GameState_H</Filter>
     </ClInclude>
+>>>>>>> .r13
   </ItemGroup>
 </Project>
