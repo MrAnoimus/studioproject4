@@ -70,6 +70,13 @@ void CIntroState::MouseMove(int x , int y)
 		mouseInfo.lastY = (600 >> 1);
 		glutWarpPointer(mouseInfo.lastX, mouseInfo.lastY);
 	}
+
+	if (mouseInfo.lastX >=240 && mouseInfo.lastX <= 563 && mouseInfo.lastY >= 410 && mouseInfo.lastY <=450){hoverStart = true;}
+	else{hoverStart = false;}
+	if (mouseInfo.lastX >=300 && mouseInfo.lastX <= 500 && mouseInfo.lastY >= 460 && mouseInfo.lastY <=500){hoverSet = true;}
+	else{hoverSet = false;}
+	if (mouseInfo.lastX >=350 && mouseInfo.lastX <= 465 && mouseInfo.lastY >= 520 && mouseInfo.lastY <=560){hoverExit = true;}
+	else{hoverExit = false;}
 }
 void CIntroState::MouseClick(int button , int state , int x , int y)
 {
@@ -128,6 +135,11 @@ bool CIntroState::Init()
 	mouseInfo.lastY = 600 >> 1;
 	//mouseInfo.lastX = glutGet(GLUT_WINDOW_WIDTH) >> 1;
 	//mouseInfo.lastY = glutGet(GLUT_WINDOW_HEIGHT) >> 1;
+
+	hoverStart = false;
+	hoverSet = false;
+	hoverExit = false;
+
 	return true;
 }
 void CIntroState::Cleanup()
@@ -216,10 +228,23 @@ void CIntroState::Draw(CGameStateManager* theGSM)
 	glPopMatrix();
 
 	//able to use push pop to move rotate change color if you want
-	print(our_font, 250, 150, "Start Game", cnt1);
-	print(our_font, 300, 100, "Setting", cnt1);
-	print(our_font, 350, 40, "Exit", cnt1);
+	glPushMatrix();
+		if(hoverStart){glScalef(1.05,1,1);glColor3f(0,1,0);}
+		else{glScalef(1,1,1);glColor3f(1,1,1);}
+		print(our_font, 250, 150, "Start Game", cnt1);
+	glPopMatrix();
 
+	glPushMatrix();
+		if(hoverSet){glScalef(1.05,1,1);glColor3f(0,1,0);}
+		else{glScalef(1,1,1);glColor3f(1,1,1);}
+		print(our_font, 300, 100, "Setting", cnt1);
+	glPopMatrix();
+
+	glPushMatrix();
+		if(hoverExit){glScalef(1.05,1,1);glColor3f(0,1,0);}
+		else{glScalef(1,1,1);glColor3f(1,1,1);}
+		print(our_font, 350, 40, "Exit", cnt1);
+	glPopMatrix();
 
 	glDisable(GL_TEXTURE_2D);
 	drawFPS();

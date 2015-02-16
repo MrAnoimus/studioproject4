@@ -42,6 +42,8 @@ class CIntroState : public CGameState
 			return &theIntroState;
 		}
 
+		bool hoverStart, hoverSet, hoverExit; 
+
 	protected:
 		CIntroState() :theCamera(NULL)
 		{
