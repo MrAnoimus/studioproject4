@@ -9,6 +9,16 @@ using namespace std;
 #include <time.h>
 
 CPlayState CPlayState::thePlayState;
+
+int Map[ROWS][COLS]={
+	{219,219,219,219,219,219,219,219},
+	{219,'.','.','.','.','.','.',219},
+	{219,'.','.','.','.','.','.',219},
+	{219,219,219,'.',219,219,219,219},
+	{219,'.','.','.','.','.','.',219},
+	{219,219,219,219,219,219,219,219}
+};
+
 void CPlayState::changeSize(int w, int h)
 {
 
@@ -161,7 +171,7 @@ bool CPlayState::Init()
 		myKeys[i] = false;
 	}
 	//
-
+	myTile.Init();
 
 	//Sound Engine init
 	theSoundEngine = createIrrKlangDevice();
@@ -213,82 +223,60 @@ void CPlayState::Update(CGameStateManager* theGSM)
 {
 	TheCitizen->MoodUpdate(Citizen::EATINGPLACE,Citizen::FOOD);
 }
-void CPlayState::DrawQuad(float x , float y ,float z,int R,int G, int B,float Alpha)
+void CPlayState::DrawTileContent()
 {
-	glDisable(GL_TEXTURE_2D);
-	//outline
-	glPushMatrix();
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glPushMatrix();
-	glLineWidth(2);
-	glTranslatef(x,y,z);
-	glColor4f(0, 0, 0, 1.0f);
-	glBegin(GL_LINE_LOOP);
-	glTexCoord2f(0,0);
-	glVertex2f(-50,50);
-	glTexCoord2f(1,0);
-	glVertex2f(50,50);
-	glTexCoord2f(1,1);
-	glVertex2f(50,-50);
-	glTexCoord2f(0,1);
-	glVertex2f(-50,-50);				
-	glEnd();
-	glPopMatrix();
-	glDisable(GL_BLEND);
-	glColor3f(1,1,1);
-	glPopMatrix();
-	//quad
-	glPushMatrix();
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glPushMatrix();
-	glTranslatef(x,y,z);
-	glColor4f(R,G,B,Alpha);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0,0);
-	glVertex2f(-50,50);
-	glTexCoord2f(1,0);
-	glVertex2f(50,50);
-	glTexCoord2f(1,1);
-	glVertex2f(50,-50);
-	glTexCoord2f(0,1);
-	glVertex2f(-50,-50);			
-	glEnd();
-	glPopMatrix();
-	glDisable(GL_BLEND);
-	glColor3f(1,1,1);
-	glPopMatrix();
+	for(int y = 0; y < ROWS; y += 1)
+	{
+		for(int x = 0; x < COLS; x += 1)
+		{
+			if(Map[y][x] == 'G')
+			{
+				myTile.Draw(x*100,y*100);
+			}
+			if(Map[y][x] == 'S')
+			{
+				myTile.Draw(x*100,y*100);
+			}
+			if(Map[y][x] == '*')
+			{
+				myTile.Draw(x*100,y*100);
+			}
+			if(Map[y][x] == 219)
+			{
+				myTile.Draw(myTile.GetPosition().x + (x*100),myTile.GetPosition().y+(y*100));
+			}
+		}
+	}
 }
-
 void CPlayState::Draw(CGameStateManager* theGSM) 
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	theCamera->Update();
 
+	glEnable(GL_TEXTURE_2D);
 	glPushMatrix();
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBindTexture (GL_TEXTURE_2D, BackgroundTexture.texID);
-	glPushMatrix();
-	glBegin(GL_QUADS);
-	glTexCoord2f(1,1);
-	glVertex2f(0,600);
-	glTexCoord2f(0,1);
-	glVertex2f(800,600);
-	glTexCoord2f(0,0);
-	glVertex2f(800,0);
-	glTexCoord2f(1,0);
-	glVertex2f(0,0);				
-	glEnd();
-	glPopMatrix();
-	glDisable(GL_BLEND);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBindTexture (GL_TEXTURE_2D, BackgroundTexture.texID);
+		glPushMatrix();
+			glBegin(GL_QUADS);
+				glTexCoord2f(1,1);
+				glVertex2f(0,600);
+				glTexCoord2f(0,1);
+				glVertex2f(800,600);
+				glTexCoord2f(0,0);
+				glVertex2f(800,0);
+				glTexCoord2f(1,0);
+				glVertex2f(0,0);				
+			glEnd();
+		glPopMatrix();
+		glDisable(GL_BLEND);
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 
-	//draw one quad to test only
-	DrawQuad(50,50,-1,value,1,1,1);
+
+	DrawTileContent();
 
 	// Enable 2D text display and HUD
 	theCamera->SetHUD( true);

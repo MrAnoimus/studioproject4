@@ -5,10 +5,16 @@
 #include <mmsystem.h>
 #include "GameState.h"
 #include "freeType.h"
+#include "Citizen.h"
+#include "Tile.h"
 
 //sound
 #include <irrKlang.h>
 using namespace irrklang;
+
+// Declare Number Of Rows & Columns For Map Grid
+const int ROWS = 6;	
+const int COLS = 8;
 
 class CPlayState : public CGameState
 {
@@ -21,6 +27,7 @@ class CPlayState : public CGameState
 		int  lastX, lastY;
 	}theMouseInfo;
 	public:
+		Citizen* TheCitizen;
 		bool Init();
 		void Cleanup();
 
@@ -32,6 +39,7 @@ class CPlayState : public CGameState
 		//
 		void DrawQuad(float x , float y,float z,int R,int G, int B , float Alpha);
 		//
+		void DrawTileContent();
 		void Draw(CGameStateManager* theGSM);
 
 		void changeSize(int w, int h);
@@ -80,6 +88,6 @@ class CPlayState : public CGameState
 		//game sounds
 		ISound* mouseLC;
 
-
+		Tile myTile;
 };
 #endif

@@ -51,7 +51,25 @@ void Tile::Draw(float x , float y)
 		glPushMatrix();
 			glTranslatef(x,y,this->Position.z);
 			glColor4f(this->Color.x,this->Color.y,this->Color.z,Alpha);
-			//glBindTexture (GL_TEXTURE_2D, TileTexture.texID);
+			//switch(Type)
+			//{
+			//	case GRASS:
+			//	{
+			//		//glBindTexture (GL_TEXTURE_2D, TileTexture.texID);
+			//	}break;
+			//	case SOIL:
+			//	{
+			//		//glBindTexture (GL_TEXTURE_2D, TileTexture.texID);
+			//	}break;
+			//	case ROCK:
+			//	{
+			//		//glBindTexture (GL_TEXTURE_2D, TileTexture.texID);
+			//	}break;
+			//	case BAD:
+			//	{
+			//		//glBindTexture (GL_TEXTURE_2D, TileTexture.texID);
+			//	}break;
+			//}
 			glBegin(GL_QUADS);
 				glTexCoord2f(0,0);
 				glVertex2f(-Size,Size);
@@ -60,7 +78,7 @@ void Tile::Draw(float x , float y)
 				glTexCoord2f(1,1);
 				glVertex2f(Size,-Size);
 				glTexCoord2f(0,1);
-				glVertex2f(-Size,-Size);			
+				glVertex2f(-Size,-Size);
 			glEnd();
 		glPopMatrix();
 	glPopMatrix();
