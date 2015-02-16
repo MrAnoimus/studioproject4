@@ -72,30 +72,38 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 	{
 	case GLUT_LEFT_BUTTON:
 		{
-			mouseInfo.mLButtonUp = state;
-			mouseInfo.lastX = x;
-			mouseInfo.lastY = y;
-			cout<<mouseInfo.lastX<<","<<mouseInfo.lastY<<endl;
-			//int randnum = rand()%3;
-
-			if(mouseLC == NULL)
+			if (state == GLUT_DOWN)
 			{
-				mouseLC = theSoundEngine->play2D ("SFX/click.mp3", false, true);
-			}
+				mouseInfo.mLButtonUp = state;
+				mouseInfo.lastX = x;
+				mouseInfo.lastY = y;
+				cout<<mouseInfo.lastX<<","<<mouseInfo.lastY<<endl;
+				cout<< "LMB is down" <<endl;
+				//int randnum = rand()%3;
 
+				if(mouseLC == NULL)
+				{
+					mouseLC = theSoundEngine->play2D ("SFX/click.mp3", false, true);
+				}
+
+				else
+				{
+					mouseLC == NULL;
+					mouseLC = theSoundEngine->play2D ("SFX/click.mp3", false, true);	
+				}
+					if(mouseLC->getIsPaused() == true)
+				{
+				mouseLC->setIsPaused(false);
+				}
+
+				else if(mouseLC->isFinished() == true)
+				{
+				mouseLC = NULL;
+				}
+			}
 			else
 			{
-				mouseLC == NULL;
-				mouseLC = theSoundEngine->play2D ("SFX/click.mp3", false, true);	
-			}
-				if(mouseLC->getIsPaused() == true)
-			{
-			mouseLC->setIsPaused(false);
-			}
-
-			else if(mouseLC->isFinished() == true)
-			{
-			mouseLC = NULL;
+				cout << "LMB is up" << endl;
 			}
 		}
 
