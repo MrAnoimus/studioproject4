@@ -3,6 +3,8 @@
 #include "PlayState.h"
 #include "introstate.h"
 #include <mmsystem.h>
+#include "SettingState.h"
+#include "PlayState.h"
 
 CIntroState CIntroState::theIntroState;
 
@@ -78,6 +80,10 @@ void CIntroState::MouseClick(int button , int state , int x , int y)
 			mouseInfo.mLButtonUp = state;
 			mouseInfo.lastX = x;
 			mouseInfo.lastY = y;
+			if (mouseInfo.lastX >=350 && mouseInfo.lastX <= 465 && mouseInfo.lastY >= 520 && mouseInfo.lastY <=560)
+			{
+				exit(0);
+			}
 		}break;
 		case GLUT_RIGHT_BUTTON:
 		{
@@ -143,7 +149,15 @@ void CIntroState::HandleEvents(CGameStateManager* theGSM)
 {
 	if (mouseInfo.mLButtonUp) 
 	{
-		theGSM->ChangeState( CPlayState::Instance() );
+		if (mouseInfo.lastX >=240 && mouseInfo.lastX <= 563 && mouseInfo.lastY >= 410 && mouseInfo.lastY <=450)
+		{
+			theGSM->ChangeState( CPlayState::Instance() );
+		}
+
+		if (mouseInfo.lastX >=300 && mouseInfo.lastX <= 500 && mouseInfo.lastY >= 460 && mouseInfo.lastY <=500)
+		{
+			theGSM->ChangeState( CSettingState::Instance() );
+		}
 	}
 	if(myKeys[27]==true)
 	{
@@ -202,8 +216,10 @@ void CIntroState::Draw(CGameStateManager* theGSM)
 	glPopMatrix();
 
 	//able to use push pop to move rotate change color if you want
-	print(our_font, 150, 150, "CLICK ON SCREEN", cnt1);
-	print(our_font, 260, 100, "TO START", cnt1);
+	print(our_font, 250, 150, "Start Game", cnt1);
+	print(our_font, 300, 100, "Setting", cnt1);
+	print(our_font, 350, 40, "Exit", cnt1);
+
 
 	glDisable(GL_TEXTURE_2D);
 	drawFPS();
