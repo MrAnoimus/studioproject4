@@ -33,33 +33,32 @@ void Camera::Reset(void)
 
 void Camera::Update()
 {
-	gluLookAt(	Position.x, Position.y, Position.z, 
-				Position.x + Forward.x, Position.y + Forward.y, Position.z + Forward.z, 
-				0.0f,1.0f,0.0f);
+	gluLookAt(Position.x, Position.y, Position.z, Position.x + Forward.x, Position.y + Forward.y, Position.z + Forward.z, 0.0f,1.0f,0.0f);
+	speed = 4.0f;
 	//camera zoom
 	if(isZoomOut)
 	{
-		ZoomOut(-800,0.1f);
+		ZoomOut(-800,speed);
 	}
 	if(isZoomIn)
 	{
-		ZoomIn(-500,0.1f);
+		ZoomIn(-500,speed);
 	}
 	if(isPanLeft)
 	{
-		PanLeft(800,0.2f);
+		PanLeft(800,speed);
 	}
 	if(isPanRight)
 	{
-		PanRight(0,0.2f);
+		PanRight(0,speed);
 	}
 	if(isPanUp)
 	{
-		PanUp(600,0.2f);
+		PanUp(600,speed);
 	}
 	if(isPanDown)
 	{
-		PanDown(0,0.2f);
+		PanDown(0,speed);
 	}
 }
 

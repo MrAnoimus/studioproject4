@@ -14,7 +14,7 @@ class Camera
 		Vector3D Along;
 		Vector3D Up;
 		Vector3D Forward;
-
+		float speed;
 	public:
 		Camera(void);
 		Camera(CAM_TYPE ct);
