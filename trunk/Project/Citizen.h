@@ -9,6 +9,7 @@ class Citizen
 {
 
 public:
+	bool active;
 	enum Favourite
 	{
 		FOOD,
