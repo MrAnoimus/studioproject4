@@ -275,6 +275,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 				}
 			}
 }
+
 void CPlayState::DrawTileContent()
 {
 	for(int y = 0; y < ROWS; y += 1)

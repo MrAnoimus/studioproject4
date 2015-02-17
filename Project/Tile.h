@@ -20,13 +20,14 @@ class Tile
 		float Alpha;
 		int Size;
 	public:
+		
 		Tile(void);
 		~Tile(void);
 		TextureImage TileTexture;
 		void Init();
 		void Update();
 		void Draw(float x , float y);
-
+		Vector3D GetCenterPoint(void);
 		int GetType();
 		bool GetEmpty();
 		Vector3D GetPosition();

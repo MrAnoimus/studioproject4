@@ -27,10 +27,14 @@ void Tile::Draw(float x , float y)
 {
 	//glEnable(GL_TEXTURE_2D);
 	//black outline
+	
 	glPushMatrix();
 		glPushMatrix();
 			glLineWidth(2);
 			glTranslatef(x,y,this->Position.z);
+			glPushMatrix();
+			glutSolidSphere(20,20,20);
+			glPopMatrix();
 			glColor4f(0, 0, 0, 1.0f);
 			glBegin(GL_LINE_LOOP);
 				glTexCoord2f(0,0);
@@ -118,4 +122,10 @@ void Tile::SetPosition(Vector3D pos)
 void Tile::SetColor(Vector3D c)
 {
 	Color = c;
+}
+
+Vector3D Tile::GetCenterPoint(void)
+{
+	return NULL;
+	//return Vector3D(x,y,z);
 }
