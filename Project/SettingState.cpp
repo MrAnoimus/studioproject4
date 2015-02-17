@@ -85,7 +85,7 @@ void CSettingState::MouseClick(int button , int state , int x , int y)
 {
 	switch (button)
 	{
-		case GLUT_LEFT_BUTTON:
+	case GLUT_LEFT_BUTTON:
 		{
 			mouseInfo.mLButtonUp = state;
 			mouseInfo.lastX = x;
@@ -94,29 +94,25 @@ void CSettingState::MouseClick(int button , int state , int x , int y)
 
 			if (mouseInfo.lastX >=290 && mouseInfo.lastX <= 350 && mouseInfo.lastY >= 150 && mouseInfo.lastY <=200)
 			{
-
-			
-				 if  ( volume > 0.2)
-				{
-					
-						volume -= 0.10f;
-						cout << volume << "\n";
-						mouseInfo.mLButtonUp = false;
-					
-				}
-
-			}
-
-				if (mouseInfo.lastX >=665 && mouseInfo.lastX <= 735 && mouseInfo.lastY >= 160 && mouseInfo.lastY <=185)
-			{
 				if (volume <= 0.8)
 				{
 					volume += 0.10;
 					cout << volume << "\n";
 					mouseInfo.mLButtonUp = false;
 				}
+
 			}
-		
+
+			if (mouseInfo.lastX >=665 && mouseInfo.lastX <= 735 && mouseInfo.lastY >= 160 && mouseInfo.lastY <=185)
+			{
+				if  ( volume > 0.2)
+				{		
+					volume -= 0.10f;
+					cout << volume << "\n";
+					mouseInfo.mLButtonUp = false;		
+				}
+			}
+
 		}break;
 		case GLUT_RIGHT_BUTTON:
 		{
@@ -215,8 +211,7 @@ void CSettingState::HandleEvents(CGameStateManager* theGSM)
 			theGSM->ChangeState( CIntroState::Instance() );
 			mouseInfo.mLButtonUp = false;
 		}
-
-
+		mouseInfo.mLButtonUp = false;	
 	}
 	if(myKeys[27]==true)
 	{
