@@ -129,6 +129,7 @@ void CIntroState::MouseClick(int button , int state , int x , int y)
 				exit(0);
 			}
 
+
 		}break;
 		case GLUT_RIGHT_BUTTON:
 		{
@@ -232,6 +233,7 @@ void CIntroState::HandleEvents(CGameStateManager* theGSM)
 			theGSM->ChangeState( CSettingState::Instance() );
 			mouseInfo.mLButtonUp = false;
 		}
+		mouseInfo.mLButtonUp = false;
 	}
 	if(myKeys[27]==true)
 	{
