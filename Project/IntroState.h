@@ -95,6 +95,7 @@ class CIntroState : public CGameState
 		// realtime loop control - frequency
 		float frequency;
 		bool myKeys[255];
+		double volume;
 		theMouseInfo mouseInfo;
 		TextureImage BackgroundTexture;	
 

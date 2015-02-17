@@ -70,7 +70,7 @@ class CPlayState : public CGameState
 
 	private:
 		static CPlayState thePlayState;
-		
+	
 		// The camera
 		Camera* theCamera;
 		// Camera
@@ -90,6 +90,7 @@ class CPlayState : public CGameState
 		ISoundEngine* theSoundEngine;
 		//game sounds
 		ISound* mouseLC;
+		float volume;
 
 		Tile myTile;
 };

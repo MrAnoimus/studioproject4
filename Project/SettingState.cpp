@@ -3,8 +3,20 @@
 #include "PlayState.h"
 #include "introstate.h"
 #include <mmsystem.h>
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+extern "C" 
+{
+	#include "lua.h"
+	#include "lualib.h"
+	#include "lauxlib.h"
+}
+
 
 CSettingState CSettingState::theSettingState;
+
 
 void CSettingState::changeSize(int w, int h)
 {
@@ -75,17 +87,40 @@ void CSettingState::MouseClick(int button , int state , int x , int y)
 	{
 		case GLUT_LEFT_BUTTON:
 		{
-			if (mouseInfo.lastX >=240 && mouseInfo.lastX <= 563 && mouseInfo.lastY >= 410 && mouseInfo.lastY <=450)
-			{
-				mouseInfo.mLButtonUp = state;
-			}
+			mouseInfo.mLButtonUp = state;
 			mouseInfo.lastX = x;
 			mouseInfo.lastY = y;
 			cout<<mouseInfo.lastX<<","<<mouseInfo.lastY<<endl;
+
+			if (mouseInfo.lastX >=290 && mouseInfo.lastX <= 350 && mouseInfo.lastY >= 150 && mouseInfo.lastY <=200)
+			{
+
+			
+				 if  ( volume > 0.2)
+				{
+					
+						volume -= 0.10f;
+						cout << volume << "\n";
+						mouseInfo.mLButtonUp = false;
+					
+				}
+
+			}
+
+				if (mouseInfo.lastX >=665 && mouseInfo.lastX <= 735 && mouseInfo.lastY >= 160 && mouseInfo.lastY <=185)
+			{
+				if (volume <= 0.8)
+				{
+					volume += 0.10;
+					cout << volume << "\n";
+					mouseInfo.mLButtonUp = false;
+				}
+			}
+		
 		}break;
 		case GLUT_RIGHT_BUTTON:
 		{
-
+			cout << volume;
 		}break;
 		case GLUT_MIDDLE_BUTTON:
 		{
@@ -95,13 +130,30 @@ void CSettingState::MouseClick(int button , int state , int x , int y)
 }
 bool CSettingState::Init()
 {
-	cout << "CSettingState::Init\n" << endl;
-	
+
+	//Read a value from the lua text file
+	lua_State *L2 = lua_open();
+	luaL_openlibs(L2);
+	if (luaL_loadfile(L2, "LuaScript/test.lua") || lua_pcall(L2, 0, 0, 0))
+	{
+		printf("error: %s", lua_tostring(L2, -1));
+		return -1;
+	}
+	lua_getglobal(L2,"VOLUME");
+	double VOLUME = lua_tonumber(L2, 1);
+
+	volume =  VOLUME;
+	lua_close(L2);
 	theCamera = new Camera( Camera::LAND_CAM );
 	theCamera->SetPosition( 0.0, 2.0, -5.0 );
 	theCamera->SetDirection( 0.0, 0.0, 1.0 );
 
+
 	LoadTGA(&BackgroundTexture,"Textures/menu.tga");
+	LoadTGA(&Icons[0],"Textures/plus.tga");
+	LoadTGA(&Icons[1],"Textures/minus.tga");
+	LoadTGA(&Icons[2],"Textures/bar.tga");
+
 	our_font.init("Fonts/FFF_Tusj.TTF", 42);
 
 	//  The number of frames
@@ -146,8 +198,25 @@ void CSettingState::Resume()
 void CSettingState::HandleEvents(CGameStateManager* theGSM)
 {
 	if (mouseInfo.mLButtonUp) 
-	{
-		theGSM->ChangeState( CPlayState::Instance() );
+	{		
+		if (mouseInfo.lastX >=250 && mouseInfo.lastX <= 390 && mouseInfo.lastY >= 500 && mouseInfo.lastY <=580)
+		{	
+			ofstream file;
+			file.open("LuaScript/test.lua");
+			file <<"VOLUME = ";
+			file << volume;
+			file.close();
+			theGSM->ChangeState( CIntroState::Instance() );
+			mouseInfo.mLButtonUp = false;
+		}
+
+		if (mouseInfo.lastX >=420 && mouseInfo.lastX <= 550 && mouseInfo.lastY >= 510 && mouseInfo.lastY <=580)
+		{
+			theGSM->ChangeState( CIntroState::Instance() );
+			mouseInfo.mLButtonUp = false;
+		}
+
+
 	}
 	if(myKeys[27]==true)
 	{
@@ -164,6 +233,7 @@ void CSettingState::Update(CGameStateManager* theGSM)
 	//cout << "CSettingState::Update\n" << endl;
 	//MouseMove(mouseInfo.lastX,mouseInfo.lastY);
 	//std::cout<<mouseInfo.lastX<<","<<mouseInfo.lastY<<std::endl;
+	
 }
 
 void CSettingState::Draw(CGameStateManager* theGSM) 
@@ -206,10 +276,77 @@ void CSettingState::Draw(CGameStateManager* theGSM)
 		//glDisable(GL_BLEND);
 	glPopMatrix();
 
-	//able to use push pop to move rotate change color if you want
-	/*print(our_font, 250, 150, "Start Game", cnt1);
-	print(our_font, 300, 100, "Setting", cnt1);
-	print(our_font, 350, 40, "Exit", cnt1);*/
+	drawvolumebars();
+
+	//plus
+	glPushMatrix();
+		glBindTexture (GL_TEXTURE_2D, Icons[0].texID);
+		glTranslatef(320,175,0);
+		glScalef(0.5,0.5,0);
+		draw();
+	glPopMatrix();
+
+	//minus
+	glPushMatrix();
+		glBindTexture (GL_TEXTURE_2D, Icons[1].texID);
+		glTranslatef(700,175,0);
+		glScalef(0.65,0.20,0);
+		draw();
+	glPopMatrix();
+
+	//plus
+	glPushMatrix();
+		glBindTexture (GL_TEXTURE_2D, Icons[0].texID);
+		glTranslatef(320,260,0);
+		glScalef(0.5,0.5,0);
+		draw();
+	glPopMatrix();
+
+	//minus
+	glPushMatrix();
+		glBindTexture (GL_TEXTURE_2D, Icons[1].texID);
+		glTranslatef(700,260,0);
+		glScalef(0.65,0.20,0);
+		draw();
+	glPopMatrix();
+
+	
+	//2nd bar
+	glPushMatrix();
+	glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+	glTranslatef(400,260,0);
+	glScalef(0.5,0.65,0);
+	draw();
+	glPopMatrix();
+
+	glPushMatrix();
+	glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+	glTranslatef(450,260,0);
+	glScalef(0.5,0.65,0);
+	draw();
+	glPopMatrix();
+
+	glPushMatrix();
+	glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+	glTranslatef(500,260,0);
+	glScalef(0.5,0.65,0);
+	draw();
+	glPopMatrix();
+
+	glPushMatrix();
+	glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+	glTranslatef(550,260,0);
+	glScalef(0.5,0.65,0);
+	draw();
+	glPopMatrix();
+
+	glPushMatrix();
+	glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+	glTranslatef(600,260,0);
+	glScalef(0.5,0.65,0);
+	draw();
+	glPopMatrix();
+	
 
 	glDisable(GL_TEXTURE_2D);
 	drawFPS();
@@ -346,4 +483,153 @@ bool CSettingState::LoadTGA(TextureImage *texture, char *filename)			// Loads A 
 	glTexImage2D(GL_TEXTURE_2D, 0, type, texture[0].width, texture[0].height, 0, type, GL_UNSIGNED_BYTE, texture[0].imageData);
 
 	return true;											// Texture Building Went Ok, Return True
+}
+
+void CSettingState::draw()
+{
+	glPushMatrix();
+	glTranslatef(0,0,-1);
+	glEnable(GL_TEXTURE_2D);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0,0);
+		glVertex2f(-50,50);
+		glTexCoord2f(1,0);
+		glVertex2f(50,50);
+		glTexCoord2f(1,1);
+		glVertex2f(50,-50);
+		glTexCoord2f(0,1);
+		glVertex2f(-50,-50);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+	glPopMatrix();
+}
+
+void CSettingState::drawvolumebars()
+{
+	//bar
+	if ( volume <= 1 && volume > 0.8f  )
+	{
+		glPushMatrix();
+			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glTranslatef(400,175,0);
+			glScalef(0.5,0.65,0);
+			draw();
+		glPopMatrix();
+
+		glPushMatrix();
+			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glTranslatef(450,175,0);
+			glScalef(0.5,0.65,0);
+			draw();
+		glPopMatrix();
+
+		glPushMatrix();
+			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glTranslatef(500,175,0);
+			glScalef(0.5,0.65,0);
+			draw();
+		glPopMatrix();
+
+		glPushMatrix();
+			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glTranslatef(550,175,0);
+			glScalef(0.5,0.65,0);
+			draw();
+		glPopMatrix();
+
+		glPushMatrix();
+			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glTranslatef(600,175,0);
+			glScalef(0.5,0.65,0);
+			draw();
+		glPopMatrix();
+	}
+
+	else if  ( volume <= 0.8f && volume >0.6f)
+	{
+		glPushMatrix();
+			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glTranslatef(400,175,0);
+			glScalef(0.5,0.65,0);
+			draw();
+		glPopMatrix();
+
+		glPushMatrix();
+			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glTranslatef(450,175,0);
+			glScalef(0.5,0.65,0);
+			draw();
+		glPopMatrix();
+
+		glPushMatrix();
+			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glTranslatef(500,175,0);
+			glScalef(0.5,0.65,0);
+			draw();
+		glPopMatrix();
+
+		glPushMatrix();
+			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glTranslatef(550,175,0);
+			glScalef(0.5,0.65,0);
+			draw();
+		glPopMatrix();
+	}
+
+	else if (volume <= 0.6f && volume >0.4f)
+	{
+		glPushMatrix();
+			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glTranslatef(400,175,0);
+			glScalef(0.5,0.65,0);
+			draw();
+		glPopMatrix();
+
+		glPushMatrix();
+			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glTranslatef(450,175,0);
+			glScalef(0.5,0.65,0);
+			draw();
+		glPopMatrix();
+
+		glPushMatrix();
+			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glTranslatef(500,175,0);
+			glScalef(0.5,0.65,0);
+			draw();
+		glPopMatrix();
+	}
+
+	else if ( volume <= 0.4f && volume >0.2f)
+	{
+		glPushMatrix();
+			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glTranslatef(400,175,0);
+			glScalef(0.5,0.65,0);
+			draw();
+		glPopMatrix();
+
+		glPushMatrix();
+			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glTranslatef(450,175,0);
+			glScalef(0.5,0.65,0);
+			draw();
+		glPopMatrix();
+
+	}
+
+	else if ( volume <= 0.2f && volume > 0)
+	{
+		glPushMatrix();
+			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glTranslatef(400,175,0);
+			glScalef(0.5,0.65,0);
+			draw();
+		glPopMatrix();
+	}
+
+	else 
+	{
+		
+	}
 }

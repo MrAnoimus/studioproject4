@@ -41,7 +41,7 @@ public:
 
 	void Pause();
 	void Resume();
-
+	void drawvolumebars();
 	void HandleEvents(CGameStateManager* theGSM);
 	void Update(CGameStateManager* theGSM);
 	void input(void);
@@ -101,9 +101,13 @@ private:
 		bool myKeys[255];
 		theMouseInfo mouseInfo;
 		TextureImage BackgroundTexture;	
+		TextureImage Icons[5];
 
+		double volume;
+		void draw();
 		freetype::font_data our_font;
 		GLfloat	cnt1;
+		
 
 };
 

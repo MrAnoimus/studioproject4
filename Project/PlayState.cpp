@@ -5,8 +5,16 @@ using namespace std;
 //#include "introstate.h"
 #include "PlayState.h"
 
+
 //for random num
 #include <time.h>
+
+extern "C" 
+{
+	#include "lua.h"
+	#include "lualib.h"
+	#include "lauxlib.h"
+}
 
 CPlayState CPlayState::thePlayState;
 
@@ -143,6 +151,8 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 					theCamera->isZoomIn = true;
 				}
 
+				cout << volume;
+
 			}
 		}break;
 		case GLUT_MIDDLE_BUTTON:
@@ -169,7 +179,21 @@ bool CPlayState::Init()
 	go = FetchObject();
 	go->active = true;
 	CitizenList.push_back(go);
+	lua_State *L2 = lua_open();
 
+	luaL_openlibs(L2);
+	if (luaL_loadfile(L2, "LuaScript/test.lua") || lua_pcall(L2, 0, 0, 0))
+	{
+		printf("error: %s", lua_tostring(L2, -1));
+		return -1;
+	}
+	lua_getglobal(L2,"VOLUME");
+	double VOLUME = lua_tonumber(L2, 1);
+	volume =  VOLUME;
+
+	lua_close(L2);
+
+	
 	//camera data and init
 	theCamera = new Camera( Camera::LAND_CAM );
 	theCamera->SetPosition( 400, 300, -500.0 );
@@ -192,10 +216,12 @@ bool CPlayState::Init()
 
 	//Sound Engine init
 	theSoundEngine = createIrrKlangDevice();
+	
 	if (!theSoundEngine)
 	{
 		return false;
 	}
+	theSoundEngine->setSoundVolume(volume);
 
 	return true;
 }
