@@ -21,16 +21,16 @@
       <Filter>GameState</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>MISC</Filter>
+      <Filter>MISC\Camera</Filter>
     </ClCompile>
     <ClCompile Include="FreeType.cpp">
-      <Filter>MISC</Filter>
+      <Filter>MISC\FreeType</Filter>
     </ClCompile>
     <ClCompile Include="LoadTGA.cpp">
-      <Filter>MISC</Filter>
+      <Filter>MISC\LoadTGA</Filter>
     </ClCompile>
     <ClCompile Include="Tile.cpp">
-      <Filter>MISC</Filter>
+      <Filter>Tile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -58,20 +58,20 @@
     <ClInclude Include="vector3D.h">
       <Filter>MISC</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>MISC</Filter>
-    </ClInclude>
-    <ClInclude Include="FreeType.h">
-      <Filter>MISC</Filter>
-    </ClInclude>
-    <ClInclude Include="LoadTGA.h">
-      <Filter>MISC</Filter>
-    </ClInclude>
     <ClInclude Include="TextureImage.h">
       <Filter>MISC</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>MISC\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeType.h">
+      <Filter>MISC\FreeType</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadTGA.h">
+      <Filter>MISC\LoadTGA</Filter>
+    </ClInclude>
     <ClInclude Include="Tile.h">
-      <Filter>MISC</Filter>
+      <Filter>Tile</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -83,6 +83,18 @@
     </Filter>
     <Filter Include="MISC">
       <UniqueIdentifier>{282c7d58-5ba7-44e6-b79e-bfae8230bda4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MISC\Camera">
+      <UniqueIdentifier>{635c5f64-d393-4bba-b028-e11fae495bfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MISC\FreeType">
+      <UniqueIdentifier>{66f212b6-40eb-4391-8a40-c8a494985b44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MISC\LoadTGA">
+      <UniqueIdentifier>{f6aeae6a-d35e-40df-bd29-f3ee23cb31e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tile">
+      <UniqueIdentifier>{e5178a0e-de66-4f18-855f-e61802b51c4f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

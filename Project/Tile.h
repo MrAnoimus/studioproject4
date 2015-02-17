@@ -15,6 +15,7 @@ class Tile
 	private:
 		int Type;
 		bool Empty;
+		bool Selected;
 		Vector3D Position;
 		Vector3D Color;
 		float Alpha;
@@ -26,13 +27,16 @@ class Tile
 		TextureImage TileTexture;
 		void Init();
 		void Update();
-		void Draw(float x , float y);
+		void Draw();
 		Vector3D GetCenterPoint(void);
+
+		bool IsSelected();
 		int GetType();
 		bool GetEmpty();
 		Vector3D GetPosition();
 		Vector3D GetColor();
 
+		void SetIsSelected(bool s);
 		void SetType(int type);
 		void SetEmpty(bool e);
 		void SetPosition(Vector3D pos);
