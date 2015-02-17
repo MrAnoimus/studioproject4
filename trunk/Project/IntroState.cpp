@@ -6,6 +6,13 @@
 #include "SettingState.h"
 #include "PlayState.h"
 
+extern "C" 
+{
+	#include "lua.h"
+	#include "lualib.h"
+	#include "lauxlib.h"
+}
+
 CIntroState CIntroState::theIntroState;
 
 void CIntroState::changeSize(int w, int h)
@@ -102,6 +109,7 @@ void CIntroState::MouseMove(int x , int y)
 			 menuGUIexit = theSoundEngine->play2D ("SFX/misc_menu_4.wav", false, true);}
 		if(menuGUIexit->getIsPaused() == true){menuGUIexit->setIsPaused(false);}
 		else if(menuGUIexit->isFinished() == true){menuGUIexit = NULL;}
+		cout << volume;
 	}
 	else{hoverExit = false;}
 }
@@ -111,13 +119,16 @@ void CIntroState::MouseClick(int button , int state , int x , int y)
 	{
 		case GLUT_LEFT_BUTTON:
 		{
+
 			mouseInfo.mLButtonUp = state;
+			
 			mouseInfo.lastX = x;
 			mouseInfo.lastY = y;
 			if (mouseInfo.lastX >=350 && mouseInfo.lastX <= 465 && mouseInfo.lastY >= 520 && mouseInfo.lastY <=560)
 			{
 				exit(0);
 			}
+
 		}break;
 		case GLUT_RIGHT_BUTTON:
 		{
@@ -132,6 +143,20 @@ void CIntroState::MouseClick(int button , int state , int x , int y)
 bool CIntroState::Init()
 {
 	cout << "CIntroState::Init\n" << endl;
+
+	lua_State *L2 = lua_open();
+	luaL_openlibs(L2);
+	if (luaL_loadfile(L2, "LuaScript/test.lua") || lua_pcall(L2, 0, 0, 0))
+	{
+		printf("error: %s", lua_tostring(L2, -1));
+		return -1;
+	}
+	lua_getglobal(L2,"VOLUME");
+	double VOLUME = lua_tonumber(L2, 1);
+	volume =  VOLUME;
+	
+	lua_close(L2);
+
 	
 	theCamera = new Camera( Camera::LAND_CAM );
 	theCamera->SetPosition( 0.0, 2.0, -5.0 );
@@ -166,6 +191,7 @@ bool CIntroState::Init()
 	//Sound Engine init
 	theSoundEngine = createIrrKlangDevice();
 	if (!theSoundEngine){return false;}
+	theSoundEngine->setSoundVolume(volume);
 
 	hoverStart = false;
 	hoverSet = false;
@@ -198,11 +224,13 @@ void CIntroState::HandleEvents(CGameStateManager* theGSM)
 		if (mouseInfo.lastX >=240 && mouseInfo.lastX <= 563 && mouseInfo.lastY >= 410 && mouseInfo.lastY <=450)
 		{
 			theGSM->ChangeState( CPlayState::Instance() );
+			mouseInfo.mLButtonUp = false;
 		}
 
 		if (mouseInfo.lastX >=300 && mouseInfo.lastX <= 500 && mouseInfo.lastY >= 460 && mouseInfo.lastY <=500)
 		{
 			theGSM->ChangeState( CSettingState::Instance() );
+			mouseInfo.mLButtonUp = false;
 		}
 	}
 	if(myKeys[27]==true)
@@ -217,6 +245,7 @@ void CIntroState::HandleEvents(CGameStateManager* theGSM)
 
 void CIntroState::Update(CGameStateManager* theGSM)
 {
+
 	//cout << "CIntroState::Update\n" << endl;
 	//MouseMove(mouseInfo.lastX,mouseInfo.lastY);
 	//std::cout<<mouseInfo.lastX<<","<<mouseInfo.lastY<<std::endl;
