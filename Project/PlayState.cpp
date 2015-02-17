@@ -80,7 +80,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 {
 	switch (button)
 	{
-	case GLUT_LEFT_BUTTON:
+		case GLUT_LEFT_BUTTON:
 		{
 			if (state == GLUT_DOWN)
 			{
@@ -92,26 +92,44 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				//int randnum = rand()%3;
 
 				if(mouseLC == NULL)
-				{mouseLC = theSoundEngine->play2D ("SFX/LMBdown.wav", false, true);}
-				else{mouseLC == NULL;
-					mouseLC = theSoundEngine->play2D ("SFX/LMBdown.wav", false, true);}
-				if(mouseLC->getIsPaused() == true){mouseLC->setIsPaused(false);}
-				else if(mouseLC->isFinished() == true){mouseLC = NULL;}
-			}
-			else
+				{
+					mouseLC = theSoundEngine->play2D ("SFX/LMBdown.wav", false, true);
+				}else
+				{
+					mouseLC == NULL;
+					mouseLC = theSoundEngine->play2D ("SFX/LMBdown.wav", false, true);
+				}
+				if(mouseLC->getIsPaused() == true)
+				{
+					mouseLC->setIsPaused(false);
+				}
+				else if(mouseLC->isFinished() == true)
+				{
+					mouseLC = NULL;
+				}
+			}else
 			{
 				cout << "LMB is up" << endl;
 				if(mouseLC == NULL)
-				{mouseLC = theSoundEngine->play2D ("SFX/LMBup.wav", false, true);}
-				else{mouseLC == NULL;
-					mouseLC = theSoundEngine->play2D ("SFX/LMBup.wav", false, true);}
-				if(mouseLC->getIsPaused() == true){mouseLC->setIsPaused(false);}
-				else if(mouseLC->isFinished() == true){mouseLC = NULL;}
+				{
+					mouseLC = theSoundEngine->play2D ("SFX/LMBup.wav", false, true);
+				}
+				else
+				{
+					mouseLC == NULL;
+					mouseLC = theSoundEngine->play2D ("SFX/LMBup.wav", false, true);
+				}
+				if(mouseLC->getIsPaused() == true)
+				{
+					mouseLC->setIsPaused(false);
+				}
+				else if(mouseLC->isFinished() == true)
+				{
+					mouseLC = NULL;
+				}
 			}
-		}
-
-		break;
-	case GLUT_RIGHT_BUTTON:
+		}break;
+		case GLUT_RIGHT_BUTTON:
 		{
 			mouseInfo.mRButtonUp = state;
 			if(state == GLUT_DOWN)
@@ -127,7 +145,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 
 			}
 		}break;
-	case GLUT_MIDDLE_BUTTON:
+		case GLUT_MIDDLE_BUTTON:
 		{
 
 		}break;
@@ -168,7 +186,10 @@ bool CPlayState::Init()
 
 	//Sound Engine init
 	theSoundEngine = createIrrKlangDevice();
-	if (!theSoundEngine){return false;}
+	if (!theSoundEngine)
+	{
+		return false;
+	}
 
 	return true;
 }
@@ -177,7 +198,10 @@ void CPlayState::Cleanup()
 	//cout << "CMenuState::Cleanup\n" << endl;
 
 	//Delete sound engine
-	if (theSoundEngine != NULL){theSoundEngine->drop();}
+	if (theSoundEngine != NULL)
+	{
+		theSoundEngine->drop();
+	}
 
 }
 void CPlayState::Pause()
