@@ -22,7 +22,7 @@ int Map[ROWS][COLS]={
 	{219,219,219,219,219,219,219,219},
 	{219,'.','.','.','.','.','.',219},
 	{219,'.','.','.','.','.','.',219},
-	{219,219,219,'.',219,219,219,219},
+	{219,'.','.','.','.','.','.',219},
 	{219,'.','.','.','.','.','.',219},
 	{219,219,219,219,219,219,219,219}
 };
@@ -95,8 +95,8 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				mouseInfo.mLButtonUp = state;
 				mouseInfo.lastX = x;
 				mouseInfo.lastY = y;
-				cout<<mouseInfo.lastX<<","<<mouseInfo.lastY<<endl;
-				cout<< "LMB is down" <<endl;
+				//cout<<mouseInfo.lastX<<","<<mouseInfo.lastY<<endl;
+				//cout<< "LMB is down" <<endl;
 				//int randnum = rand()%3;
 
 				if(mouseLC == NULL)
@@ -118,7 +118,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				
 			}else
 			{
-				cout << "LMB is up" << endl;
+				//cout << "LMB is up" << endl;
 				if(mouseLC == NULL)
 				{
 					mouseLC = theSoundEngine->play2D ("SFX/LMBup.wav", false, true);
@@ -151,9 +151,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				{
 					theCamera->isZoomIn = true;
 				}
-
-				cout << volume;
-
+				//cout << volume;
 			}
 		}break;
 		case GLUT_MIDDLE_BUTTON:
@@ -188,7 +186,6 @@ bool CPlayState::Init()
 
 	lua_close(L2);
 
-	
 	//camera data and init
 	theCamera = new Camera( Camera::LAND_CAM );
 	theCamera->SetPosition( 400, 300, -500.0 );
@@ -207,7 +204,14 @@ bool CPlayState::Init()
 		myKeys[i] = false;
 	}
 	//
-	myTile.Init();
+	for(int y = 0; y < ROWS; y += 1)
+	{
+		for(int x = 0; x < COLS; x += 1)
+		{
+			myTile[y][x].Init();
+		}
+	}
+	//myTile.Init();
 
 	//Sound Engine init
 	theSoundEngine = createIrrKlangDevice();
@@ -226,8 +230,6 @@ bool CPlayState::Init()
 }
 void CPlayState::Cleanup()
 {
-	//cout << "CMenuState::Cleanup\n" << endl;
-
 	//Delete sound engine
 	if (theSoundEngine != NULL)
 	{
@@ -251,29 +253,51 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 	{
 		exit(0);
 	}
-	
+	if(myKeys['w']==true)
+	{
+		Vector3D temp (0,0,1);
+		myTile[0][0].SetColor(temp);
+	}
 }
 
 void CPlayState::Update(CGameStateManager* theGSM) 
 {
-	std::cout <<"Mouse X: "<< mouseInfo.lastX << std::endl;
-	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+	int testx = theCamera->GetPosition().x / 100;
+	int testy = theCamera->GetPosition().y / 100;
+	//std::cout <<"Mouse X: "<< mouseInfo.lastX << std::endl;
+	for(int y = 0; y < ROWS; y += 1)
+	{
+		for(int x = 0; x < COLS; x += 1)
+		{
+			if(testx != x && testy != y)
 			{
-				
-				Citizen *Citizens = *it;
-				if (Citizens->active == true)
+				myTile[y][x].SetIsSelected(false);
+			}else
+			{
+				if(myTile[y][x].IsSelected())
 				{
-					Citizens->MoodUpdate();
-					if(mouseInfo.lastX<Citizens->GetPosition().x+25&&mouseInfo.lastX>Citizens->GetPosition().x-25)
-					{
-						Citizens->RenderMood=true;
-					}
-					else
-					{
-						Citizens->RenderMood=false;
-					}
+					myTile[y][x].SetIsSelected(false);
 				}
+				myTile[testy][testx].SetIsSelected(true);
 			}
+			myTile[y][x].Update();
+		}
+	}
+	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+	{
+		Citizen *Citizens = *it;
+		if (Citizens->active == true)
+		{
+			Citizens->MoodUpdate();
+			if(mouseInfo.lastX<Citizens->GetPosition().x+25&&mouseInfo.lastX>Citizens->GetPosition().x-25)
+			{
+				Citizens->RenderMood=true;
+			}else
+			{
+				Citizens->RenderMood=false;
+			}
+		}
+	}
 }
 
 void CPlayState::DrawTileContent()
@@ -282,22 +306,9 @@ void CPlayState::DrawTileContent()
 	{
 		for(int x = 0; x < COLS; x += 1)
 		{
-			if(Map[y][x] == 'G')
-			{
-				myTile.Draw(x*100,y*100);
-			}
-			if(Map[y][x] == 'S')
-			{
-				myTile.Draw(x*100,y*100);
-			}
-			if(Map[y][x] == '*')
-			{
-				myTile.Draw(x*100,y*100);
-			}
-			if(Map[y][x] == 219)
-			{
-				myTile.Draw(myTile.GetPosition().x + (x*100),myTile.GetPosition().y+(y*100));
-			}
+			Vector3D temp(50 + x*100,50 +y*100,-1);
+			myTile[y][x].SetPosition(temp);
+			myTile[y][x].Draw();
 		}
 	}
 }

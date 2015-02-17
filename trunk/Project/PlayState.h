@@ -92,6 +92,6 @@ class CPlayState : public CGameState
 		ISound* mouseLC;
 		float volume;
 
-		Tile myTile;
+		Tile myTile[6][8];
 };
 #endif

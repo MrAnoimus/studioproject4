@@ -6,7 +6,6 @@ Tile::Tile(void)
 
 }
 
-
 Tile::~Tile(void)
 {
 
@@ -15,15 +14,22 @@ Tile::~Tile(void)
 void Tile::Init()
 {
 	this->Position.Set(50,50,-1);
-	this->Color.Set(1,0,0);
-	this->Alpha = 1;
+	this->Color.Set(1,1,1);
+	this->Alpha = 0.5f;
 	this->Size = 50;
+	this->Type = 0;
 }
 void Tile::Update()
 {
-
+	if(Selected)
+	{
+		this->Color.Set(0,1,0);
+	}else
+	{
+		this->Color.Set(1,1,1);
+	}
 }
-void Tile::Draw(float x , float y)
+void Tile::Draw()
 {
 	//glEnable(GL_TEXTURE_2D);
 	//black outline
@@ -31,7 +37,7 @@ void Tile::Draw(float x , float y)
 	glPushMatrix();
 		glPushMatrix();
 			glLineWidth(2);
-			glTranslatef(x,y,this->Position.z);
+			glTranslatef(this->Position.x,this->Position.y,this->Position.z);
 			glPushMatrix();
 			glutSolidSphere(20,20,20);
 			glPopMatrix();
@@ -53,7 +59,7 @@ void Tile::Draw(float x , float y)
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glPushMatrix();
-			glTranslatef(x,y,this->Position.z);
+			glTranslatef(this->Position.x,this->Position.y,this->Position.z);
 			glColor4f(this->Color.x,this->Color.y,this->Color.z,Alpha);
 			//switch(Type)
 			//{
@@ -90,6 +96,12 @@ void Tile::Draw(float x , float y)
 	//glDisable(GL_TEXTURE_2D);
 }
 
+
+bool Tile::IsSelected()
+{
+	return Selected;
+}
+
 int Tile::GetType()
 {
 	return Type;
@@ -107,6 +119,10 @@ Vector3D Tile::GetColor()
 	return Color;
 }
 
+void Tile::SetIsSelected(bool s )
+{
+	Selected = s;
+}
 void Tile::SetType(int type)
 {
 	Type = type;
