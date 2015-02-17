@@ -163,7 +163,13 @@ void CPlayState::KeyboardUp(unsigned char key, int x, int y)
 
 bool CPlayState::Init()
 {
-	TheCitizen=new Citizen();
+
+	
+	Citizen *go;
+	go = FetchObject();
+	go->active = true;
+	CitizenList.push_back(go);
+
 	//camera data and init
 	theCamera = new Camera( Camera::LAND_CAM );
 	theCamera->SetPosition( 400, 300, -500.0 );
@@ -225,7 +231,15 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 
 void CPlayState::Update(CGameStateManager* theGSM) 
 {
-	TheCitizen->MoodUpdate(Citizen::EATINGPLACE,Citizen::FOOD);
+	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+			{
+				Citizen *Citizens = *it;
+				if (Citizens->active == true)
+				{
+
+					
+				}
+			}
 }
 void CPlayState::DrawTileContent()
 {
@@ -279,7 +293,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 
-	TheCitizen->Draw();
+
 	DrawTileContent();
 
 	// Enable 2D text display and HUD
@@ -292,4 +306,22 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	glutPostRedisplay();
 	// swapping the buffers causes the rendering above to be shown
 	glutSwapBuffers();
+}
+
+Citizen* CPlayState::FetchObject()
+{
+	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+	{
+		Citizen *go = *it;
+		if (!go->active)
+		{
+			go->active = true;
+			return go;
+		}
+	}
+	Citizen *go = new Citizen();
+	go->active = true;
+	CitizenList.push_back(go);
+	return go;
+
 }

@@ -27,7 +27,10 @@ class CPlayState : public CGameState
 		int  lastX, lastY;
 	}theMouseInfo;
 	public:
-		Citizen* TheCitizen;
+		Citizen* FetchObject();
+
+		std::vector<Citizen*> CitizenList;
+		
 		bool Init();
 		void Cleanup();
 

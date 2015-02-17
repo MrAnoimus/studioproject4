@@ -7,6 +7,7 @@ Citizen::Citizen(void)
 	,TheBuildings(Citizen::NOTHING)
 	,happy(false)
 	,HappinessLevels(0)
+	,active(true)
 {
 	glEnable(GL_TEXTURE_2D);
 	LoadTGA(&Moody,"Textures/Smiley.tga");
