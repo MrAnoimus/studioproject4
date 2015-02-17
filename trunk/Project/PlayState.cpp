@@ -220,14 +220,7 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 	{
 		exit(0);
 	}
-	if(myKeys['z'] == true)
-	{
-		theCamera->SetPosition(theCamera->GetPosition().x,theCamera->GetPosition().y,theCamera->GetPosition().z + 0.1f);
-	}
-	if(myKeys['x'] == true)
-	{
-		theCamera->SetPosition(theCamera->GetPosition().x,theCamera->GetPosition().y,theCamera->GetPosition().z - 0.1f);
-	}
+	
 }
 
 void CPlayState::Update(CGameStateManager* theGSM) 
