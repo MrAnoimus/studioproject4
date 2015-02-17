@@ -236,16 +236,15 @@ void Citizen::Draw()
 	glEnable(GL_TEXTURE_2D);
 	if(RenderMood==true)
 	{
-	glPushMatrix();
-		glTranslatef(GetPosition().x-100,GetPosition().y,-2);
+		glPushMatrix();
+			glTranslatef(GetPosition().x-220,GetPosition().y,-2);
 			StatsBoard();
-	glPopMatrix();
+		glPopMatrix();
 	}
 	glPushMatrix();
-	glTranslatef(GetPosition().x,GetPosition().y,-2);
-	RenderCitizen();
+		glTranslatef(GetPosition().x,GetPosition().y,-2);
+		RenderCitizen();
 	glPopMatrix();
-
 	glDisable(GL_TEXTURE_2D);
 }
 
@@ -339,47 +338,77 @@ Vector3D Citizen::GetPosition(void)
 void Citizen::StatsBoard(void)
 {
 	glPushMatrix();
-	glTranslatef(50,50,0);
-	DrawInGameText("Current Mood:");
+		glTranslatef(85,50,0);
+		DrawInGameText("Current Mood:");
 	glPopMatrix();
-	glColor3f(1,1,1);
-	glPushMatrix();
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, StatsBG.id);
-	DrawSquare(80,100);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(0,50,-1);
 
-	if(this->GetMood()=="HAPPY")
-	{
-		glBindTexture(GL_TEXTURE_2D,Happy.id);
-	}
-	else if(this->GetMood()=="ENRAGED")
-	{
-		glBindTexture(GL_TEXTURE_2D, Enraged.id);
-	}
-	else if(this->GetMood()=="SAD")
-	{
-		glBindTexture(GL_TEXTURE_2D, Sad.id);
-	}
-	else if(this->GetMood()=="OKAY")
-	{
-		glBindTexture(GL_TEXTURE_2D, Okay.id);
-	}
-	DrawSquare(20,20);
-	glPushMatrix();
-	glTranslatef(10,-40,-1);
-	DrawInGameText(GetMood());
-	glPopMatrix();
+	glColor3f(1,1,1);
+
+		glPushMatrix();
+			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, StatsBG.id);
+			DrawSquare(180,100);
+		glPopMatrix();
+	
+
+		glPushMatrix();
+		glTranslatef(-70,50,-1);
+
+		if(this->GetMood()=="HAPPY")
+		{
+			glBindTexture(GL_TEXTURE_2D,Happy.id);
+		}
+		else if(this->GetMood()=="ENRAGED")
+		{
+			glBindTexture(GL_TEXTURE_2D, Enraged.id);
+		}
+		else if(this->GetMood()=="SAD")
+		{
+			glBindTexture(GL_TEXTURE_2D, Sad.id);
+		}
+		else if(this->GetMood()=="OKAY")
+		{
+			glBindTexture(GL_TEXTURE_2D, Okay.id);
+		}
+		DrawSquare(20,20);
+		glPushMatrix();
+		glTranslatef(6,-40,-1);
+		//DrawInGameText(GetMood());
+		glPopMatrix();
+	
 	glPopMatrix();
 	
+
+	glPushMatrix();
+	glTranslatef(0,-5,-1);
+	glPushMatrix();
+	glTranslatef(90,0,0);
+	DrawInGameText("Favourite:");
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(-30,0,0);
+	DrawInGameText(GetFavourites());
+	glPopMatrix();
+	glPopMatrix();
+
+
+	glPushMatrix();
+	glTranslatef(0,-55,-1);
+	glPushMatrix();
+	glTranslatef(90,0,0);
+	DrawInGameText("Current Place:");
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(-70,0,0);
+	DrawInGameText(GetPlace());
+	glPopMatrix();
+	glPopMatrix();
 }
 
 void Citizen::DrawInGameText(std::string Text)
 {
 	glPushMatrix();
-    glColor3f(1.0f, 0.0f, 0.0f);//needs to be called before RasterPos
+    glColor3f(0.0f, 0.0f, 0.0f);//needs to be called before RasterPos
     glRasterPos2i(0, 00);
     std::string s = Text;
     void * font = GLUT_BITMAP_9_BY_15;
