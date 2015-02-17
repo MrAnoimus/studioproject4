@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include "LoadTGA.h"
+#include <time.h>
+#include "vector3D.h"
 //#include "TextureImage.h"
 #pragma once
 
@@ -29,16 +31,42 @@ public:
 		WORKPLACE,
 		NOTHING
 	};
-	TextureImage Moody;
+
 	
-	void MoodUpdate( 
-		NearByBuilding TheBuildings,
-		Favourite TheFavourite);
+	TextureImage Happy;
+	TextureImage Sad;
+	TextureImage Enraged;
+	TextureImage Okay;
+
+	void MoodUpdate();
 	std::string GetMood();
 	Citizen(void);
 	~Citizen(void);
 	void Draw(void);
+
+	void SetFavourite(Favourite MyFavourites);
+	void SetPlace(NearByBuilding MyBuilding);
+	
+	std::string GetFavourites(void);
+	std::string GetPlace(void);
+
+	void RenderCitizen();
+
+	TextureImage FemaleCitizen;
+	TextureImage MaleCitizen;
+	int AnimationCounter;
+	bool AnimationInvert;
+
+	void DrawSquare(float xSize, float ySize);
+
+	void SetAnimationCounter(int AnimationCounter);
+	int GetAnimationCounter(void);
+	void SetPosition(Vector3D Position);
+	Vector3D GetPosition(void);
 private:
+	int dir;
+	Vector3D Position;
+	int Gender;
 	bool happy;
 	float HappinessLevels;
 	Favourite TheFavourites;

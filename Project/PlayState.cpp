@@ -175,10 +175,7 @@ bool CPlayState::Init()
 {
 
 	
-	Citizen *go;
-	go = FetchObject();
-	go->active = true;
-	CitizenList.push_back(go);
+	
 	lua_State *L2 = lua_open();
 
 	luaL_openlibs(L2);
@@ -223,6 +220,10 @@ bool CPlayState::Init()
 	}
 	theSoundEngine->setSoundVolume(volume);
 
+	Citizen *go;
+	go = FetchObject();
+	go->active = true;
+	CitizenList.push_back(go);
 	return true;
 }
 void CPlayState::Cleanup()
@@ -259,11 +260,11 @@ void CPlayState::Update(CGameStateManager* theGSM)
 {
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 			{
+				
 				Citizen *Citizens = *it;
 				if (Citizens->active == true)
 				{
-
-					
+					Citizens->MoodUpdate();
 				}
 			}
 }
@@ -319,9 +320,20 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 
+	
 
 	DrawTileContent();
-
+	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+	{
+				
+		Citizen *Citizens = *it;
+		if (Citizens->active == true)
+		{
+			//Citizens->MoodUpdate(Citizen::EATINGPLACE, Citizen::FOOD);
+			Citizens->Draw();
+					
+		}
+	}
 	// Enable 2D text display and HUD
 	theCamera->SetHUD( true);
 	print(our_font,0,550,"Cam posX :%f\nCam posY :%f\nCam PosZ:%f",theCamera->GetPosition().x ,theCamera->GetPosition().y,theCamera->GetPosition().z);
