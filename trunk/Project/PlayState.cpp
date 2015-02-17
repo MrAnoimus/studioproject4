@@ -115,6 +115,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				{
 					mouseLC = NULL;
 				}
+				
 			}else
 			{
 				cout << "LMB is up" << endl;
@@ -173,9 +174,6 @@ void CPlayState::KeyboardUp(unsigned char key, int x, int y)
 
 bool CPlayState::Init()
 {
-
-	
-	
 	lua_State *L2 = lua_open();
 
 	luaL_openlibs(L2);
@@ -258,6 +256,7 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 
 void CPlayState::Update(CGameStateManager* theGSM) 
 {
+	std::cout <<"Mouse X: "<< mouseInfo.lastX << std::endl;
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 			{
 				
@@ -265,6 +264,10 @@ void CPlayState::Update(CGameStateManager* theGSM)
 				if (Citizens->active == true)
 				{
 					Citizens->MoodUpdate();
+					if(mouseInfo.lastX<Citizens->GetPosition().x+25&&mouseInfo.lastX>Citizens->GetPosition().x-25)
+					{
+						Citizens->RenderMood=true;
+					}
 				}
 			}
 }
@@ -337,7 +340,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	// Enable 2D text display and HUD
 	theCamera->SetHUD( true);
 	print(our_font,0,550,"Cam posX :%f\nCam posY :%f\nCam PosZ:%f",theCamera->GetPosition().x ,theCamera->GetPosition().y,theCamera->GetPosition().z);
-	print(our_font,0,150,"BURDEN");
+	
 	theCamera->SetHUD( false );
 	// Flush off any entity which is not drawn yet, so that we maintain the frame rate.
 	glFlush();
@@ -345,7 +348,6 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	// swapping the buffers causes the rendering above to be shown
 	glutSwapBuffers();
 }
-
 Citizen* CPlayState::FetchObject()
 {
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
