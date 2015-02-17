@@ -268,6 +268,10 @@ void CPlayState::Update(CGameStateManager* theGSM)
 					{
 						Citizens->RenderMood=true;
 					}
+					else
+					{
+						Citizens->RenderMood=false;
+					}
 				}
 			}
 }
@@ -340,7 +344,6 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	// Enable 2D text display and HUD
 	theCamera->SetHUD( true);
 	print(our_font,0,550,"Cam posX :%f\nCam posY :%f\nCam PosZ:%f",theCamera->GetPosition().x ,theCamera->GetPosition().y,theCamera->GetPosition().z);
-	
 	theCamera->SetHUD( false );
 	// Flush off any entity which is not drawn yet, so that we maintain the frame rate.
 	glFlush();

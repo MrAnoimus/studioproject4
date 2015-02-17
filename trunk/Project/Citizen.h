@@ -73,6 +73,8 @@ public:
 	void StatsBoard(void);
 
 	void DrawInGameText(std::string Text);
+
+
 private:
 	int dir;
 	Vector3D Position;
