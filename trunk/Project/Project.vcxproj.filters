@@ -32,6 +32,9 @@
     <ClCompile Include="Tile.cpp">
       <Filter>Tile</Filter>
     </ClCompile>
+    <ClCompile Include="Building.cpp">
+      <Filter>Building</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Citizen.h">
@@ -73,6 +76,9 @@
     <ClInclude Include="Tile.h">
       <Filter>Tile</Filter>
     </ClInclude>
+    <ClInclude Include="Building.h">
+      <Filter>Building</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Citizen">
@@ -95,6 +101,9 @@
     </Filter>
     <Filter Include="Tile">
       <UniqueIdentifier>{e5178a0e-de66-4f18-855f-e61802b51c4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Building">
+      <UniqueIdentifier>{89e28072-8692-4bf8-a80b-e531494a2f82}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -18,6 +18,7 @@ void Tile::Init()
 	this->Alpha = 0.5f;
 	this->Size = 50;
 	this->Type = 0;
+	this->Empty = true;
 }
 void Tile::Update()
 {

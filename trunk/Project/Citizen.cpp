@@ -58,7 +58,7 @@ void Citizen::MoodUpdate()
 {
 	int time = glutGet(GLUT_ELAPSED_TIME);
 	static int ctime = glutGet(GLUT_ELAPSED_TIME);
-	std::cout <<"Citizen Position: " << GetPosition().x << std::endl;
+	//std::cout <<"Citizen Position: " << GetPosition().x << std::endl;
 	if(dir==1)
 	{
 		AnimationInvert=false;

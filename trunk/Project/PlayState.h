@@ -7,6 +7,7 @@
 #include "freeType.h"
 #include "Citizen.h"
 #include "Tile.h"
+#include "Building.h"
 
 //sound
 #include <irrKlang.h>
@@ -93,5 +94,11 @@ class CPlayState : public CGameState
 		float volume;
 
 		Tile myTile[6][8];
+		int testx;
+		int testy;
+
+		Building mybuilding;
+		bool canbuild;
+		bool testing;
 };
 #endif

@@ -98,7 +98,6 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				//cout<<mouseInfo.lastX<<","<<mouseInfo.lastY<<endl;
 				//cout<< "LMB is down" <<endl;
 				//int randnum = rand()%3;
-
 				if(mouseLC == NULL)
 				{
 					mouseLC = theSoundEngine->play2D ("SFX/LMBdown.wav", false, true);
@@ -115,7 +114,13 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				{
 					mouseLC = NULL;
 				}
-				
+				testing = true;
+				if(myTile[testy][testx].IsSelected())
+				{
+					Vector3D temp(50+testx*100,50+testy*100,-2);
+					mybuilding.SetPosition(temp);
+					myTile[testy][testx].SetIsSelected(false);
+				}
 			}else
 			{
 				//cout << "LMB is up" << endl;
@@ -226,6 +231,10 @@ bool CPlayState::Init()
 	go = FetchObject();
 	go->active = true;
 	CitizenList.push_back(go);
+
+	mybuilding.Init();
+	canbuild = true;
+	testing = false;
 	return true;
 }
 void CPlayState::Cleanup()
@@ -235,7 +244,6 @@ void CPlayState::Cleanup()
 	{
 		theSoundEngine->drop();
 	}
-
 }
 void CPlayState::Pause()
 {
@@ -255,15 +263,13 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 	}
 	if(myKeys['w']==true)
 	{
-		Vector3D temp (0,0,1);
-		myTile[0][0].SetColor(temp);
 	}
 }
 
 void CPlayState::Update(CGameStateManager* theGSM) 
 {
-	int testx = theCamera->GetPosition().x / 100;
-	int testy = theCamera->GetPosition().y / 100;
+	testx = theCamera->GetPosition().x / 100;
+	testy = theCamera->GetPosition().y / 100;
 	//std::cout <<"Mouse X: "<< mouseInfo.lastX << std::endl;
 	for(int y = 0; y < ROWS; y += 1)
 	{
@@ -339,8 +345,6 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 
-	
-
 	DrawTileContent();
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 	{
@@ -350,8 +354,11 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 		{
 			//Citizens->MoodUpdate(Citizen::EATINGPLACE, Citizen::FOOD);
 			Citizens->Draw();
-					
 		}
+	}
+	if(testing)
+	{
+		mybuilding.Draw();
 	}
 	// Enable 2D text display and HUD
 	theCamera->SetHUD( true);
