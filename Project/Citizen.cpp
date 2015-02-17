@@ -11,6 +11,7 @@ Citizen::Citizen(void)
 	,active(true)
 	,AnimationCounter(0.0f)
 	,AnimationInvert(false)
+	,RenderMood(false)
 {
 	glEnable(GL_TEXTURE_2D);
 	LoadTGA(&Okay, "Textures/Smiley.tga");
@@ -19,6 +20,8 @@ Citizen::Citizen(void)
 	LoadTGA(&Sad, "Textures/Sad.tga");
 	LoadTGA(&FemaleCitizen, "Textures/FemaleCitizen.tga");
 	LoadTGA(&MaleCitizen, "Textures/MaleCitizen.tga");
+	LoadTGA(&StatsBG, "Textures/MoodBackground.tga");
+	
 	srand(time(NULL));
 
 	int Random = rand() % 3 + 1;	
@@ -55,16 +58,30 @@ void Citizen::MoodUpdate()
 {
 	int time = glutGet(GLUT_ELAPSED_TIME);
 	static int ctime = glutGet(GLUT_ELAPSED_TIME);
-	
+	std::cout <<"Citizen Position: " << GetPosition().x << std::endl;
 	if(dir==1)
 	{
 		AnimationInvert=false;
+		if(GetPosition().x+1<800)
+		{
 		SetPosition(Vector3D(GetPosition().x+1,GetPosition().y,GetPosition().z));
+		}
+		else
+		{
+			dir=2;
+		}
 	}
 	else if(dir==2)
 	{
 		AnimationInvert=true;
+		if(GetPosition().x-1>0)
+		{
 		SetPosition(Vector3D(GetPosition().x-1,GetPosition().y,GetPosition().z));
+		}
+		else
+		{
+			dir=1;
+		}
 	}
 	if (time - ctime > 300) 
 	{
@@ -217,30 +234,13 @@ std::string Citizen::GetPlace(void)
 void Citizen::Draw()
 {
 	glEnable(GL_TEXTURE_2D);
+	if(RenderMood==true)
+	{
 	glPushMatrix();
-	glTranslatef(0,0,-1);
-	
-	if(this->GetMood()=="HAPPY")
-	{
-		glBindTexture(GL_TEXTURE_2D,Happy.id);
-	}
-	else if(this->GetMood()=="ENRAGED")
-	{
-		glBindTexture(GL_TEXTURE_2D, Enraged.id);
-	}
-	else if(this->GetMood()=="SAD")
-	{
-		glBindTexture(GL_TEXTURE_2D, Sad.id);
-	}
-	else if(this->GetMood()=="OKAY")
-	{
-		glBindTexture(GL_TEXTURE_2D, Okay.id);
-	}
-	DrawSquare(50,50);
-
-	
+		glTranslatef(GetPosition().x-100,GetPosition().y,-2);
+			StatsBoard();
 	glPopMatrix();
-
+	}
 	glPushMatrix();
 	glTranslatef(GetPosition().x,GetPosition().y,-2);
 	RenderCitizen();
@@ -334,4 +334,62 @@ void Citizen::SetPosition(Vector3D Position)
 Vector3D Citizen::GetPosition(void)
 {
 	return this->Position;
+}
+
+void Citizen::StatsBoard(void)
+{
+	glPushMatrix();
+	glTranslatef(50,50,0);
+	DrawInGameText("Current Mood:");
+	glPopMatrix();
+	glColor3f(1,1,1);
+	glPushMatrix();
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, StatsBG.id);
+	DrawSquare(80,100);
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(0,50,-1);
+
+	if(this->GetMood()=="HAPPY")
+	{
+		glBindTexture(GL_TEXTURE_2D,Happy.id);
+	}
+	else if(this->GetMood()=="ENRAGED")
+	{
+		glBindTexture(GL_TEXTURE_2D, Enraged.id);
+	}
+	else if(this->GetMood()=="SAD")
+	{
+		glBindTexture(GL_TEXTURE_2D, Sad.id);
+	}
+	else if(this->GetMood()=="OKAY")
+	{
+		glBindTexture(GL_TEXTURE_2D, Okay.id);
+	}
+	DrawSquare(20,20);
+	glPushMatrix();
+	glTranslatef(10,-40,-1);
+	DrawInGameText(GetMood());
+	glPopMatrix();
+	glPopMatrix();
+	
+}
+
+void Citizen::DrawInGameText(std::string Text)
+{
+	glPushMatrix();
+    glColor3f(1.0f, 0.0f, 0.0f);//needs to be called before RasterPos
+    glRasterPos2i(0, 00);
+    std::string s = Text;
+    void * font = GLUT_BITMAP_9_BY_15;
+    for (std::string::iterator i = s.begin(); i != s.end(); ++i)
+    {
+        char c = *i;
+        //this does nothing, color is fixed for Bitmaps when calling glRasterPos
+        //glColor3f(1.0, 0.0, 1.0); 
+        glutBitmapCharacter(font, c);
+    }
+    
+    glPopMatrix();
 }

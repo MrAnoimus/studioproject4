@@ -3,7 +3,9 @@
 #include "LoadTGA.h"
 #include <time.h>
 #include "vector3D.h"
-//#include "TextureImage.h"
+#include "FreeType.h"
+#include "Camera.h"
+
 #pragma once
 
 using namespace std;
@@ -11,6 +13,7 @@ class Citizen
 {
 
 public:
+
 	bool active;
 	enum Favourite
 	{
@@ -54,6 +57,7 @@ public:
 
 	TextureImage FemaleCitizen;
 	TextureImage MaleCitizen;
+	TextureImage StatsBG;
 	int AnimationCounter;
 	bool AnimationInvert;
 
@@ -63,6 +67,12 @@ public:
 	int GetAnimationCounter(void);
 	void SetPosition(Vector3D Position);
 	Vector3D GetPosition(void);
+
+	bool RenderMood;
+
+	void StatsBoard(void);
+
+	void DrawInGameText(std::string Text);
 private:
 	int dir;
 	Vector3D Position;
