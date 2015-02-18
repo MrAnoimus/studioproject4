@@ -76,4 +76,12 @@ public:
 				z * vec.x - x * vec.z,
 				x * vec.y - y * vec.x);
 	}
+
+	Vector3D operator+=( const Vector3D& rhs )
+	{
+		x += rhs.x;
+		y += rhs.y;
+		z += rhs.z;
+		return *this;
+	}
 };

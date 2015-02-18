@@ -13,6 +13,13 @@
 #include <irrKlang.h>
 using namespace irrklang;
 
+//for mini game
+#include "GameObject.h"
+#include "MyMath.h"
+#include "MiniGame.h"
+
+//for mini game
+const int SPAWN_TIME = 1;
 // Declare Number Of Rows & Columns For Map Grid
 const int ROWS = 6;	
 const int COLS = 8;
@@ -55,6 +62,11 @@ class CPlayState : public CGameState
 		{
 			return &thePlayState;
 		}
+
+		//minigame
+		void DrawMGBG();
+		void DrawTextureBase();
+		void DrawObject(GameObject *go);
 
 	protected:
 		CPlayState():theCamera(NULL)
@@ -100,5 +112,21 @@ class CPlayState : public CGameState
 		Building mybuilding;
 		bool canbuild;
 		bool testing;
+
+		
+		//minigame stuffs
+		//stop panning
+		bool panning;
+		bool minigame;
+		std::vector<GameObject *> m_goList;		
+		GameObject ghost;
+		float speed;
+		int CposX;
+		int CposY;
+		Vector3D gravity;
+		float fallspeed;
+		int spawntime;
+		MiniGame* minigameobjects;
+
 };
 #endif

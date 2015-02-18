@@ -35,6 +35,12 @@
     <ClCompile Include="Building.cpp">
       <Filter>Building</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>MiniGame</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniGame.cpp">
+      <Filter>MiniGame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Citizen.h">
@@ -79,6 +85,15 @@
     <ClInclude Include="Building.h">
       <Filter>Building</Filter>
     </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>MiniGame</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniGame.h">
+      <Filter>MiniGame</Filter>
+    </ClInclude>
+    <ClInclude Include="MyMath.h">
+      <Filter>MiniGame</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Citizen">
@@ -104,6 +119,9 @@
     </Filter>
     <Filter Include="Building">
       <UniqueIdentifier>{89e28072-8692-4bf8-a80b-e531494a2f82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MiniGame">
+      <UniqueIdentifier>{783140f3-b920-4b29-97ff-83a64638922e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
