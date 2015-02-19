@@ -7,16 +7,15 @@
 #include "freeType.h"
 #include "Citizen.h"
 #include "Tile.h"
-#include "Building.h"
-
-//sound
-#include <irrKlang.h>
-using namespace irrklang;
-
 //for mini game
 #include "GameObject.h"
 #include "MyMath.h"
 #include "MiniGame.h"
+//sound
+#include <irrKlang.h>
+using namespace irrklang;
+
+
 
 //for mini game
 const int SPAWN_TIME = 1;
@@ -63,7 +62,9 @@ class CPlayState : public CGameState
 		}
 
 	protected:
-		CPlayState():theCamera(NULL)
+		CPlayState()
+		:	theCamera(NULL)
+		,	minigameobjects(NULL)
 		{ 
 		}
 		~CPlayState()
@@ -72,6 +73,10 @@ class CPlayState : public CGameState
 			{
 				delete theCamera;
 				theCamera = NULL;
+			}
+			if (theSoundEngine != NULL)
+			{
+				theSoundEngine->drop();
 			}
 		}
 
@@ -85,13 +90,13 @@ class CPlayState : public CGameState
 		Vector3D theCameraDirection;
 		float angle;
 		float frequency;
-
+		//texture
 		TextureImage BackgroundTexture;
+		//keyboard and mouse
 		bool myKeys[255];
 		theMouseInfo mouseInfo;
-
+		//fonts
 		freetype::font_data our_font;
-		int value;
 
 		//The sound engine vroom vroom
 		ISoundEngine* theSoundEngine;
@@ -100,17 +105,15 @@ class CPlayState : public CGameState
 		float volume;
 
 		Tile myTile[6][8];
-		int testx;
-		int testy;
+		int SelectorX;
+		int SelectorY;
 
-		Building mybuilding;
-		bool canbuild;
-		bool testing;
 		//citizen stuff
 		Citizen* FetchObject();
 		std::vector<Citizen*> CitizenList;
 		
 		//minigame stuffs
+		//PUT EVERYTHING THAT SUPPOSED TO BE IN YOUR MINIGAME CLASS THERE PLEASE
 		MiniGame* minigameobjects;
 		bool minigame;
 		std::vector<GameObject *> m_goList;		
@@ -121,7 +124,5 @@ class CPlayState : public CGameState
 		Vector3D gravity;
 		float fallspeed;
 		int spawntime;
-		
-
 };
 #endif

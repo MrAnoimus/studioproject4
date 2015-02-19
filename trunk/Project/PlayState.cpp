@@ -1,14 +1,8 @@
-#include <iostream>
-using namespace std;
-
 #include "GameStateManager.h"
 //#include "introstate.h"
 #include "PlayState.h"
-
-
-//for random num
+#include <iostream>
 #include <time.h>
-
 extern "C" 
 {
 	#include "lua.h"
@@ -17,6 +11,7 @@ extern "C"
 }
 
 CPlayState CPlayState::thePlayState;
+using namespace std;
 
 int Map[ROWS][COLS]={
 	{219,219,219,219,219,219,219,219},
@@ -26,6 +21,7 @@ int Map[ROWS][COLS]={
 	{219,'.','.','.','.','.','.',219},
 	{219,219,219,219,219,219,219,219}
 };
+
 
 void CPlayState::changeSize(int w, int h)
 {
@@ -103,31 +99,42 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				//cout<<mouseInfo.lastX<<","<<mouseInfo.lastY<<endl;
 				//cout<< "LMB is down" <<endl;
 				//int randnum = rand()%3;
-
-				if(mouseLC == NULL){mouseLC = theSoundEngine->play2D ("SFX/LMBdown.wav", false, true);}
-				else{mouseLC == NULL;
-					 mouseLC = theSoundEngine->play2D ("SFX/LMBdown.wav", false, true);}
-				if(mouseLC->getIsPaused() == true){mouseLC->setIsPaused(false);}
-				else if(mouseLC->isFinished() == true){mouseLC = NULL;}
-
-				testing = true;
-				if(myTile[testy][testx].IsSelected())
+				if(mouseLC == NULL)
 				{
-					Vector3D temp(50+testx*100,50+testy*100,-2);
-					mybuilding.SetPosition(temp);
-					myTile[testy][testx].SetIsSelected(false);
+					mouseLC = theSoundEngine->play2D ("SFX/LMBdown.wav", false, true);
+				}else
+				{
+					mouseLC == NULL;
+					mouseLC = theSoundEngine->play2D ("SFX/LMBdown.wav", false, true);
 				}
+				if(mouseLC->getIsPaused() == true)
+				{
+					mouseLC->setIsPaused(false);
+				}
+				else if(mouseLC->isFinished() == true)
+				{
+					mouseLC = NULL;
+				}
+
 			}else
 			{
 				//cout << "LMB is up" << endl;
-				if(mouseLC == NULL){
-					mouseLC = theSoundEngine->play2D ("SFX/LMBup.wav", false, true);}
-				else{mouseLC == NULL;
-					 mouseLC = theSoundEngine->play2D ("SFX/LMBup.wav", false, true);}
-				if(mouseLC->getIsPaused() == true){mouseLC->setIsPaused(false);}
-				else if(mouseLC->isFinished() == true){mouseLC = NULL;}
-			
-			
+				if(mouseLC == NULL)
+				{
+					mouseLC = theSoundEngine->play2D ("SFX/LMBup.wav", false, true);
+				}else
+				{
+					mouseLC == NULL;
+					mouseLC = theSoundEngine->play2D ("SFX/LMBup.wav", false, true);
+				}
+				if(mouseLC->getIsPaused() == true)
+				{
+					mouseLC->setIsPaused(false);
+				}
+				else if(mouseLC->isFinished() == true)
+				{
+					mouseLC = NULL;
+				}
 				for(std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
 				{
 					GameObject *go = *it;
@@ -190,7 +197,6 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 						mouseLC = NULL;
 					}*/
 				}
-				//cout << volume;
 			}
 		}break;
 		case GLUT_MIDDLE_BUTTON:
@@ -232,7 +238,7 @@ bool CPlayState::Init()
 	angle = 0.0f;
 	frequency = 30.0f;
 	//data used for testing 
-	value = 0;
+	//
 	//load texture here
 	LoadTGA(&BackgroundTexture,"Textures/Farmbg.tga");
 	//load ttf fonts
@@ -253,22 +259,17 @@ bool CPlayState::Init()
 
 	//Sound Engine init
 	theSoundEngine = createIrrKlangDevice();
-	
 	if (!theSoundEngine)
 	{
 		return false;
 	}
-
 	theSoundEngine->setSoundVolume(volume);
 
+	//Citizen stuff
 	Citizen *go;
 	go = FetchObject();
 	go->active = true;
 	CitizenList.push_back(go);
-
-	mybuilding.Init();
-	canbuild = true;
-	testing = false;
 
 	//for mini game
 	minigame = false;
@@ -292,11 +293,6 @@ bool CPlayState::Init()
 }
 void CPlayState::Cleanup()
 {
-	//Delete sound engine
-	if (theSoundEngine != NULL)
-	{
-		theSoundEngine->drop();
-	}
 }
 void CPlayState::Pause()
 {
@@ -383,18 +379,14 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		}
 	}
 
-
-	/*testx = theCamera->GetPosition().x / 100;
-	testy = theCamera->GetPosition().y / 100;*/
-	testx = (-mouseInfo.lastX +800 ) / 100;
-	testy = (-mouseInfo.lastY +600) / 100;
-	cout<<mouseInfo.lastX/100<<":"<<testx<<"\n"<<mouseInfo.lastY/100<<":"<< testy <<endl;
+	SelectorX = (-mouseInfo.lastX +800 ) / 100;
+	SelectorY = (-mouseInfo.lastY +600) / 100;
 	//std::cout <<"Mouse X: "<< mouseInfo.lastX << std::endl;
 	for(int y = 0; y < ROWS; y += 1)
 	{
 		for(int x = 0; x < COLS; x += 1)
 		{
-			if(testx != x && testy != y)
+			if(SelectorX != x && SelectorY != y)
 			{
 				myTile[y][x].SetIsSelected(false);
 			}else
@@ -403,7 +395,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 				{
 					myTile[y][x].SetIsSelected(false);
 				}
-				myTile[testy][testx].SetIsSelected(true);
+				myTile[SelectorY][SelectorX].SetIsSelected(true);
 			}
 			myTile[y][x].Update();
 		}
@@ -467,6 +459,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	//for mini game
 	if(minigame)
 	{
+		//DRAW THIS STUFF IN THE MINIGAME CLASS PLEASE
 		glPushMatrix();
 		glTranslatef(150,50,-1);
 		DrawMGBG();
@@ -484,8 +477,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 
 	DrawTileContent();
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
-	{
-				
+	{	
 		Citizen *Citizens = *it;
 		if (Citizens->active == true)
 		{
@@ -493,11 +485,6 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 			Citizens->Draw();
 		}
 	}
-	if(testing)
-	{
-		mybuilding.Draw();
-	}
-
 	// Enable 2D text display and HUD
 	theCamera->SetHUD( true);
 	print(our_font,0,550,"Cam posX :%f\nCam posY :%f\nCam PosZ:%f",theCamera->GetPosition().x ,theCamera->GetPosition().y,theCamera->GetPosition().z);
@@ -528,6 +515,9 @@ Citizen* CPlayState::FetchObject()
 
 void CPlayState::DrawMGBG()
 {
+
+	//DRAW THIS STUFF IN THE MINIGAME CLASS PLEASE
+
 	/*glEnable(GL_TEXTURE_2D);
 	glPushMatrix();
 		glEnable(GL_BLEND);
@@ -553,6 +543,7 @@ void CPlayState::DrawMGBG()
 
 void CPlayState::DrawObject(GameObject *go)
 {
+	//DRAW THIS STUFF IN THE MINIGAME CLASS PLEASE
 	switch(go->type)
 	{
 	case GameObject::GO_COIN:
