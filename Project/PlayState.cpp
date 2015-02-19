@@ -33,8 +33,9 @@ void CPlayState::changeSize(int w, int h)
 	// Prevent a divide by zero, when window is too short
 	// (you cant make a window of zero width).
 	if(h == 0)
+	{
 		h = 1;
-
+	}
 	float ratio = (float) (1.0f* w / h);
 
 	// Reset the coordinate system before modifying
@@ -55,16 +56,37 @@ void CPlayState::MouseMove(int x , int y)
 	mouseInfo.lastX = x;
 	mouseInfo.lastY = y;
 	//to check where camera pan
-	if(panning == true)
+	if(theCamera->canPan == true)
 	{
-		if(mouseInfo.lastX >= 700){theCamera->isPanRight = true;}
-		else{theCamera->isPanRight = false;}
-		if(mouseInfo.lastX <= 100){theCamera->isPanLeft = true;}
-		else{theCamera->isPanLeft = false;}
-		if(mouseInfo.lastY <= 100){theCamera->isPanUp = true;}
-		else{theCamera->isPanUp = false;}
-		if(mouseInfo.lastY >= 500){theCamera->isPanDown = true;}
-		else{theCamera->isPanDown = false;}
+		//stop making it one line.
+		if(mouseInfo.lastX >= 700)
+		{
+			theCamera->isPanRight = true;
+		}else
+		{
+			theCamera->isPanRight = false;
+		}
+		if(mouseInfo.lastX <= 100)
+		{
+			theCamera->isPanLeft = true;
+		}else
+		{
+			theCamera->isPanLeft = false;
+		}
+		if(mouseInfo.lastY <= 100)
+		{
+			theCamera->isPanUp = true;
+		}else
+		{
+			theCamera->isPanUp = false;
+		}
+		if(mouseInfo.lastY >= 500)
+		{
+			theCamera->isPanDown = true;
+		}else
+		{
+			theCamera->isPanDown = false;
+		}
 	}
 }
 void CPlayState::MouseClick(int button , int state , int x , int y)
@@ -132,21 +154,41 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				{
 					theCamera->isZoomOut = true;
 					if(mouseLC == NULL)
-					{mouseLC = theSoundEngine->play2D ("SFX/zoomout.wav", false, true);}
-					else{mouseLC == NULL;
+					{
 						mouseLC = theSoundEngine->play2D ("SFX/zoomout.wav", false, true);}
-					if(mouseLC->getIsPaused() == true){mouseLC->setIsPaused(false);}
-					else if(mouseLC->isFinished() == true){mouseLC = NULL;}
+					else
+					{
+						mouseLC == NULL;
+						mouseLC = theSoundEngine->play2D ("SFX/zoomout.wav", false, true);
+					}
+					/*if(mouseLC->getIsPaused() == true)
+					{
+						mouseLC->setIsPaused(false);
+					}
+					else if(mouseLC->isFinished() == true)
+					{
+						mouseLC = NULL;
+					}*/
 				}
-				if(theCamera->GetPosition().z <=-800)
+				if(theCamera->GetPosition().z <=-725)
 				{
 					theCamera->isZoomIn = true;
 					if(mouseLC == NULL)
-					{mouseLC = theSoundEngine->play2D ("SFX/zoomin.wav", false, true);}
-					else{mouseLC == NULL;
-						mouseLC = theSoundEngine->play2D ("SFX/zoomin.wav", false, true);}
-					if(mouseLC->getIsPaused() == true){mouseLC->setIsPaused(false);}
-					else if(mouseLC->isFinished() == true){mouseLC = NULL;}
+					{
+						mouseLC = theSoundEngine->play2D ("SFX/zoomin.wav", false, true);
+					}else
+					{
+						mouseLC == NULL;
+						mouseLC = theSoundEngine->play2D ("SFX/zoomin.wav", false, true);
+					}
+					/*if(mouseLC->getIsPaused() == true)
+					{
+						mouseLC->setIsPaused(false);
+					}
+					else if(mouseLC->isFinished() == true)
+					{
+						mouseLC = NULL;
+					}*/
 				}
 				//cout << volume;
 			}
@@ -208,12 +250,14 @@ bool CPlayState::Init()
 			myTile[y][x].Init();
 		}
 	}
-	//myTile.Init();
 
 	//Sound Engine init
 	theSoundEngine = createIrrKlangDevice();
 	
-	if (!theSoundEngine){return false;}
+	if (!theSoundEngine)
+	{
+		return false;
+	}
 
 	theSoundEngine->setSoundVolume(volume);
 
@@ -226,9 +270,7 @@ bool CPlayState::Init()
 	canbuild = true;
 	testing = false;
 
-
 	//for mini game
-	panning = true;
 	minigame = false;
 	gravity.Set(0, -9.8f, 0);
 	fallspeed = 1;
@@ -246,8 +288,6 @@ bool CPlayState::Init()
 		go->pos.x = 800 - Math::RandIntMinMax(320, 780) + theCamera->GetPosition().x - 400;
 		go->pos.y = 600 - Math::RandIntMinMax(110, 310) + theCamera->GetPosition().y - 300;
 	}
-
-
 	return true;
 }
 void CPlayState::Cleanup()
@@ -280,18 +320,13 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 
 	if(myKeys['m'] == true)
 	{
-		/*panning = !panning;
-		minigame = !minigame;*/
-		panning = false;
-		minigame = true;
+		//minigame = true;
+		theCamera->canPan = !theCamera->canPan;
 	}
 	
 	if(myKeys['n'] == true)
 	{
-		/*panning = !panning;
-		minigame = !minigame;*/
-		panning = true;
-		minigame = false;
+		//minigame = false;
 	}
 }
 
@@ -344,13 +379,16 @@ void CPlayState::Update(CGameStateManager* theGSM)
 					go->active = true;
 				}
 			}
-			cout << "speedfall: " << go->vel.y << endl;
+			//cout << "speedfall: " << go->vel.y << endl;
 		}
 	}
 
 
-	testx = theCamera->GetPosition().x / 100;
-	testy = theCamera->GetPosition().y / 100;
+	/*testx = theCamera->GetPosition().x / 100;
+	testy = theCamera->GetPosition().y / 100;*/
+	testx = (-mouseInfo.lastX +800 ) / 100;
+	testy = (-mouseInfo.lastY +600) / 100;
+	cout<<mouseInfo.lastX/100<<":"<<testx<<"\n"<<mouseInfo.lastY/100<<":"<< testy <<endl;
 	//std::cout <<"Mouse X: "<< mouseInfo.lastX << std::endl;
 	for(int y = 0; y < ROWS; y += 1)
 	{

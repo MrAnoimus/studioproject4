@@ -35,10 +35,6 @@ class CPlayState : public CGameState
 		int  lastX, lastY;
 	}theMouseInfo;
 	public:
-		Citizen* FetchObject();
-
-		std::vector<Citizen*> CitizenList;
-		
 		bool Init();
 		void Cleanup();
 
@@ -47,12 +43,15 @@ class CPlayState : public CGameState
 
 		void HandleEvents(CGameStateManager* theGSM);
 		void Update(CGameStateManager* theGSM);
-		//
-		void DrawQuad(float x , float y,float z,int R,int G, int B , float Alpha);
+		//draw function start here
+		//minigame
+		void DrawMGBG();
+		void DrawTextureBase();
+		void DrawObject(GameObject *go);
 		//
 		void DrawTileContent();
 		void Draw(CGameStateManager* theGSM);
-
+		//end of draw function
 		void changeSize(int w, int h);
 		void MouseMove (int x, int y);
 		void MouseClick(int button,int state,int x,int y);
@@ -62,11 +61,6 @@ class CPlayState : public CGameState
 		{
 			return &thePlayState;
 		}
-
-		//minigame
-		void DrawMGBG();
-		void DrawTextureBase();
-		void DrawObject(GameObject *go);
 
 	protected:
 		CPlayState():theCamera(NULL)
@@ -112,11 +106,12 @@ class CPlayState : public CGameState
 		Building mybuilding;
 		bool canbuild;
 		bool testing;
-
+		//citizen stuff
+		Citizen* FetchObject();
+		std::vector<Citizen*> CitizenList;
 		
 		//minigame stuffs
-		//stop panning
-		bool panning;
+		MiniGame* minigameobjects;
 		bool minigame;
 		std::vector<GameObject *> m_goList;		
 		GameObject ghost;
@@ -126,7 +121,7 @@ class CPlayState : public CGameState
 		Vector3D gravity;
 		float fallspeed;
 		int spawntime;
-		MiniGame* minigameobjects;
+		
 
 };
 #endif
