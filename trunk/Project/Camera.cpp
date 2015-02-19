@@ -28,6 +28,7 @@ void Camera::Reset(void)
 	Along = Vector3D(1.0, 0.0, 0.0);
 	Up = Vector3D(0.0, 1.0, 0.0);
 	Forward = Vector3D(0.0, 0.0, -1.0);
+	canPan = true;
 //	Update();
 }
 
@@ -38,27 +39,35 @@ void Camera::Update()
 	//camera zoom
 	if(isZoomOut)
 	{
-		ZoomOut(-800,speed);
+		ZoomOut(-725,speed);
 	}
 	if(isZoomIn)
 	{
 		ZoomIn(-500,speed);
 	}
-	if(isPanLeft)
+	if(canPan)
 	{
-		PanLeft(800,speed);
-	}
-	if(isPanRight)
+		if(isPanLeft)
+		{
+			PanLeft(700,speed);
+		}
+		if(isPanRight)
+		{
+			PanRight(0,speed);
+		}
+		if(isPanUp)
+		{
+			PanUp(600,speed);
+		}
+		if(isPanDown)
+		{
+			PanDown(0,speed);
+		}
+	}else
 	{
-		PanRight(0,speed);
-	}
-	if(isPanUp)
-	{
-		PanUp(600,speed);
-	}
-	if(isPanDown)
-	{
-		PanDown(0,speed);
+		this->Position.x = 400;
+		this->Position.y = 300;
+		//this->Position.z = -725;
 	}
 }
 
@@ -176,8 +185,7 @@ void Camera::SetHUD(bool m_bHUDmode)
 		glLoadIdentity();
 		glDisable(GL_DEPTH_TEST);
 		glDisable(GL_TEXTURE_2D);
-	}
-	else
+	}else
 	{
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_DEPTH_TEST);

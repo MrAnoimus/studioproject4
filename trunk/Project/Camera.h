@@ -36,6 +36,8 @@ class Camera
 		void Strafe(GLfloat delta);
 		void Fly(GLfloat delta);
 
+		//
+		bool canPan;
 		//2d camera zoom
 		bool isZoomIn;
 		void ZoomIn(float limit , float speed);
