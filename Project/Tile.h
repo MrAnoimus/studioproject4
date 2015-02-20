@@ -10,13 +10,14 @@ class Tile
 		GRASS = 0,
 		SOIL,
 		ROCK,
-		BAD,
+		UNBUILDABLE,
 		LAST
 	}TileType;
 	private:
 		int Type;
 		bool Empty;
 		bool Selected;
+		bool ClickedOn;
 		Vector3D Position;
 		Vector3D Color;
 		float Alpha;
@@ -36,12 +37,14 @@ class Tile
 		bool GetEmpty();
 		Vector3D GetPosition();
 		Vector3D GetColor();
+		bool IsClickedOn();
 
 		void SetIsSelected(bool s);
 		void SetType(int type);
 		void SetEmpty(bool e);
 		void SetPosition(Vector3D pos);
 		void SetColor(Vector3D c);
+		void SetIsClickedOn(bool co);
 
 };
 
