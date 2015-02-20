@@ -19,13 +19,23 @@ void Tile::Init()
 	this->Size = 50;
 	this->Type = 0;
 	this->Empty = true;
+	this->ClickedOn = false;
 }
 void Tile::Update()
 {
 	if(Selected)
 	{
 		this->Color.Set(0,1,0);
-	}else
+	}
+	if(ClickedOn)
+	{
+		this->Color.Set(1,1,0);
+	}
+	if(Type == UNBUILDABLE)
+	{
+		this->Color.Set(1,0,0);
+	}
+	if(!ClickedOn && !Selected && Type != UNBUILDABLE)
 	{
 		this->Color.Set(1,1,1);
 	}
@@ -34,7 +44,6 @@ void Tile::Draw()
 {
 	//glEnable(GL_TEXTURE_2D);
 	//black outline
-	
 	glPushMatrix();
 		glPushMatrix();
 			glLineWidth(2);
@@ -97,12 +106,14 @@ void Tile::Draw()
 	//glDisable(GL_TEXTURE_2D);
 }
 
-
+bool Tile::IsClickedOn()
+{
+	return ClickedOn;
+}
 bool Tile::IsSelected()
 {
 	return Selected;
 }
-
 int Tile::GetType()
 {
 	return Type;
@@ -118,6 +129,17 @@ Vector3D Tile::GetPosition()
 Vector3D Tile::GetColor()
 {
 	return Color;
+}
+Vector3D Tile::GetCenterPoint(void)
+{
+	return NULL;
+	//return Vector3D(x,y,z);
+}
+
+//setter
+void Tile::SetIsClickedOn(bool co )
+{
+	ClickedOn = co;
 }
 
 void Tile::SetIsSelected(bool s )
@@ -139,10 +161,4 @@ void Tile::SetPosition(Vector3D pos)
 void Tile::SetColor(Vector3D c)
 {
 	Color = c;
-}
-
-Vector3D Tile::GetCenterPoint(void)
-{
-	return NULL;
-	//return Vector3D(x,y,z);
 }

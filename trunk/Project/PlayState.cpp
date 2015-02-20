@@ -96,9 +96,13 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				mouseInfo.mLButtonUp = state;
 				mouseInfo.lastX = x;
 				mouseInfo.lastY = y;
-				//cout<<mouseInfo.lastX<<","<<mouseInfo.lastY<<endl;
-				//cout<< "LMB is down" <<endl;
-				//int randnum = rand()%3;
+
+				//only if tile is not selected
+				if(myTile[SelectorY][SelectorX].IsClickedOn() == false)
+				{
+					myTile[SelectorY][SelectorX].SetIsClickedOn(true);
+				}
+				//
 				if(mouseLC == NULL)
 				{
 					mouseLC = theSoundEngine->play2D ("SFX/LMBdown.wav", false, true);
@@ -378,10 +382,9 @@ void CPlayState::Update(CGameStateManager* theGSM)
 			//cout << "speedfall: " << go->vel.y << endl;
 		}
 	}
-
+	//tile selection check
 	SelectorX = (-mouseInfo.lastX +800 ) / 100;
 	SelectorY = (-mouseInfo.lastY +600) / 100;
-	//std::cout <<"Mouse X: "<< mouseInfo.lastX << std::endl;
 	for(int y = 0; y < ROWS; y += 1)
 	{
 		for(int x = 0; x < COLS; x += 1)
@@ -423,6 +426,10 @@ void CPlayState::DrawTileContent()
 	{
 		for(int x = 0; x < COLS; x += 1)
 		{
+			if(Map[y][x] == 219)
+			{//3 = UNBUILDABLE
+				myTile[y][x].SetType(3);
+			}
 			Vector3D temp(50 + x*100,50 +y*100,-1);
 			myTile[y][x].SetPosition(temp);
 			myTile[y][x].Draw();
@@ -515,7 +522,6 @@ Citizen* CPlayState::FetchObject()
 
 void CPlayState::DrawMGBG()
 {
-
 	//DRAW THIS STUFF IN THE MINIGAME CLASS PLEASE
 
 	/*glEnable(GL_TEXTURE_2D);
