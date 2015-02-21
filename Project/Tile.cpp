@@ -20,25 +20,29 @@ void Tile::Init()
 	this->Type = 0;
 	this->Empty = true;
 	this->ClickedOn = false;
+	this->ModeOn = false;
 	thebuilding.Init(this->Position);
 }
 void Tile::Update()
 {
-	if(Selected)
+	if(ModeOn)
 	{
-		this->Color.Set(0,1,0);
-	}
-	if(ClickedOn)
-	{
-		this->Color.Set(1,1,0);
-	}
-	if(Type == UNBUILDABLE)
-	{
-		this->Color.Set(1,0,0);
-	}
-	if(!ClickedOn && !Selected && Type != UNBUILDABLE)
-	{
-		this->Color.Set(1,1,1);
+		if(Selected)
+		{
+			this->Color.Set(0,1,0);
+		}
+		if(ClickedOn)
+		{
+			this->Color.Set(1,1,0);
+		}
+		if(Type == UNBUILDABLE)
+		{
+			this->Color.Set(1,0,0);
+		}
+		if(!ClickedOn && !Selected && Type != UNBUILDABLE)
+		{
+			this->Color.Set(1,1,1);
+		}
 	}
 }
 
@@ -110,20 +114,40 @@ void Tile::DrawTile()
 }
 void Tile::Draw()
 {
-	if(ClickedOn)
+	if(ModeOn)
 	{
-		if(Empty)
+		DrawTileOutLine();
+		DrawTile();
+		if(ClickedOn)
 		{
-			//if not empty
-			thebuilding.SetPosition(this->Position);
-			thebuilding.Draw();
+			if(Empty)
+			{
+				Vector3D temp;
+				temp.Set(0,0,-3);
+				thebuilding.SetPosition(this->Position+temp);
+				thebuilding.Draw();
+			}
+		}
+	}else
+	{
+		if(ClickedOn)
+		{
+			if(!Empty)
+			{
+				//if not empty
+				Vector3D temp;
+				temp.Set(0,0,-3);
+				thebuilding.SetPosition(this->Position+temp);
+				thebuilding.Draw();
+			}
 		}
 	}
-	DrawTileOutLine();
-	DrawTile();
-		
+	
 }
-
+bool Tile::GetModeOn()
+{
+	return ModeOn;
+}
 bool Tile::IsClickedOn()
 {
 	return ClickedOn;
@@ -150,6 +174,11 @@ Vector3D Tile::GetColor()
 }
 
 //setter
+
+void Tile::SetModeOn(bool m)
+{
+	ModeOn = m;
+}
 void Tile::SetIsClickedOn(bool co )
 {
 	ClickedOn = co;
