@@ -205,7 +205,9 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 		}break;
 		case GLUT_MIDDLE_BUTTON:
 		{
-
+			//cout <<resource.GetCitizen();
+			REvent.Random();
+			REvent.CreateEventz();
 		}break;
 	}
 }

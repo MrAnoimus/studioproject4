@@ -1,5 +1,7 @@
 #pragma once
 #include "GameStateManager.h"
+#include "RandomEvent.h"
+#include "Resource.h"
 
 class CGameState
 {
@@ -30,4 +32,6 @@ class CGameState
 		CGameState()
 		{
 		}
+		CResource resource;
+		CRandomEvent REvent;
 };
