@@ -1,7 +1,7 @@
 #pragma once
 #ifndef PLAYSTATE_H
 #define PLAYSTATE_H
-
+#include "Astar.h"
 #include <mmsystem.h>
 #include "GameState.h"
 #include "freeType.h"
@@ -34,6 +34,8 @@ class CPlayState : public CGameState
 		int  lastX, lastY;
 	}theMouseInfo;
 	public:
+
+		float px,py;
 		bool Init();
 		void Cleanup();
 

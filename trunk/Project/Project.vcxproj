@@ -25,7 +25,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -83,6 +82,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Astar.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Citizen.cpp" />
@@ -94,6 +94,7 @@
     <ClCompile Include="LoadTGA.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MiniGame.cpp" />
+    <ClCompile Include="Node.cpp" />
     <ClCompile Include="PlayState.cpp" />
     <ClCompile Include="RandomEvent.cpp" />
     <ClCompile Include="Resource.cpp" />
@@ -102,6 +103,7 @@
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Astar.h" />
     <ClInclude Include="Building.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Citizen.h" />
@@ -114,6 +116,7 @@
     <ClInclude Include="LoadTGA.h" />
     <ClInclude Include="MiniGame.h" />
     <ClInclude Include="MyMath.h" />
+    <ClInclude Include="Node.h" />
     <ClInclude Include="PlayState.h" />
     <ClInclude Include="RandomEvent.h" />
     <ClInclude Include="Resource.h" />
