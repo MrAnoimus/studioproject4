@@ -11,9 +11,11 @@ Building::~Building(void)
 {
 }
 
-void Building::Init()
+void Building::Init(Vector3D pos)
 {
 	LoadTGA(&Building1, "Textures/Building/building1.tga");
+	this->Size = 50;
+	this->Position = pos;
 }
 void Building::Update()
 {

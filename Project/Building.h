@@ -12,7 +12,7 @@ class Building
 		Building(void);
 		~Building(void);
 
-		void Init();
+		void Init(Vector3D pos);
 		void Update();
 		void Draw();
 

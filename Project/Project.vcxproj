@@ -89,6 +89,7 @@
     <ClCompile Include="FreeType.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameStateManager.cpp" />
+    <ClCompile Include="GaugeBar.cpp" />
     <ClCompile Include="IntroState.cpp" />
     <ClCompile Include="LoadTGA.cpp" />
     <ClCompile Include="main.cpp" />
@@ -107,6 +108,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateManager.h" />
+    <ClInclude Include="GaugeBar.h" />
     <ClInclude Include="IntroState.h" />
     <ClInclude Include="LoadTGA.h" />
     <ClInclude Include="MiniGame.h" />

@@ -403,7 +403,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 			myTile[y][x].Update();
 		}
 	}
-	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+	/*for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 	{
 		Citizen *Citizens = *it;
 		if (Citizens->active == true)
@@ -417,7 +417,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 				Citizens->RenderMood=false;
 			}
 		}
-	}
+	}*/
 }
 
 void CPlayState::DrawTileContent()

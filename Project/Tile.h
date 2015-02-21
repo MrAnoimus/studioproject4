@@ -22,6 +22,10 @@ class Tile
 		Vector3D Color;
 		float Alpha;
 		int Size;
+		Building thebuilding; 
+		//don't want people to use this two drawing function outside of this class
+		void DrawTileOutLine();
+		void DrawTile();
 	public:
 		
 		Tile(void);
@@ -29,8 +33,9 @@ class Tile
 		TextureImage TileTexture;
 		void Init();
 		void Update();
+
+		//
 		void Draw();
-		Vector3D GetCenterPoint(void);
 
 		bool IsSelected();
 		int GetType();

@@ -20,6 +20,7 @@ void Tile::Init()
 	this->Type = 0;
 	this->Empty = true;
 	this->ClickedOn = false;
+	thebuilding.Init(this->Position);
 }
 void Tile::Update()
 {
@@ -40,10 +41,11 @@ void Tile::Update()
 		this->Color.Set(1,1,1);
 	}
 }
-void Tile::Draw()
+
+
+//draw stuff
+void Tile::DrawTileOutLine()
 {
-	//glEnable(GL_TEXTURE_2D);
-	//black outline
 	glPushMatrix();
 		glPushMatrix();
 			glLineWidth(2);
@@ -64,7 +66,9 @@ void Tile::Draw()
 			glEnd();
 		glPopMatrix();
 	glPopMatrix();
-		//quad
+}
+void Tile::DrawTile()
+{
 	glPushMatrix();
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -103,7 +107,21 @@ void Tile::Draw()
 		glPopMatrix();
 	glPopMatrix();
 	glColor3f(1,1,1);
-	//glDisable(GL_TEXTURE_2D);
+}
+void Tile::Draw()
+{
+	if(ClickedOn)
+	{
+		if(Empty)
+		{
+			//if not empty
+			thebuilding.SetPosition(this->Position);
+			thebuilding.Draw();
+		}
+	}
+	DrawTileOutLine();
+	DrawTile();
+		
 }
 
 bool Tile::IsClickedOn()
@@ -129,11 +147,6 @@ Vector3D Tile::GetPosition()
 Vector3D Tile::GetColor()
 {
 	return Color;
-}
-Vector3D Tile::GetCenterPoint(void)
-{
-	return NULL;
-	//return Vector3D(x,y,z);
 }
 
 //setter
