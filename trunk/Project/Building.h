@@ -4,9 +4,18 @@
 
 class Building
 {
+	enum
+	{
+		HOUSE = 0,
+		BANK,
+		FOODSTORE,
+		LAST
+	}BuildingType;
 	private:
 		int Size;
 		Vector3D Position;
+		int Type;
+		float Cost;
 	public:
 		TextureImage Building1;
 		Building(void);
@@ -16,7 +25,11 @@ class Building
 		void Update();
 		void Draw();
 
+		float GetCost();
+		int GetType();
 		Vector3D GetPosition();
+
+		void SetType(int tp);
 		void SetPosition(Vector3D pos);
 };
 

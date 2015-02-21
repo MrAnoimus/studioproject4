@@ -14,6 +14,7 @@ class Tile
 		LAST
 	}TileType;
 	private:
+		bool ModeOn;
 		int Type;
 		bool Empty;
 		bool Selected;
@@ -37,6 +38,7 @@ class Tile
 		//
 		void Draw();
 
+		bool GetModeOn();
 		bool IsSelected();
 		int GetType();
 		bool GetEmpty();
@@ -44,6 +46,8 @@ class Tile
 		Vector3D GetColor();
 		bool IsClickedOn();
 
+
+		void SetModeOn(bool m);
 		void SetIsSelected(bool s);
 		void SetType(int type);
 		void SetEmpty(bool e);

@@ -45,7 +45,10 @@ void Building::Draw()
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
 }
-
+float Building::GetCost()
+{
+	return this->Cost;
+}
 Vector3D Building::GetPosition()
 {
 	return this->Position;

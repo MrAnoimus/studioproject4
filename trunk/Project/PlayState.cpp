@@ -100,7 +100,6 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				float SelectorY2 = (-mouseInfo.lastY +600) / 100;
 				for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 				{
-				
 					Citizen *Citizens = *it;
 					if (Citizens->active == true)
 					{
@@ -110,10 +109,17 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 						}
 					}
 				}
-				//only if tile is not selected
-				if(myTile[SelectorY][SelectorX].IsClickedOn() == false)
+				//check mode
+				if(myTile[SelectorY][SelectorX].GetModeOn() == true)
 				{
-					myTile[SelectorY][SelectorX].SetIsClickedOn(true);
+					//only if tile is not clicked on
+					if(myTile[SelectorY][SelectorX].IsClickedOn() == false)
+					{
+						myTile[SelectorY][SelectorX].SetIsClickedOn(true);
+						//once selected and click on set tile to not empty
+						myTile[SelectorY][SelectorX].SetEmpty(false);
+
+					}
 				}
 				//
 				if(mouseLC == NULL)
@@ -370,6 +376,17 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 	{
 		//minigame = false;
 	}
+	if(myKeys['p'] == true)
+	{
+		//minigame = false;
+		for(int y = 0; y < ROWS; y += 1)
+		{
+			for(int x = 0; x < COLS; x += 1)
+			{
+				myTile[y][x].SetModeOn(!myTile[y][x].GetModeOn());
+			}
+		}
+	}
 }
 
 void CPlayState::Update(CGameStateManager* theGSM) 
@@ -430,7 +447,6 @@ void CPlayState::Update(CGameStateManager* theGSM)
 	SelectorY = (-mouseInfo.lastY +600) / 100;
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 	{
-				
 		Citizen *Citizens = *it;
 		if (Citizens->active == true)
 		{
