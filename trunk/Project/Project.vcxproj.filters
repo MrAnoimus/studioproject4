@@ -41,6 +41,8 @@
     <ClCompile Include="MiniGame.cpp">
       <Filter>MiniGame</Filter>
     </ClCompile>
+    <ClCompile Include="Resource.cpp" />
+    <ClCompile Include="GaugeBar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Citizen.h">
@@ -94,6 +96,8 @@
     <ClInclude Include="MyMath.h">
       <Filter>MiniGame</Filter>
     </ClInclude>
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="GaugeBar.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Citizen">
