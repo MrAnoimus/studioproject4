@@ -43,6 +43,9 @@
     </ClCompile>
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="GaugeBar.cpp" />
+    <ClCompile Include="RandomEvent.cpp" />
+    <ClCompile Include="Astar.cpp" />
+    <ClCompile Include="Node.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Citizen.h">
@@ -98,6 +101,9 @@
     </ClInclude>
     <ClInclude Include="Resource.h" />
     <ClInclude Include="GaugeBar.h" />
+    <ClInclude Include="RandomEvent.h" />
+    <ClInclude Include="Astar.h" />
+    <ClInclude Include="Node.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Citizen">

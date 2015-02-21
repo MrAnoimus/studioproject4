@@ -64,7 +64,7 @@ void Citizen::MoodUpdate()
 		AnimationInvert=false;
 		if(GetPosition().x+1<800)
 		{
-		SetPosition(Vector3D(GetPosition().x+1,GetPosition().y,GetPosition().z));
+		//SetPosition(Vector3D(GetPosition().x+1,GetPosition().y,GetPosition().z));
 		}
 		else
 		{
@@ -76,7 +76,7 @@ void Citizen::MoodUpdate()
 		AnimationInvert=true;
 		if(GetPosition().x-1>0)
 		{
-		SetPosition(Vector3D(GetPosition().x-1,GetPosition().y,GetPosition().z));
+		//SetPosition(Vector3D(GetPosition().x-1,GetPosition().y,GetPosition().z));
 		}
 		else
 		{

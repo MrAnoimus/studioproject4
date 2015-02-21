@@ -96,7 +96,20 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				mouseInfo.mLButtonUp = state;
 				mouseInfo.lastX = x;
 				mouseInfo.lastY = y;
-
+				float SelectorX2 = (-mouseInfo.lastX +800) / 100;
+				float SelectorY2 = (-mouseInfo.lastY +600) / 100;
+				for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+				{
+				
+					Citizen *Citizens = *it;
+					if (Citizens->active == true)
+					{
+						if(SelectorX2==Citizens->GetPosition().x&&SelectorY2==Citizens->GetPosition().y)
+						{
+							Citizens->RenderMood=true;
+						}
+					}
+				}
 				//only if tile is not selected
 				if(myTile[SelectorY][SelectorX].IsClickedOn() == false)
 				{
@@ -119,7 +132,33 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				{
 					mouseLC = NULL;
 				}
+				Astar as(px,py,SelectorX2,SelectorY2);
+				
+				bool result = as.Search(Map);
 
+				if(result)
+				{
+					for(int i=0;i<(int)as.closeList.size();i++)
+					{
+
+						for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+						{
+				
+							Citizen *Citizens = *it;
+							if (Citizens->active == true)
+							{
+								if((Citizens->GetPosition().x != as.closeList[i]->x*100))
+								{
+									Citizens->SetPosition(Vector3D((int)as.closeList[i]->x*100 ,Citizens->GetPosition().y ,Citizens->GetPosition().z));
+								}
+								if((Citizens->GetPosition().y != as.closeList[i]->y*100))
+								{
+									Citizens->SetPosition(Vector3D(Citizens->GetPosition().x ,(int)as.closeList[i]->y*100 ,Citizens->GetPosition().z));
+								}
+							}
+						}
+					}
+				}
 			}else
 			{
 				//cout << "LMB is up" << endl;
@@ -275,6 +314,7 @@ bool CPlayState::Init()
 	Citizen *go;
 	go = FetchObject();
 	go->active = true;
+	go->SetPosition(Vector3D(101,101,0));
 	CitizenList.push_back(go);
 
 	//for mini game
@@ -342,9 +382,10 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		if (Citizens->active == true)
 		{
 			Citizens->MoodUpdate();
+			px = Citizens->GetPosition().x*0.01f;
+			py = Citizens->GetPosition().y*0.01f;
 		}
 	}
-
 	static int frame = 0;
 	static int lastTime = glutGet(GLUT_ELAPSED_TIME);
 	++frame;
@@ -387,6 +428,15 @@ void CPlayState::Update(CGameStateManager* theGSM)
 	//tile selection check
 	SelectorX = (-mouseInfo.lastX +800 ) / 100;
 	SelectorY = (-mouseInfo.lastY +600) / 100;
+	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+	{
+				
+		Citizen *Citizens = *it;
+		if (Citizens->active == true)
+		{
+			Citizens->MoodUpdate();
+		}
+	}
 	for(int y = 0; y < ROWS; y += 1)
 	{
 		for(int x = 0; x < COLS; x += 1)
@@ -416,7 +466,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 				Citizens->RenderMood=true;
 			}else
 			{
-				Citizens->RenderMood=false;
+				//Citizens->RenderMood=false;
 			}
 		}
 	}*/
