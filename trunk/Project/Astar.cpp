@@ -14,10 +14,13 @@ Astar::Astar(int sx,int sy,int gx,int gy)
 {
 	start = new CNode;									// Create Node Objects & Allocate Memory
 	goal = new CNode;
-	start->x=sx;start->y=sy; goal->x=gx;goal->y=gy;		// Set Start and Goal x-y Values
+	start->x=sx;
+	start->y=sy; 
+	goal->x=gx;
+	goal->y=gy;		// Set Start and Goal x-y Values
 	cout << "Initialised start...";
 	start->h=Compute_h(start);
-	start->f=start->g+start->h;
+	start->f= start->g + start->h;
 	printInfo(start->x,start->y,start->f,start->g,start->h);
 	cout << "Initialised goal....";
 	printInfo(goal->x,goal->y,goal->f,goal->g,goal->h);					// Show Initialised x,y,f values
@@ -28,7 +31,7 @@ Astar::Astar(int sx,int sy,int gx,int gy)
 CNode* Astar::GetBest()									
 {
 	int best = 0;										// Initialise Best (Minimum f) Index=0 For Start Of Comparison
-	for ( int i=1; i < (int)openList.size() ; i++)
+	for ( int i=0; i < (int)openList.size() ; i++)
 	{	
 		if (openList[i]->f < openList[best]->f)
 		{
@@ -52,6 +55,7 @@ CNode* Astar::GetSuccessor(CNode *current,int i,int (&grid)[ROWS2][COLS2])
 		n->x = x;										// Initialise To x-y Value Of Successor
 		n->y = y;
 	}
+
 	return n;											// Return Successor Node
 }
 
@@ -122,8 +126,8 @@ bool Astar::Search(int (&grid)[ROWS2][COLS2])
 {
 	CNode *temp;	
 	cout << "Searching....\n\n";
-	AddOpenList(start);									// Add Start Node To Open List
-	while ((int)openList.size() !=0)					// Checking If Open List Is Empty
+	AddOpenList(start);		// Add Start Node To Open List
+	while ((int)openList.size() >0)					// Checking If Open List Is Empty
 	{
 		CNode *n = GetBest();							// Get Best Node With Minimum 'f' Value
 		cout << "Getting best node (minimum f) ... ";		
@@ -131,10 +135,11 @@ bool Astar::Search(int (&grid)[ROWS2][COLS2])
 		cout << "Matching  (" << n->x << "," << n->y << ") with  goal " ; 
 		cout << "(" << goal->x << "," << goal->y << ")"<< endl; 
 		//cin.get();									// UNCOMMENT TO SEE INTERMEDIATE RESULTS
+		
 		if ((n->x==goal->x) && (n->y==goal->y))			// If Current Node 'n' Matches Goal Node in x,y Values
 		{
 			// Show Path In Text Mode & Return True(Found For Search)									// ie: Reached Goal
-			//ShowPath(n,grid);
+			ShowPath(n,grid);
 			cout <<"openlist: "<< endl;
 			ShowList(openList);
 			cout <<"closelist: "<< endl;
@@ -200,7 +205,7 @@ void Astar::ShowPath(CNode *walker,int (&grid)[ROWS2][COLS2])
 {
 	cout << "\nBEST PATH SOLUTION";
 	grid[goal->y][goal->x] = 'G';		// Mark "Goal" Node On Grid Array
-	walker=walker->parent;				// Get Node On Best Path Linked To Goal 
+	//walker=walker->parent;				// Get Node On Best Path Linked To Goal 
 	while(walker->parent != NULL)		// If Start Point IS Not NULL
 	{
 		grid[walker->y][walker->x]='*';	// Grid Map Node Is Marked As Best Path Node

@@ -15,7 +15,7 @@ class Astar
 {
 	private:
 		//varable
-		CNode* goal;								// Goal node
+		CNode* goal;							// Goal node
 		CNode* start;							// Start node
 		
 	public:

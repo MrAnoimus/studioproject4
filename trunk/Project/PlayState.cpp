@@ -120,6 +120,35 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 						myTile[SelectorY][SelectorX].SetEmpty(false);
 
 					}
+
+					Astar as(px,py,SelectorX2,SelectorY2);
+				
+				bool result = as.Search(Map);
+				CNode* Node = new CNode;
+				Node->x = SelectorX2;
+				Node->y = SelectorY2;
+				as.AddCloseList(Node);
+				if(result)
+				{
+					for(int i=0;i<(int)as.closeList.size();i++)
+					{
+						for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+						{
+							Citizen *Citizens = *it;
+							if (Citizens->active == true)
+							{
+								if((Citizens->GetPosition().x != as.closeList[i]->x*100))
+								{
+									Citizens->SetPosition(Vector3D(as.closeList[i]->x*100 ,Citizens->GetPosition().y ,Citizens->GetPosition().z));
+								}
+								if((Citizens->GetPosition().y != as.closeList[i]->y*100))
+								{
+									Citizens->SetPosition(Vector3D(Citizens->GetPosition().x ,as.closeList[i]->y*100 ,Citizens->GetPosition().z));
+								}			
+							}
+						}	
+					}
+				}
 				}
 				//
 				if(mouseLC == NULL)
@@ -138,33 +167,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				{
 					mouseLC = NULL;
 				}
-				Astar as(px,py,SelectorX2,SelectorY2);
 				
-				bool result = as.Search(Map);
-
-				if(result)
-				{
-					for(int i=0;i<(int)as.closeList.size();i++)
-					{
-
-						for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
-						{
-				
-							Citizen *Citizens = *it;
-							if (Citizens->active == true)
-							{
-								if((Citizens->GetPosition().x != as.closeList[i]->x*100))
-								{
-									Citizens->SetPosition(Vector3D((int)as.closeList[i]->x*100 ,Citizens->GetPosition().y ,Citizens->GetPosition().z));
-								}
-								if((Citizens->GetPosition().y != as.closeList[i]->y*100))
-								{
-									Citizens->SetPosition(Vector3D(Citizens->GetPosition().x ,(int)as.closeList[i]->y*100 ,Citizens->GetPosition().z));
-								}
-							}
-						}
-					}
-				}
 			}else
 			{
 				//cout << "LMB is up" << endl;
