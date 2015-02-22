@@ -326,24 +326,25 @@ bool CPlayState::Init()
 	go->SetPosition(Vector3D(101,101,0));
 	CitizenList.push_back(go);
 
-	//for mini game
-	minigame = false;
-	gravity.Set(0, -9.8f, 0);
-	fallspeed = 1;
-	CposX = Math::RandIntMinMax(320, 780);
-	CposY = 110;
-	spawntime = 0;
-
+	//mini game coins
 	for (int i = 0; i <10; ++i)
 	{
-		GameObject *go = new GameObject(GameObject::GO_COIN);
-		go->scale.Set(0.5,0.5,0.5);
-		m_goList.push_back(go);
-		//go->active = true; 
-		go->vel.y = -200;
-		go->pos.x = 800 - Math::RandIntMinMax(320, 780) + theCamera->GetPosition().x - 400;
-		go->pos.y = 600 - Math::RandIntMinMax(110, 310) + theCamera->GetPosition().y - 300;
+		GameObject *mg = new GameObject(GameObject::GO_COIN);
+		mg->scale.Set(1.1,1.1,1.1);
+		m_goList.push_back(mg);
+		//mg->active = true; 
+		mg->vel.y = -200;
+		mg->pos.x = 800 - Math::RandIntMinMax(320, 780) + theCamera->GetPosition().x - 400;
+		mg->pos.y = 600 - Math::RandIntMinMax(110, 310) + theCamera->GetPosition().y - 300;
 	}
+	//mini game catcher
+	GameObject *other = new GameObject(GameObject::GO_CATCHER);
+	other->scale.Set(2,2,2);
+	m_goList.push_back(other);
+	other->active = true; 
+	other->pos.x = 400;
+	other->pos.y = 50;
+
 	return true;
 }
 void CPlayState::Cleanup()
@@ -371,14 +372,15 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 
 	if(myKeys['m'] == true)
 	{
-		//minigame = true;
+		mgstuffs.minigame = true;
 		theCamera->canPan = !theCamera->canPan;
 	}
 	
 	if(myKeys['n'] == true)
 	{
-		//minigame = false;
+		mgstuffs.minigame = false;
 	}
+
 	if(myKeys['p'] == true)
 	{
 		//minigame = false;
@@ -390,11 +392,33 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 			}
 		}
 	}
+
+	if(mgstuffs.minigame)
+	{
+		for(std::vector<GameObject *>::iterator it2 = m_goList.begin(); it2 != m_goList.end(); ++it2)
+		{
+			GameObject* other = (GameObject*)*it2;
+			if(other->active)
+			{
+				if(other->type == GameObject::GO_CATCHER)
+				{
+					if(myKeys['a'] == true)
+					{
+						other->pos.x += 2;
+					}
+					if(myKeys['d'] == true)
+					{
+						other->pos.x -= 2;
+					}
+				}
+			}
+		}
+	}
+
 }
 
 void CPlayState::Update(CGameStateManager* theGSM) 
 {
-	//for mini game
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 	{
 				
@@ -406,6 +430,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 			py = Citizens->GetPosition().y*0.01f;
 		}
 	}
+	//for mini game
 	static int frame = 0;
 	static int lastTime = glutGet(GLUT_ELAPSED_TIME);
 	++frame;
@@ -413,36 +438,55 @@ void CPlayState::Update(CGameStateManager* theGSM)
 	float dt = (time - lastTime) / 1000.f;
 
 	lastTime = time;
-
-	spawntime -= dt*0.001;
-	if(minigame)
+	mgstuffs.spawntime -= dt*0.001;
+	if(mgstuffs.minigame)
 	{
 		for(std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
 		{
-			GameObject *go = (GameObject *)*it;
-			if(go->active)
+			GameObject *mg = (GameObject *)*it;
+			if(mg->active)
 			{
-				go->vel +=  gravity * dt;
-				go->pos += fallspeed * (go->vel + (go->vel + gravity * dt)) * 0.5 * dt;
+				if(mg->type == GameObject::GO_COIN)
+				{//coin falling update
+					mg->vel +=  mgstuffs.gravity * dt;
+					mg->pos += mgstuffs.fallspeed * (mg->vel + (mg->vel + mgstuffs.gravity * dt)) * 0.5 * dt;
 
-				if(go->pos.y<= (600 - 590 + theCamera->GetPosition().y - 300))
-				{
-					go->active = false;
-					go->pos.x = 800 - Math::RandIntMinMax(320, 780) + theCamera->GetPosition().x - 400;
-					go->pos.y = 600 - Math::RandIntMinMax(110, 150) + theCamera->GetPosition().y - 300;
-					if(go->vel.y <= -200)
-					{go->vel.y = -200;}
+					if(mg->pos.y <= (600 - 590 + theCamera->GetPosition().y - 300))
+					{
+						mg->active = false;
+						mg->pos.x = 800 - Math::RandIntMinMax(320, 780) + theCamera->GetPosition().x - 400;
+						mg->pos.y = 600 - Math::RandIntMinMax(110, 150) + theCamera->GetPosition().y - 300;
+						if(mg->vel.y <= -200)
+						{mg->vel.y = -200;}
+					}
+
+					for(std::vector<GameObject *>::iterator it2 = m_goList.begin(); it2 != m_goList.end(); ++it2)
+					{//coin and catcher update
+						GameObject* other = (GameObject*)*it2;
+						if(other->active)
+						{
+							if(other->type == GameObject::GO_CATCHER)
+							{
+								if((other->pos-mg->pos).Length()<=20)
+								{
+									mg->active = false;
+								}
+								if(other->pos.x <= 20){other->pos.x = 20;}
+								if(other->pos.x >= 480){other->pos.x = 480;}
+							}
+						}
+					}
+
 				}
 			}
 			else
 			{
-				if(spawntime <= 0)
+				if(mgstuffs.spawntime <= 0)
 				{
-					spawntime = SPAWN_TIME;
-					go->active = true;
+					mgstuffs.spawntime = SPAWN_TIME;
+					mg->active = true;
 				}
 			}
-			//cout << "speedfall: " << go->vel.y << endl;
 		}
 	}
 	//tile selection check
@@ -535,21 +579,30 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	glDisable(GL_TEXTURE_2D);
 
 	//for mini game
-	if(minigame)
-	{
+	if(mgstuffs.minigame)
+		{
 		//DRAW THIS STUFF IN THE MINIGAME CLASS PLEASE
 		glPushMatrix();
 		glTranslatef(150,50,-1);
-		DrawMGBG();
+		minigameobjects->DrawMGBG();
 		
 		for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
 		{
-			GameObject *go = (GameObject *)*it;
-			if (go->active)
+			GameObject *mg = (GameObject *)*it;
+			if (mg->active)
 			{
-				DrawObject(go);
+				minigameobjects->DrawObject(mg);
 			}
 		}
+		for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
+		{
+			GameObject *other = (GameObject *)*it;
+			if (other->active)
+			{
+				minigameobjects->DrawObject(other);
+			}
+		}
+
 		glPopMatrix();
 	} 
 
@@ -589,62 +642,4 @@ Citizen* CPlayState::FetchObject()
 	CitizenList.push_back(go);
 	return go;
 
-}
-
-void CPlayState::DrawMGBG()
-{
-	//DRAW THIS STUFF IN THE MINIGAME CLASS PLEASE
-
-	/*glEnable(GL_TEXTURE_2D);
-	glPushMatrix();
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
-		glColor3f(0.5,0.5,0.5);
-		glPushMatrix();
-			glBegin(GL_QUADS);
-				glTexCoord2f(1,1);
-				glVertex2f(0,500);
-				glTexCoord2f(0,1);
-				glVertex2f(500,500);
-				glTexCoord2f(0,0);
-				glVertex2f(500,0);
-				glTexCoord2f(1,0);
-				glVertex2f(0,0);				
-			glEnd();
-		glPopMatrix();
-		glColor3f(1,1,1);
-		/*glDisable(GL_BLEND);
-	glPopMatrix();
-	glDisable(GL_TEXTURE_2D);*/
-}
-
-void CPlayState::DrawObject(GameObject *go)
-{
-	//DRAW THIS STUFF IN THE MINIGAME CLASS PLEASE
-	switch(go->type)
-	{
-	case GameObject::GO_COIN:
-		{
-			glColor3f(0,0,0);
-			glEnable(GL_TEXTURE_2D);
-			glPushMatrix();
-			glTranslatef(go->pos.x, go->pos.y, go->pos.z);
-			glScalef(go->scale.x, go->scale.y, go->scale.z);
-			glutSolidSphere(20,32,32);
-			glPopMatrix();
-			glDisable(GL_TEXTURE_2D);
-		}
-		break;
-	case GameObject::GO_CATCHER:
-		{
-			glEnable(GL_TEXTURE_2D);
-			glPushMatrix();
-			glColor3f(1, 0, 0);
-			glTranslatef(go->pos.x, go->pos.y, go->pos.z);
-			glScalef(go->scale.x, go->scale.y, go->scale.z);
-			glPopMatrix();
-			glDisable(GL_TEXTURE_2D);
-		}
-		break;
-	}
 }

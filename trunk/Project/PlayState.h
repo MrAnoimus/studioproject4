@@ -115,16 +115,8 @@ class CPlayState : public CGameState
 		std::vector<Citizen*> CitizenList;
 		
 		//minigame stuffs
-		//PUT EVERYTHING THAT SUPPOSED TO BE IN YOUR MINIGAME CLASS THERE PLEASE
 		MiniGame* minigameobjects;
-		bool minigame;
-		std::vector<GameObject *> m_goList;		
-		GameObject ghost;
-		float speed;
-		int CposX;
-		int CposY;
-		Vector3D gravity;
-		float fallspeed;
-		int spawntime;
+		MiniGame mgstuffs;
+		std::vector<GameObject *> m_goList;	
 };
 #endif
