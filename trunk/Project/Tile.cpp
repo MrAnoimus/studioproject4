@@ -23,7 +23,6 @@ void Tile::Init()
 	this->ModeOn = false;
 	this->startbuild = false;
 	myGaugeBar.init(1,0,1,this->Position);
-
 	myHouse.Init(this->Position);
 }
 void Tile::Update()

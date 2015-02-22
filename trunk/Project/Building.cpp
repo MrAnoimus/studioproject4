@@ -4,13 +4,12 @@
 Building::Building(void)
 : Size(50),Cost(100.0f)
 {
-
+	this->Cost = 100.0f;
 }
 
 Building::~Building(void)
 {
-
-	this->Cost = 100.0f;
+	
 }
 //getter
 float Building::GetBPercentage()
