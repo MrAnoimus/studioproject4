@@ -1,7 +1,7 @@
 #pragma once
 #include "LoadTGA.h"
 #include "vector3D.h"
-
+#include "Citizen.h"
 class Building
 {
 	enum
@@ -17,6 +17,8 @@ class Building
 		int Type;
 		float Cost;
 	public:
+		std::vector<Citizen* >CitizenList;
+
 		TextureImage Building1;
 		Building(void);
 		~Building(void);
