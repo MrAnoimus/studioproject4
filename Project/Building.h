@@ -2,7 +2,9 @@
 #include "LoadTGA.h"
 #include "vector3D.h"
 #include "GaugeBar.h"
-#include "Citizen.h"class Building
+#include "Citizen.h"
+
+class Building
 {
 	private:
 		Vector3D Position;

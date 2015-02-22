@@ -112,8 +112,8 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				//check mode
 				if(myTile[SelectorY][SelectorX].GetModeOn() == true)
 				{
-					//only if tile is not clicked on
-					if(myTile[SelectorY][SelectorX].IsClickedOn() == false&&((PlayerResource.GetMoney()-10.0f)>0))
+					//only if tile is not clicked on&&((PlayerResource.GetMoney()-10.0f)>0)
+					if(myTile[SelectorY][SelectorX].IsClickedOn() == false)
 					{
 						myTile[SelectorY][SelectorX].SetIsClickedOn(true);
 						//once selected and click on set tile to not empty
@@ -436,7 +436,7 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 
 	if(myKeys['m'] == true)
 	{
-		mgstuffs.minigame = true;
+		//mgstuffs.minigame = true;
 		theCamera->canPan = !theCamera->canPan;
 	}
 
