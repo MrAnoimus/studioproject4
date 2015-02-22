@@ -5,9 +5,9 @@
 #include <time.h>
 extern "C" 
 {
-	#include "lua.h"
-	#include "lualib.h"
-	#include "lauxlib.h"
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
 }
 
 CPlayState CPlayState::thePlayState;
@@ -89,7 +89,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 {
 	switch (button)
 	{
-		case GLUT_LEFT_BUTTON:
+	case GLUT_LEFT_BUTTON:
 		{
 			if (state == GLUT_DOWN)
 			{
@@ -113,44 +113,83 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				if(myTile[SelectorY][SelectorX].GetModeOn() == true)
 				{
 					//only if tile is not clicked on
-					if(myTile[SelectorY][SelectorX].IsClickedOn() == false)
+					if(myTile[SelectorY][SelectorX].IsClickedOn() == false&&((PlayerResource.GetMoney()-10.0f)>0))
 					{
 						myTile[SelectorY][SelectorX].SetIsClickedOn(true);
 						//once selected and click on set tile to not empty
 						myTile[SelectorY][SelectorX].SetEmpty(false);
-
+						PlayerResource.SetMoney(PlayerResource.GetMoney()-10.0f);
 					}
 
 					Astar as(px,py,SelectorX2,SelectorY2);
-				
-				bool result = as.Search(Map);
-				CNode* Node = new CNode;
-				Node->x = SelectorX2;
-				Node->y = SelectorY2;
-				as.AddCloseList(Node);
-				if(result)
-				{
-					for(int i=0;i<(int)as.closeList.size();i++)
+
+					bool result = as.Search(Map);
+					CNode *Test = new CNode;
+					as.AddCloseList(Test);
+					CNode* Node = new CNode;
+					Node->x = SelectorX2;
+					Node->y = SelectorY2;
+					as.AddCloseList(Node);
+					
+
+					if(result)
 					{
-						for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+						moving = true;
+
+						for(int i=index;i<(int)as.closeList.size();i++)
 						{
-							Citizen *Citizens = *it;
-							if (Citizens->active == true)
+							/*if(moving == true)
 							{
-								if((Citizens->GetPosition().x != as.closeList[i]->x*100))
-								{
-									Citizens->SetPosition(Vector3D(as.closeList[i]->x*100 ,Citizens->GetPosition().y ,Citizens->GetPosition().z));
-								}
-								if((Citizens->GetPosition().y != as.closeList[i]->y*100))
-								{
-									Citizens->SetPosition(Vector3D(Citizens->GetPosition().x ,as.closeList[i]->y*100 ,Citizens->GetPosition().z));
-								}			
+							Target.x = as.closeList[i]->x*100;
+							Target.y = as.closeList[i]->y*100;
+							index++;
 							}
-						}	
+							else
+							{
+							i--;
+							}
+							break;*/
+
+							for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+							{
+								Citizen *Citizens = *it;
+								if (Citizens->active == true)
+								{
+									if((Citizens->GetPosition().x != as.closeList[i]->x*100))
+									{
+										Citizens->SetPosition(Vector3D(as.closeList[i]->x*100 ,Citizens->GetPosition().y ,Citizens->GetPosition().z));
+									}
+									
+									if((Citizens->GetPosition().y != as.closeList[i]->y*100))
+									{
+										Citizens->SetPosition(Vector3D(Citizens->GetPosition().x ,as.closeList[i]->y*100 ,Citizens->GetPosition().z));
+									}	
+
+									/*if(moving)
+									{
+										if ((Target - Citizens->GetPosition()).LengthSquared() > 0)
+										{
+											Vector3D direction(Target-Citizens->GetPosition());
+
+											Vector3D newPosition((Citizens->GetPosition().x)+direction.Normalized().x*100,(Citizens->GetPosition().y)+direction.Normalized().y*100,direction.Normalized().z);
+
+											Citizens->SetPosition(Vector3D(newPosition.x,newPosition.y,newPosition.z));
+											break;
+										}
+										else 
+										{
+											moving=false;
+										}
+										
+									}*/
+								}
+							}
+						}
 					}
+
 				}
-				}
-				//
+
+
 				if(mouseLC == NULL)
 				{
 					mouseLC = theSoundEngine->play2D ("SFX/LMBdown.wav", false, true);
@@ -167,7 +206,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				{
 					mouseLC = NULL;
 				}
-				
+
 			}else
 			{
 				//cout << "LMB is up" << endl;
@@ -204,7 +243,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 
 			}
 		}break;
-		case GLUT_RIGHT_BUTTON:
+	case GLUT_RIGHT_BUTTON:
 		{
 			mouseInfo.mRButtonUp = state;
 			if(state == GLUT_DOWN)
@@ -222,11 +261,11 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 					}
 					/*if(mouseLC->getIsPaused() == true)
 					{
-						mouseLC->setIsPaused(false);
+					mouseLC->setIsPaused(false);
 					}
 					else if(mouseLC->isFinished() == true)
 					{
-						mouseLC = NULL;
+					mouseLC = NULL;
 					}*/
 				}
 				if(theCamera->GetPosition().z <=-725)
@@ -242,16 +281,16 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 					}
 					/*if(mouseLC->getIsPaused() == true)
 					{
-						mouseLC->setIsPaused(false);
+					mouseLC->setIsPaused(false);
 					}
 					else if(mouseLC->isFinished() == true)
 					{
-						mouseLC = NULL;
+					mouseLC = NULL;
 					}*/
 				}
 			}
 		}break;
-		case GLUT_MIDDLE_BUTTON:
+	case GLUT_MIDDLE_BUTTON:
 		{
 			//cout <<resource.GetCitizen();
 			REvent.Random();
@@ -271,6 +310,9 @@ void CPlayState::KeyboardUp(unsigned char key, int x, int y)
 
 bool CPlayState::Init()
 {
+	index=0;
+	moving = false;
+	movingX = false;
 	lua_State *L2 = lua_open();
 
 	luaL_openlibs(L2);
@@ -282,6 +324,28 @@ bool CPlayState::Init()
 	lua_getglobal(L2,"VOLUME");
 	double VOLUME = lua_tonumber(L2, 1);
 	volume =  VOLUME;
+
+	//sets the player resources;
+	lua_getglobal(L2,"FOOD");
+	int food = lua_tointeger(L2,2);
+	PlayerResource.SetFood(food);
+
+	lua_getglobal(L2,"MONEY");
+	float money= (float)lua_tonumber(L2,3);
+	PlayerResource.SetMoney(money);
+
+	lua_getglobal(L2, "MANPOWER");
+	int manpower = lua_tointeger(L2,4);
+	PlayerResource.SetManpower(manpower);
+
+	lua_getglobal(L2,"CITIZEN");
+	int numOfCitizen= lua_tointeger(L2,5);
+	PlayerResource.SetCitizen(numOfCitizen);
+
+	std::cout <<"FOOD: "<< PlayerResource.GetFood() << std::endl;
+	std::cout << "Money: "<<PlayerResource.GetMoney() << std::endl;
+	std::cout <<"ManPower: "<< PlayerResource.GetManPower() << std::endl;
+	std::cout << "Citizen: "<<PlayerResource.GetCitizen() << std::endl;
 
 	lua_close(L2);
 
@@ -375,7 +439,7 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 		mgstuffs.minigame = true;
 		theCamera->canPan = !theCamera->canPan;
 	}
-	
+
 	if(myKeys['n'] == true)
 	{
 		mgstuffs.minigame = false;
@@ -419,9 +483,45 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 
 void CPlayState::Update(CGameStateManager* theGSM) 
 {
+
+	//for movement of ai		
+	//std::cout <<"Index: " << index << std::endl;
+	//for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+	//	{
+	//		Citizen *Citizens = *it;
+	//		if (Citizens->active == true)
+	//		{
+	//			/*if((Citizens->GetPosition().x != as.closeList[i]->x*100))
+	//			{
+	//				Citizens->SetPosition(Vector3D(as.closeList[i]->x*100 ,Citizens->GetPosition().y ,Citizens->GetPosition().z));
+	//			}*/
+	//			if(moving)
+	//			{
+	//				if ((Target - Citizens->GetPosition()).LengthSquared() > 0)
+	//				{
+	//					Vector3D direction(Target-Citizens->GetPosition());
+
+	//					Vector3D newPosition((Citizens->GetPosition().x)+direction.Normalized().x*100,(Citizens->GetPosition().y)+direction.Normalized().y*100,direction.Normalized().z);
+	//								
+	//					Citizens->SetPosition(Vector3D(newPosition.x,newPosition.y,newPosition.z));
+	//					break;
+	//				}
+	//				else 
+	//				{
+	//					moving=false;
+	//				}
+	//				/*if((Citizens->GetPosition().y != as.closeList[i]->y*100))
+	//				{
+	//					Citizens->SetPosition(Vector3D(Citizens->GetPosition().x ,as.closeList[i]->y*100 ,Citizens->GetPosition().z));
+	//				}*/	
+	//			}
+	//			}
+	//		}
+
+	//for mini game
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 	{
-				
+
 		Citizen *Citizens = *it;
 		if (Citizens->active == true)
 		{
@@ -520,18 +620,18 @@ void CPlayState::Update(CGameStateManager* theGSM)
 	}
 	/*for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 	{
-		Citizen *Citizens = *it;
-		if (Citizens->active == true)
-		{
-			Citizens->MoodUpdate();
-			if(mouseInfo.lastX<Citizens->GetPosition().x+25&&mouseInfo.lastX>Citizens->GetPosition().x-25)
-			{
-				Citizens->RenderMood=true;
-			}else
-			{
-				//Citizens->RenderMood=false;
-			}
-		}
+	Citizen *Citizens = *it;
+	if (Citizens->active == true)
+	{
+	Citizens->MoodUpdate();
+	if(mouseInfo.lastX<Citizens->GetPosition().x+25&&mouseInfo.lastX>Citizens->GetPosition().x-25)
+	{
+	Citizens->RenderMood=true;
+	}else
+	{
+	//Citizens->RenderMood=false;
+	}
+	}
 	}*/
 }
 
@@ -551,6 +651,7 @@ void CPlayState::DrawTileContent()
 		}
 	}
 }
+
 void CPlayState::Draw(CGameStateManager* theGSM) 
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -559,22 +660,22 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 
 	glEnable(GL_TEXTURE_2D);
 	glPushMatrix();
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glBindTexture (GL_TEXTURE_2D, BackgroundTexture.id);
-		glPushMatrix();
-			glBegin(GL_QUADS);
-				glTexCoord2f(1,1);
-				glVertex2f(0,600);
-				glTexCoord2f(0,1);
-				glVertex2f(800,600);
-				glTexCoord2f(0,0);
-				glVertex2f(800,0);
-				glTexCoord2f(1,0);
-				glVertex2f(0,0);				
-			glEnd();
-		glPopMatrix();
-		glDisable(GL_BLEND);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBindTexture (GL_TEXTURE_2D, BackgroundTexture.id);
+	glPushMatrix();
+	glBegin(GL_QUADS);
+	glTexCoord2f(1,1);
+	glVertex2f(0,600);
+	glTexCoord2f(0,1);
+	glVertex2f(800,600);
+	glTexCoord2f(0,0);
+	glVertex2f(800,0);
+	glTexCoord2f(1,0);
+	glVertex2f(0,0);				
+	glEnd();
+	glPopMatrix();
+	glDisable(GL_BLEND);
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 
@@ -585,7 +686,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 		glPushMatrix();
 		glTranslatef(150,50,-1);
 		minigameobjects->DrawMGBG();
-		
+
 		for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
 		{
 			GameObject *mg = (GameObject *)*it;
@@ -619,6 +720,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	// Enable 2D text display and HUD
 	theCamera->SetHUD( true);
 	print(our_font,0,550,"Cam posX :%f\nCam posY :%f\nCam PosZ:%f",theCamera->GetPosition().x ,theCamera->GetPosition().y,theCamera->GetPosition().z);
+	RenderUI();
 	theCamera->SetHUD( false );
 	// Flush off any entity which is not drawn yet, so that we maintain the frame rate.
 	glFlush();
@@ -626,6 +728,13 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	// swapping the buffers causes the rendering above to be shown
 	glutSwapBuffers();
 }
+
+void CPlayState::RenderUI(void)
+{
+	print(our_font,0,250,"Current Money :%.2f\nCurrent Manpower :%1i\nCurrent Citizen:%1i",PlayerResource.GetMoney() ,PlayerResource.GetManPower(),PlayerResource.GetCitizen());
+}
+
+
 Citizen* CPlayState::FetchObject()
 {
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
@@ -642,4 +751,62 @@ Citizen* CPlayState::FetchObject()
 	CitizenList.push_back(go);
 	return go;
 
+}
+
+void CPlayState::DrawMGBG()
+{
+	//DRAW THIS STUFF IN THE MINIGAME CLASS PLEASE
+
+	/*glEnable(GL_TEXTURE_2D);
+	glPushMatrix();
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
+	glColor3f(0.5,0.5,0.5);
+	glPushMatrix();
+	glBegin(GL_QUADS);
+	glTexCoord2f(1,1);
+	glVertex2f(0,500);
+	glTexCoord2f(0,1);
+	glVertex2f(500,500);
+	glTexCoord2f(0,0);
+	glVertex2f(500,0);
+	glTexCoord2f(1,0);
+	glVertex2f(0,0);				
+	glEnd();
+	glPopMatrix();
+	glColor3f(1,1,1);
+	/*glDisable(GL_BLEND);
+	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);*/
+}
+
+void CPlayState::DrawObject(GameObject *go)
+{
+	//DRAW THIS STUFF IN THE MINIGAME CLASS PLEASE
+	switch(go->type)
+	{
+	case GameObject::GO_COIN:
+		{
+			glColor3f(0,0,0);
+			glEnable(GL_TEXTURE_2D);
+			glPushMatrix();
+			glTranslatef(go->pos.x, go->pos.y, go->pos.z);
+			glScalef(go->scale.x, go->scale.y, go->scale.z);
+			glutSolidSphere(20,32,32);
+			glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
+		}
+		break;
+	case GameObject::GO_CATCHER:
+		{
+			glEnable(GL_TEXTURE_2D);
+			glPushMatrix();
+			glColor3f(1, 0, 0);
+			glTranslatef(go->pos.x, go->pos.y, go->pos.z);
+			glScalef(go->scale.x, go->scale.y, go->scale.z);
+			glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
+		}
+		break;
+	}
 }

@@ -201,6 +201,7 @@ bool Astar::Search(int (&grid)[ROWS2][COLS2])
 
 // Show In Text Mode The Grid Map & The Best Path Worked Backwards From Goal Node
 // 'walker' Is A Node Traversing Pointer
+
 void Astar::ShowPath(CNode *walker,int (&grid)[ROWS2][COLS2])
 {
 	cout << "\nBEST PATH SOLUTION";

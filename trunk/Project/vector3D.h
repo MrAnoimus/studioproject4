@@ -1,7 +1,8 @@
 #pragma once
 
 #include <math.h>
-
+#include "MyMath.h"
+#pragma warning( disable: 4290 )
 class Vector3D
 {
 public:
@@ -62,7 +63,10 @@ public:
 		y /= magnitude;
 		z /= magnitude;
 	}
-	
+	float LengthSquared (void ) const
+	{
+		return x * x + y * y + z * z;
+	}
 	//calculate and return dot product
 	float dotVector3D(const Vector3D &vec) const
 	{
@@ -76,7 +80,17 @@ public:
 				z * vec.x - x * vec.z,
 				x * vec.y - y * vec.x);
 	}
-
+	float Length( void ) const
+	{
+	  return sqrt(x * x + y * y + z * z);
+	}
+	Vector3D Normalized( void ) const throw( DivideByZero )
+	{
+		float d = Length();
+		if(d <= Math::EPSILON && -d <= Math::EPSILON)
+		  throw DivideByZero();
+		return Vector3D(x / d, y / d, z / d);
+	}
 	Vector3D operator+=( const Vector3D& rhs )
 	{
 		x += rhs.x;
@@ -85,9 +99,6 @@ public:
 		return *this;
 	}
 
-	float Length( void ) const
-	{
-	  return sqrt(x * x + y * y + z * z);
-	}
+	
 
 };

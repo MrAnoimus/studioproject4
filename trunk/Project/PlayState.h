@@ -7,6 +7,10 @@
 #include "freeType.h"
 #include "Citizen.h"
 #include "Tile.h"
+
+//for resource management
+#include "Resource.h"
+
 //for mini game
 #include "GameObject.h"
 #include "MyMath.h"
@@ -25,6 +29,7 @@ const int COLS = 8;
 
 class CPlayState : public CGameState
 {
+
 	//Mouse Info
 	typedef struct
 	{
@@ -34,7 +39,15 @@ class CPlayState : public CGameState
 		int  lastX, lastY;
 	}theMouseInfo;
 	public:
-
+		//for movement of citizens to selected tile
+		Vector3D Target;
+		int index;
+		bool moving;
+		bool movingX;
+		//render ui
+		void RenderUI(void);
+		//player resources
+		CResource PlayerResource;
 		float px,py;
 		bool Init();
 		void Cleanup();

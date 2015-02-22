@@ -2,7 +2,7 @@
 
 
 Building::Building(void)
-: Size(50)
+: Size(50),Cost(100.0f)
 {
 
 }
@@ -16,6 +16,7 @@ void Building::Init(Vector3D pos)
 	LoadTGA(&Building1, "Textures/Building/building1.tga");
 	this->Size = 50;
 	this->Position = pos;
+	this->Cost = 100.0f;
 }
 void Building::Update()
 {
