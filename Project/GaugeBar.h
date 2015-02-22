@@ -1,7 +1,6 @@
 #pragma once
 #include "vector3D.h"
-#include "TextureImage.h"
-
+#include "LoadTGA.h"
 class GaugeBar
 {
 	private:
@@ -10,19 +9,22 @@ class GaugeBar
 		float Height;
 		Vector3D Color;
 		bool Active;
+		bool done;
 	public:
-		TextureImage outline;
 		GaugeBar(void);
 		~GaugeBar(void);
-		void init(float r,float g,float b);
+		void init(float r,float g,float b,Vector3D pos);
 		void draw();
-		void update(Vector3D pos,float p,int posy);
+		void update();
 		//get
+		bool getdone();
 		Vector3D getPos();
 		Vector3D getColor();
 		float getPercentage();
 		bool getActive();
 		//set
+		void setDone(bool d);
+		void setActive(bool at);
 		void setPos(Vector3D newpos);
 		void setColor(Vector3D Color);
 		void setPercentage(float Percentage);

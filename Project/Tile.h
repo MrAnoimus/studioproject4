@@ -1,7 +1,7 @@
 #pragma once
 #include "vector3D.h"
 #include "LoadTGA.h"
-#include "Building.h"
+#include "House.h"
 
 class Tile
 {
@@ -14,6 +14,8 @@ class Tile
 		LAST
 	}TileType;
 	private:
+		GaugeBar myGaugeBar;
+		bool startbuild;
 		bool ModeOn;
 		int Type;
 		bool Empty;
@@ -23,7 +25,7 @@ class Tile
 		Vector3D Color;
 		float Alpha;
 		int Size;
-		Building thebuilding; 
+		House myHouse;
 		//don't want people to use this two drawing function outside of this class
 		void DrawTileOutLine();
 		void DrawTile();

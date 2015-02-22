@@ -46,8 +46,8 @@
     <ClCompile Include="RandomEvent.cpp" />
     <ClCompile Include="Astar.cpp" />
     <ClCompile Include="Node.cpp" />
-    <ClCompile Include="LuaFuncs.cpp">
-      <Filter>LUA</Filter>
+    <ClCompile Include="House.cpp">
+      <Filter>Building</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -107,11 +107,8 @@
     <ClInclude Include="RandomEvent.h" />
     <ClInclude Include="Astar.h" />
     <ClInclude Include="Node.h" />
-    <ClInclude Include="LuaFuncs.h">
-      <Filter>LUA</Filter>
-    </ClInclude>
-    <ClInclude Include="Definitions.h">
-      <Filter>LUA</Filter>
+    <ClInclude Include="House.h">
+      <Filter>Building</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -141,9 +138,6 @@
     </Filter>
     <Filter Include="MiniGame">
       <UniqueIdentifier>{783140f3-b920-4b29-97ff-83a64638922e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="LUA">
-      <UniqueIdentifier>{207652e9-58fb-4c4a-833b-5f6e1c68e902}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
