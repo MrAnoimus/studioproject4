@@ -84,4 +84,10 @@ public:
 		z += rhs.z;
 		return *this;
 	}
+
+	float Length( void ) const
+	{
+	  return sqrt(x * x + y * y + z * z);
+	}
+
 };

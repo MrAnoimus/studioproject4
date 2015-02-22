@@ -59,6 +59,8 @@
       <AdditionalLibraryDirectories>$(SolutionDir)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -79,6 +81,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
+      <ModuleDefinitionFile>Definitions.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -92,6 +95,7 @@
     <ClCompile Include="GaugeBar.cpp" />
     <ClCompile Include="IntroState.cpp" />
     <ClCompile Include="LoadTGA.cpp" />
+    <ClCompile Include="LuaFuncs.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MiniGame.cpp" />
     <ClCompile Include="Node.cpp" />
@@ -107,6 +111,7 @@
     <ClInclude Include="Building.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Citizen.h" />
+    <ClInclude Include="Definitions.h" />
     <ClInclude Include="FreeType.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameState.h" />
@@ -114,6 +119,7 @@
     <ClInclude Include="GaugeBar.h" />
     <ClInclude Include="IntroState.h" />
     <ClInclude Include="LoadTGA.h" />
+    <ClInclude Include="LuaFuncs.h" />
     <ClInclude Include="MiniGame.h" />
     <ClInclude Include="MyMath.h" />
     <ClInclude Include="Node.h" />

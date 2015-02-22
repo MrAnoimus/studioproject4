@@ -5,6 +5,7 @@ extern "C" {
 #include "lualib.h"
 #include "lauxlib.h"
 }
+#include "Definitions.h"
 
 CGameStateManager theGSM;
 
@@ -63,35 +64,7 @@ void CleanUpUponExit(void)
 
 int main(int argc, char **argv )
 {
-	//Read a value from the lua text file
-	lua_State *L2 = lua_open();
-	luaL_openlibs(L2);
-	if (luaL_loadfile(L2, "LuaScript/config.lua") || lua_pcall(L2, 0, 0, 0))
-	{
-		printf("error: %s", lua_tostring(L2, -1));
-		return -1;
-	}
-
-	lua_getglobal(L2,"PROGRAM_NAME");
-	lua_getglobal(L2,"PROGRAM_VERSION");
-	lua_getglobal(L2, "SCREENWIDTH");
-	lua_getglobal(L2, "SCREENHEIGHT");
-	lua_getglobal(L2, "COLORDEPTH");
-	lua_getglobal(L2, "WPOS_X");
-	lua_getglobal(L2, "WPOS_Y");
-	lua_getglobal(L2, "FULLSCREEN");
-	
-	std::string PROGRAM_NAME = lua_tostring(L2, 1);
-	std::string PROGRAM_VERSION  = lua_tostring(L2,2);
-	int SCREENWIDTH = (int)lua_tonumber(L2, 3);
-	int SCREENHEIGHT = (int)lua_tonumber(L2, 4);
-	int COLORDEPTH = (int)lua_tonumber(L2, 5);
-	int WPOS_X = (int)lua_tonumber(L2, 6);
-	int WPOS_Y = (int)lua_tonumber(L2, 7);
-	bool FULLSCREEN = (bool)lua_toboolean(L2,8);
 	printf("PROGRAM_NAME: %s \nPROGRAM_VERSION: %s \nSCREENWIDTH: %d\nSCREENHEIGHT: %d\nCOLORDEPTH: %d\nWPOS_X: %d\nWPOS_Y: %d\nFULLSCREEN: %s\n", PROGRAM_NAME.c_str (),PROGRAM_VERSION.c_str(), SCREENWIDTH, SCREENHEIGHT,COLORDEPTH,WPOS_X,WPOS_Y,FULLSCREEN? "true" : "false");	
-
-	lua_close(L2);
 	// initialize the engine
 	theGSM.Init( "Game State Test" );
 	//glut
