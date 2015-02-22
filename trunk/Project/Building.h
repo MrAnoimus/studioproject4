@@ -1,37 +1,30 @@
 #pragma once
 #include "LoadTGA.h"
 #include "vector3D.h"
-#include "Citizen.h"
-class Building
+#include "GaugeBar.h"
+#include "Citizen.h"class Building
 {
-	enum
-	{
-		HOUSE = 0,
-		BANK,
-		FOODSTORE,
-		LAST
-	}BuildingType;
 	private:
-		int Size;
 		Vector3D Position;
-		int Type;
 		float Cost;
+		float BuildPercentage;
+		float speed;
+		int Size;
+		
 	public:
 		std::vector<Citizen* >CitizenList;
-
-		TextureImage Building1;
 		Building(void);
 		~Building(void);
 
-		void Init(Vector3D pos);
-		void Update();
-		void Draw();
-
+		//get
+		float GetBPercentage();
+		int GetSize();
 		float GetCost();
-		int GetType();
 		Vector3D GetPosition();
-
-		void SetType(int tp);
+		//set
+		void SetBPercentage(float pc);
+		void SetSize(int size);
+		void SetCost(float cost);
 		void SetPosition(Vector3D pos);
 };
 

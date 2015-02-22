@@ -21,10 +21,14 @@ void Tile::Init()
 	this->Empty = true;
 	this->ClickedOn = false;
 	this->ModeOn = false;
-	thebuilding.Init(this->Position);
+	this->startbuild = false;
+	myGaugeBar.init(1,0,1,this->Position);
+
+	myHouse.Init(this->Position);
 }
 void Tile::Update()
 {
+	//myHouse.Update();
 	if(ModeOn)
 	{
 		if(Selected)
@@ -33,6 +37,7 @@ void Tile::Update()
 		}
 		if(ClickedOn)
 		{
+			startbuild= true;
 			this->Color.Set(1,1,0);
 		}
 		if(Type == UNBUILDABLE)
@@ -42,6 +47,12 @@ void Tile::Update()
 		if(!ClickedOn && !Selected && Type != UNBUILDABLE)
 		{
 			this->Color.Set(1,1,1);
+		}
+	}else
+	{
+		if(startbuild)
+		{
+			myGaugeBar.update();
 		}
 	}
 }
@@ -124,8 +135,8 @@ void Tile::Draw()
 			{
 				Vector3D temp;
 				temp.Set(0,0,-3);
-				thebuilding.SetPosition(this->Position+temp);
-				thebuilding.Draw();
+				myHouse.SetPosition(this->Position+temp);
+				myHouse.Draw();
 			}
 		}
 	}else
@@ -135,10 +146,17 @@ void Tile::Draw()
 			if(!Empty)
 			{
 				//if not empty
-				Vector3D temp;
+				Vector3D temp,temp2;
 				temp.Set(0,0,-3);
-				thebuilding.SetPosition(this->Position+temp);
-				thebuilding.Draw();
+				temp2.Set(50,50,-4);
+				myHouse.SetPosition(this->Position+temp);
+				myGaugeBar.setPos(this->Position+temp2);
+				myGaugeBar.draw();
+				if(myGaugeBar.getdone()==true)
+				{
+					myHouse.Draw();
+				}
+				
 			}
 		}
 	}
