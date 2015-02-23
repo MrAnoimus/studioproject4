@@ -1,14 +1,16 @@
 #pragma once
 #include "Building.h"
 
-class FoodCourt : public Building
+class Generalstore : public Building
 {
 	private:
 		float rotationSpeed;
+
 	public:
-		TextureImage FoodCourtTexture;
-		FoodCourt(void);
-		~FoodCourt(void);
+		TextureImage GStoreTexture;
+
+		Generalstore(void);
+		~Generalstore(void);
 
 		void Init(Vector3D pos);
 		void Update();
@@ -16,5 +18,6 @@ class FoodCourt : public Building
 
 		float GetRSpeed();
 		void SetRspeed(float rs);
+		
 };
 

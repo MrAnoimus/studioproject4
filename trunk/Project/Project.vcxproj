@@ -94,6 +94,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="GaugeBar.cpp" />
+    <ClCompile Include="Generalstore.cpp" />
     <ClCompile Include="House.cpp" />
     <ClCompile Include="IntroState.cpp" />
     <ClCompile Include="LoadTGA.cpp" />
@@ -120,6 +121,7 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateManager.h" />
     <ClInclude Include="GaugeBar.h" />
+    <ClInclude Include="Generalstore.h" />
     <ClInclude Include="House.h" />
     <ClInclude Include="IntroState.h" />
     <ClInclude Include="LoadTGA.h" />

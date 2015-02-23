@@ -1,33 +1,30 @@
-#include "FoodCourt.h"
+#include "Generalstore.h"
 
 
-FoodCourt::FoodCourt(void)
+Generalstore::Generalstore(void)
 {
-
 }
 
-FoodCourt::~FoodCourt(void)
+
+Generalstore::~Generalstore(void)
 {
-
 }
-
-void FoodCourt::Init(Vector3D pos)
+void Generalstore::Init(Vector3D pos)
 {
 	LoadTGA(&IsBuilding, "Textures/Building/loading.tga");
-	LoadTGA(&FoodCourtTexture, "Textures/Building/foodcourt.tga");
+	LoadTGA(&GStoreTexture, "Textures/Building/generalstore.tga");
 	SetSize(50);
 	SetPosition(pos);
 	SetBPercentage(0);
-	SetCost(800);
+	SetCost(600);
 	SetTier(0);
-	this->rotationSpeed = 0.5f;
+	this->rotationSpeed = 0.4f;
 }
-void FoodCourt::Update()
+void Generalstore::Update()
 {
 	rotationSpeed++;
 }
-
-void FoodCourt::Draw()
+void Generalstore::Draw()
 {
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
@@ -36,9 +33,8 @@ void FoodCourt::Draw()
 		glTranslatef(GetPosition().x,GetPosition().y,GetPosition().z);
 		if(GetTier() == 0)
 		{
-			glBindTexture(GL_TEXTURE_2D, FoodCourtTexture.id);
+			glBindTexture(GL_TEXTURE_2D, GStoreTexture.id);
 		}
-		
 		glPushMatrix();
 			glBegin(GL_QUADS);
 				glTexCoord2f(1,1);
@@ -56,11 +52,12 @@ void FoodCourt::Draw()
 	glDisable(GL_BLEND);
 	glColor3f(1,1,1);
 }
-float FoodCourt::GetRSpeed()
+
+float Generalstore::GetRSpeed()
 {
 	return this->rotationSpeed;
 }
-void FoodCourt::SetRspeed(float rs)
+void Generalstore::SetRspeed(float rs)
 {
 	this->rotationSpeed = rs;
 }

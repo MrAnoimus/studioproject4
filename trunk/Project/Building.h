@@ -19,6 +19,8 @@ class Building
 		Building(void);
 		~Building(void);
 
+		void DrawBuildingbar(float r);
+
 		//get
 		int GetTier();
 		float GetBPercentage();
