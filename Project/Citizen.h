@@ -5,11 +5,11 @@
 #include "vector3D.h"
 #include "FreeType.h"
 #include "Camera.h"
-
+#include "Human.h"
 #pragma once
 
 using namespace std;
-class Citizen
+class Citizen: public Human
 {
 
 public:
@@ -65,8 +65,7 @@ public:
 
 	void SetAnimationCounter(int AnimationCounter);
 	int GetAnimationCounter(void);
-	void SetPosition(Vector3D Position);
-	Vector3D GetPosition(void);
+	
 
 	bool RenderMood;
 

@@ -14,7 +14,7 @@ class Building
 		int Size;
 		int Tier;
 	public:
-		std::vector<Citizen* >CitizenList;
+		
 		TextureImage IsBuilding;
 		Building(void);
 		~Building(void);

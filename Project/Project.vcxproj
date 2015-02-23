@@ -88,6 +88,7 @@
     <ClCompile Include="Astar.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Choices.cpp" />
     <ClCompile Include="Citizen.cpp" />
     <ClCompile Include="FoodCourt.cpp" />
     <ClCompile Include="FreeType.cpp" />
@@ -96,6 +97,7 @@
     <ClCompile Include="GaugeBar.cpp" />
     <ClCompile Include="Generalstore.cpp" />
     <ClCompile Include="House.cpp" />
+    <ClCompile Include="Human.cpp" />
     <ClCompile Include="IntroState.cpp" />
     <ClCompile Include="LoadTGA.cpp" />
     <ClCompile Include="LuaFuncs.cpp" />
@@ -113,6 +115,7 @@
     <ClInclude Include="Astar.h" />
     <ClInclude Include="Building.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Choices.h" />
     <ClInclude Include="Citizen.h" />
     <ClInclude Include="Definitions.h" />
     <ClInclude Include="FoodCourt.h" />
@@ -123,6 +126,7 @@
     <ClInclude Include="GaugeBar.h" />
     <ClInclude Include="Generalstore.h" />
     <ClInclude Include="House.h" />
+    <ClInclude Include="Human.h" />
     <ClInclude Include="IntroState.h" />
     <ClInclude Include="LoadTGA.h" />
     <ClInclude Include="LuaFuncs.h" />

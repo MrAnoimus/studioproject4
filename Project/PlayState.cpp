@@ -145,16 +145,18 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 						
 					}
 
-					Astar as(px,py,SelectorX2,SelectorY2);
 
-					bool result = as.Search(Map);
+					Astar as(px,py,SelectorX2,SelectorY2);
 					CNode *Test = new CNode;
 					as.AddCloseList(Test);
+					
+					bool result = as.Search(Map);
+					
+					
 					CNode* Node = new CNode;
 					Node->x = SelectorX2;
 					Node->y = SelectorY2;
 					as.AddCloseList(Node);
-					
 
 					if(result)
 					{
@@ -174,6 +176,8 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 							}
 							break;*/
 
+							if(myTile[SelectorY][SelectorX].GetBtype()==1)
+							{
 							for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 							{
 								Citizen *Citizens = *it;
@@ -206,6 +210,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 										
 									}*/
 								}
+							}
 							}
 						}
 					}
@@ -419,6 +424,10 @@ bool CPlayState::Init()
 		return false;
 	}
 	theSoundEngine->setSoundVolume(volume);
+	//Choice stuff
+	TheChoice = new Choices;
+
+	//end of choice
 
 	//Citizen stuff
 	Citizen *go;
@@ -491,11 +500,12 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 	}
 	if(myKeys['w']==true)
 	{
+		TheChoice->SetPopup(true);
 	}
 
 	if(myKeys['m'] == true)
 	{
-		//mgstuffs.minigame = true;
+		mgstuffs.minigame = true;
 		theCamera->canPan = !theCamera->canPan;
 	}
 
@@ -783,6 +793,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	//print(our_font,0,550,"Cam posX :%f\nCam posY :%f\nCam PosZ:%f",theCamera->GetPosition().x ,theCamera->GetPosition().y,theCamera->GetPosition().z);
 	print(our_font,0,550,"type: %d",myTile[SelectorY][SelectorX].GetBtype());
 	RenderUI();
+	TheChoice->Draw();
 
 	
 	if (REvent.IsDisplay == true)
@@ -801,7 +812,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 
 void CPlayState::RenderUI(void)
 {
-	print(our_font,0,250,"Current Money :%.2f\nCurrent Manpower :%1i\nCurrent Citizen:%1i",resource.GetMoney() ,resource.GetManPower(),resource.GetCitizen());
+	//print(our_font,0,250,"Current Money :%.2f\nCurrent Manpower :%1i\nCurrent Citizen:%1i",PlayerResource.GetMoney() ,PlayerResource.GetManPower(),PlayerResource.GetCitizen());
 }
 
 Citizen* CPlayState::FetchObject()

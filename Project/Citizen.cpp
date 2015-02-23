@@ -325,16 +325,6 @@ int Citizen::GetAnimationCounter(void)
 	return this->AnimationCounter;
 }
 
-void Citizen::SetPosition(Vector3D Position)
-{
-	this->Position = Position;
-}
-
-Vector3D Citizen::GetPosition(void)
-{
-	return this->Position;
-}
-
 void Citizen::StatsBoard(void)
 {
 	glPushMatrix();
