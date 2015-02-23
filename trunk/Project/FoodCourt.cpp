@@ -1,31 +1,31 @@
-#include "House.h"
+#include "FoodCourt.h"
 
 
-House::House(void)
+FoodCourt::FoodCourt(void)
 {
 
 }
 
-House::~House(void)
+FoodCourt::~FoodCourt(void)
 {
 
 }
 
-void House::Init(Vector3D pos)
+void FoodCourt::Init(Vector3D pos)
 {
 	LoadTGA(&IsBuilding, "Textures/Building/loading.tga");
-	LoadTGA(&HouseTexture, "Textures/Building/House.tga");
+	LoadTGA(&FoodCourtTexture, "Textures/Building/foodcourt.tga");
 	SetSize(50);
 	SetPosition(pos);
 	SetBPercentage(0);
-	SetCost(500);
+	SetCost(800);
 	SetTier(0);
 }
-void House::Update()
+void FoodCourt::Update()
 {
 	rotationSpeed++;
 }
-void House::DrawBuildingbar()
+void FoodCourt::DrawBuildingbar()
 {
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
@@ -50,7 +50,7 @@ void House::DrawBuildingbar()
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
 }
-void House::Draw()
+void FoodCourt::Draw()
 {
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
@@ -59,8 +59,9 @@ void House::Draw()
 		glTranslatef(GetPosition().x,GetPosition().y,GetPosition().z);
 		if(GetTier() == 0)
 		{
-			glBindTexture(GL_TEXTURE_2D, HouseTexture.id);
+			glBindTexture(GL_TEXTURE_2D, FoodCourtTexture.id);
 		}
+		
 		glPushMatrix();
 			glBegin(GL_QUADS);
 				glTexCoord2f(1,1);

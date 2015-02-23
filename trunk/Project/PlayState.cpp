@@ -89,7 +89,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 {
 	switch (button)
 	{
-	case GLUT_LEFT_BUTTON:
+		case GLUT_LEFT_BUTTON:
 		{
 			if (state == GLUT_DOWN)
 			{
@@ -112,13 +112,29 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				//check mode
 				if(myTile[SelectorY][SelectorX].GetModeOn() == true)
 				{
-					//only if tile is not clicked on&&((PlayerResource.GetMoney()-10.0f)>0)
-					if(myTile[SelectorY][SelectorX].IsClickedOn() == false)
+					//only if tile is not clicked on)
+					if(myTile[SelectorY][SelectorX].IsClickedOn() == false && (PlayerResource.GetMoney())>=0)
 					{
 						myTile[SelectorY][SelectorX].SetIsClickedOn(true);
-						//once selected and click on set tile to not empty
-						myTile[SelectorY][SelectorX].SetEmpty(false);
-						PlayerResource.SetMoney(PlayerResource.GetMoney()-10.0f);
+
+						if(myTile[SelectorY][SelectorX].GetBtype() == 0)
+						{
+							myTile[SelectorY][SelectorX].SetEmpty(true);
+							myTile[SelectorY][SelectorX].SetIsClickedOn(false);
+						}
+						if(myTile[SelectorY][SelectorX].GetBtype() == 1)
+						{
+							//once selected and click on set tile to not empty
+							myTile[SelectorY][SelectorX].SetEmpty(false);
+							PlayerResource.SetMoney(PlayerResource.GetMoney()-myTile[SelectorY][SelectorX].myHouse.GetCost());
+						}
+						if(myTile[SelectorY][SelectorX].GetBtype() == 2)
+						{
+							//once selected and click on set tile to not empty
+							myTile[SelectorY][SelectorX].SetEmpty(false);
+							PlayerResource.SetMoney(PlayerResource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
+						}
+						
 					}
 
 					Astar as(px,py,SelectorX2,SelectorY2);
@@ -187,7 +203,6 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 					}
 
 				}
-
 
 				if(mouseLC == NULL)
 				{
@@ -430,7 +445,7 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 	{
 		exit(0);
 	}
-	if(myKeys['h']==true)
+	if(myKeys['1']==true)
 	{
 		if(myTile[SelectorY][SelectorX].GetBtype()==0)
 		{
@@ -438,10 +453,11 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 		}else
 		{
 			myTile[SelectorY][SelectorX].SetBtype(0);
+
 		}
 		
 	}
-	if(myKeys['j']==true)
+	if(myKeys['2']==true)
 	{
 		if(myTile[SelectorY][SelectorX].GetBtype()==0)
 		{
@@ -504,7 +520,6 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 
 void CPlayState::Update(CGameStateManager* theGSM) 
 {
-
 	//for movement of ai		
 	//std::cout <<"Index: " << index << std::endl;
 	//for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
@@ -542,7 +557,6 @@ void CPlayState::Update(CGameStateManager* theGSM)
 	//for mini game
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 	{
-
 		Citizen *Citizens = *it;
 		if (Citizens->active == true)
 		{
@@ -726,7 +740,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 		}
 
 		glPopMatrix();
-	} 
+	}
 
 	DrawTileContent();
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
@@ -740,8 +754,8 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	}
 	// Enable 2D text display and HUD
 	theCamera->SetHUD( true);
-	print(our_font,0,550,"Cam posX :%f\nCam posY :%f\nCam PosZ:%f",theCamera->GetPosition().x ,theCamera->GetPosition().y,theCamera->GetPosition().z);
-	print(our_font,0,300,"type: %d",myTile[SelectorY][SelectorX].GetBtype());
+	//print(our_font,0,550,"Cam posX :%f\nCam posY :%f\nCam PosZ:%f",theCamera->GetPosition().x ,theCamera->GetPosition().y,theCamera->GetPosition().z);
+	print(our_font,0,550,"type: %d",myTile[SelectorY][SelectorX].GetBtype());
 	RenderUI();
 	theCamera->SetHUD( false );
 	// Flush off any entity which is not drawn yet, so that we maintain the frame rate.
@@ -755,7 +769,6 @@ void CPlayState::RenderUI(void)
 {
 	print(our_font,0,250,"Current Money :%.2f\nCurrent Manpower :%1i\nCurrent Citizen:%1i",PlayerResource.GetMoney() ,PlayerResource.GetManPower(),PlayerResource.GetCitizen());
 }
-
 
 Citizen* CPlayState::FetchObject()
 {
@@ -772,7 +785,6 @@ Citizen* CPlayState::FetchObject()
 	go->active = true;
 	CitizenList.push_back(go);
 	return go;
-
 }
 
 void CPlayState::DrawMGBG()

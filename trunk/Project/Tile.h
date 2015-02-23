@@ -28,13 +28,13 @@ class Tile
 		int Size;
 		//building stuff
 		int Btype;
-		House myHouse;
-		FoodCourt myFCourt;
+		
 		//don't want people to use this two drawing function outside of this class
 		void DrawTileOutLine();
 		void DrawTile();
 	public:
-		
+		House myHouse;
+		FoodCourt myFCourt;
 		Tile(void);
 		~Tile(void);
 		TextureImage TileTexture;
