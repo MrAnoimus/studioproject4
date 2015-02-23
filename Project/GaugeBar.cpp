@@ -66,10 +66,10 @@ void GaugeBar::draw()
 		glPopMatrix();
 		glColor3f(1,1,1);
 }
-void GaugeBar::update()
+void GaugeBar::update(float r)
 {
 
-	Percentage+=1.0f;
+	Percentage+=r;
 	if(Percentage>=100)
 	{
 		Percentage=100;

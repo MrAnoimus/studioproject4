@@ -43,8 +43,6 @@
     </ClCompile>
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="RandomEvent.cpp" />
-    <ClCompile Include="Astar.cpp" />
-    <ClCompile Include="Node.cpp" />
     <ClCompile Include="House.cpp">
       <Filter>Building</Filter>
     </ClCompile>
@@ -54,6 +52,15 @@
     <ClCompile Include="LuaFuncs.cpp" />
     <ClCompile Include="FoodCourt.cpp">
       <Filter>Building</Filter>
+    </ClCompile>
+    <ClCompile Include="Generalstore.cpp">
+      <Filter>Building</Filter>
+    </ClCompile>
+    <ClCompile Include="Astar.cpp">
+      <Filter>PathFinding</Filter>
+    </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>PathFinding</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -110,8 +117,6 @@
     </ClInclude>
     <ClInclude Include="Resource.h" />
     <ClInclude Include="RandomEvent.h" />
-    <ClInclude Include="Astar.h" />
-    <ClInclude Include="Node.h" />
     <ClInclude Include="House.h">
       <Filter>Building</Filter>
     </ClInclude>
@@ -122,9 +127,20 @@
       <Filter>MISC</Filter>
     </ClInclude>
     <ClInclude Include="LuaFuncs.h" />
-    <ClInclude Include="resource1.h" />
     <ClInclude Include="FoodCourt.h">
       <Filter>Building</Filter>
+    </ClInclude>
+    <ClInclude Include="Generalstore.h">
+      <Filter>Building</Filter>
+    </ClInclude>
+    <ClInclude Include="Astar.h">
+      <Filter>PathFinding</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>PathFinding</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>MISC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +176,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Project.rc" />
+    <ResourceCompile Include="Project.rc">
+      <Filter>MISC</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

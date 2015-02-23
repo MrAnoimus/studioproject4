@@ -15,7 +15,7 @@ class GaugeBar
 		~GaugeBar(void);
 		void init(float r,float g,float b,Vector3D pos);
 		void draw();
-		void update();
+		void update(float r);
 		//get
 		bool getdone();
 		Vector3D getPos();

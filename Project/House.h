@@ -13,12 +13,13 @@ class House : public Building
 
 		void Init(Vector3D pos);
 		void Update();
-		void DrawBuildingbar();
 		void Draw();
 
 		//get
 		std::string GetOwner();
+		float GetRSpeed();
 		//set
 		void SetOwner(std::string name);
+		void SetRspeed(float rs);
 };
 

@@ -55,15 +55,19 @@ void Tile::Update()
 	{
 		if(startbuild)
 		{
-			myGaugeBar.update();
 			switch(Btype)
 			{
+				
 				case 1:
 				{
+					//myGaugeBar.update(myHouse.GetRSpeed());
+					
+					myGaugeBar.update(1.0f);
 					myHouse.Update();
 				}break;
 				case 2:
 				{
+					myGaugeBar.update(0.5f);
 					myFCourt.Update();
 				}break;
 			}
@@ -143,13 +147,15 @@ void Tile::Draw()
 					{
 						case 1:
 						{
+							//set building speed
 							myHouse.SetPosition(this->Position+temp);
-							myHouse.DrawBuildingbar();
+							myHouse.DrawBuildingbar(myHouse.GetRSpeed());
 						}break;
 						case 2:
 						{
+							//set building speed
 							myFCourt.SetPosition(this->Position+temp);
-							myFCourt.DrawBuildingbar();
+							myFCourt.DrawBuildingbar(myFCourt.GetRSpeed());
 						}break;
 					}
 				}else
