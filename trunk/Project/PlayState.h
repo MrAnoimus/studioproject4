@@ -53,6 +53,7 @@ class CPlayState : public CGameState
 		void Pause();
 		void Resume();
 
+		void HandleREvents(int type);
 		void HandleEvents(CGameStateManager* theGSM);
 		void Update(CGameStateManager* theGSM);
 		//draw function start here
@@ -105,6 +106,8 @@ class CPlayState : public CGameState
 		float frequency;
 		//texture
 		TextureImage BackgroundTexture;
+		TextureImage MenuTexture[2];
+		TextureImage EventTexture[10];
 		//keyboard and mouse
 		bool myKeys[255];
 		theMouseInfo mouseInfo;

@@ -10,11 +10,12 @@ using namespace std;
 class CRandomEvent
 {
 private:
-	int type;
-
+	
+	
 public:
-
-	void CreateEventz();
+	int type;
+	bool IsDisplay;
+	void CreateEventz(int type);
 	int Random();
 
 	CResource resource;

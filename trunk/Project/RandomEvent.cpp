@@ -2,6 +2,7 @@
 
 CRandomEvent::CRandomEvent(void)
 {
+	IsDisplay = false;
 }
 
 
@@ -11,14 +12,14 @@ CRandomEvent::~CRandomEvent(void)
 
 int CRandomEvent::Random()
 {
-	int i = rand()%  5;
+	int i = rand()% 5;
 	type = i;
 	return type;
 }
 
-void CRandomEvent::CreateEventz()
+void CRandomEvent::CreateEventz(int typez)
 {
-	switch (type)
+	switch (typez)
 	{
 	case 1:
 		{

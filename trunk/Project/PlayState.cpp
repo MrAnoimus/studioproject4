@@ -91,6 +91,14 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 	{
 		case GLUT_LEFT_BUTTON:
 		{
+			if (REvent.IsDisplay == true)
+			{
+				if (mouseInfo.lastX >=325 && mouseInfo.lastX <= 475 && mouseInfo.lastY >= 395 && mouseInfo.lastY <=465)
+				{
+					REvent.IsDisplay = false;
+					theCamera->canPan = true;
+				}
+			}
 			if (state == GLUT_DOWN)
 			{
 				mouseInfo.mLButtonUp = state;
@@ -306,10 +314,17 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 		}break;
 	case GLUT_MIDDLE_BUTTON:
 		{
-			//cout <<resource.GetCitizen();
-			REvent.Random();
-			REvent.CreateEventz();
-		}break;
+			if(state == GLUT_DOWN)
+			{
+				REvent.IsDisplay = true;
+				REvent.Random();
+				REvent.CreateEventz(REvent.type);
+				/*cout <<mouseInfo.lastX <<endl;
+				cout <<mouseInfo.lastY <<endl;*/
+				cout <<REvent.type<<endl;
+				theCamera->canPan = false;
+			}break;
+		}
 	}
 }
 void CPlayState::KeyboardDown(unsigned char key, int x, int y)
@@ -374,6 +389,13 @@ bool CPlayState::Init()
 	//
 	//load texture here
 	LoadTGA(&BackgroundTexture,"Textures/Farmbg.tga");
+	LoadTGA(&MenuTexture[0],"Textures/redbg.tga");
+	LoadTGA(&MenuTexture[1],"Textures/greenbg.tga");
+	LoadTGA(&EventTexture[0],"Textures/bad1.tga");
+	LoadTGA(&EventTexture[1],"Textures/bad2.tga");
+	LoadTGA(&EventTexture[5],"Textures/good1.tga");
+	LoadTGA(&EventTexture[6],"Textures/good2.tga");
+	LoadTGA(&EventTexture[7],"Textures/good3.tga");
 	//load ttf fonts
 	our_font.init("Fonts/FFF_Tusj.TTF", 42);
 	//init keyboard values
@@ -520,6 +542,8 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 
 void CPlayState::Update(CGameStateManager* theGSM) 
 {
+	if (REvent.IsDisplay ==false)
+	{
 	//for movement of ai		
 	//std::cout <<"Index: " << index << std::endl;
 	//for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
@@ -668,6 +692,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 	}
 	}
 	}*/
+	}
 }
 
 void CPlayState::DrawTileContent()
@@ -693,9 +718,11 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	glLoadIdentity();
 	theCamera->Update();
 
+	
+
 	glEnable(GL_TEXTURE_2D);
 	glPushMatrix();
-		glEnable(GL_BLEND);
+	glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glBindTexture (GL_TEXTURE_2D, BackgroundTexture.id);
 		glPushMatrix();
@@ -708,11 +735,10 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 			glVertex2f(800,0);
 			glTexCoord2f(1,0);
 			glVertex2f(0,0);				
-			glEnd();
+		glEnd();
 		glPopMatrix();
-		glDisable(GL_BLEND);
-	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
+
 
 	//for mini game
 	if(mgstuffs.minigame)
@@ -757,6 +783,14 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	//print(our_font,0,550,"Cam posX :%f\nCam posY :%f\nCam PosZ:%f",theCamera->GetPosition().x ,theCamera->GetPosition().y,theCamera->GetPosition().z);
 	print(our_font,0,550,"type: %d",myTile[SelectorY][SelectorX].GetBtype());
 	RenderUI();
+
+	
+	if (REvent.IsDisplay == true)
+	{
+		HandleREvents(REvent.type);
+
+	}
+
 	theCamera->SetHUD( false );
 	// Flush off any entity which is not drawn yet, so that we maintain the frame rate.
 	glFlush();
@@ -843,4 +877,136 @@ void CPlayState::DrawObject(GameObject *go)
 		}
 		break;
 	}
+}
+
+void CPlayState::HandleREvents(int type)
+{
+	switch (type)
+	{
+		// - money
+	case 0:
+		glEnable(GL_TEXTURE_2D);
+		glPushMatrix();
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture (GL_TEXTURE_2D, EventTexture[0].id);
+			glPushMatrix();
+				glTranslatef(100,50,0);
+				glScalef(0.75,0.75,0.75);
+				glBegin(GL_QUADS);
+				glTexCoord2f(1,1);
+				glVertex2f(0,600);
+				glTexCoord2f(0,1);
+				glVertex2f(800,600);
+				glTexCoord2f(0,0);
+				glVertex2f(800,0);
+				glTexCoord2f(1,0);
+				glVertex2f(0,0);				
+				glEnd();
+			glPopMatrix();
+			glDisable(GL_BLEND);
+		glPopMatrix();
+		glDisable(GL_TEXTURE_2D);
+		break;
+	case 1:
+		// - money
+		glEnable(GL_TEXTURE_2D);
+		glPushMatrix();
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture (GL_TEXTURE_2D, EventTexture[1].id);
+			glPushMatrix();
+				glTranslatef(100,50,-1);
+				glScalef(0.75,0.75,0.75);
+				glBegin(GL_QUADS);
+				glTexCoord2f(1,1);
+				glVertex2f(0,600);
+				glTexCoord2f(0,1);
+				glVertex2f(800,600);
+				glTexCoord2f(0,0);
+				glVertex2f(800,0);
+				glTexCoord2f(1,0);
+				glVertex2f(0,0);				
+				glEnd();
+			glPopMatrix();
+			glDisable(GL_BLEND);
+		glPopMatrix();
+		glDisable(GL_TEXTURE_2D);
+		break;
+	case 2:
+		// + money
+		glEnable(GL_TEXTURE_2D);
+		glPushMatrix();
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture (GL_TEXTURE_2D, EventTexture[5].id);
+			glPushMatrix();
+				glTranslatef(100,50,-1);
+				glScalef(0.75,0.75,0.75);
+				glBegin(GL_QUADS);
+				glTexCoord2f(1,1);
+				glVertex2f(0,600);
+				glTexCoord2f(0,1);
+				glVertex2f(800,600);
+				glTexCoord2f(0,0);
+				glVertex2f(800,0);
+				glTexCoord2f(1,0);
+				glVertex2f(0,0);				
+				glEnd();
+			glPopMatrix();
+			glDisable(GL_BLEND);
+		glPopMatrix();
+		glDisable(GL_TEXTURE_2D);
+		break;
+	case 3:	
+		// + Man power
+		glEnable(GL_TEXTURE_2D);
+		glPushMatrix();
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture (GL_TEXTURE_2D, EventTexture[6].id);
+			glPushMatrix();
+				glTranslatef(100,50,-1);
+				glScalef(0.75,0.75,0.75);
+				glBegin(GL_QUADS);
+				glTexCoord2f(1,1);
+				glVertex2f(0,600);
+				glTexCoord2f(0,1);
+				glVertex2f(800,600);
+				glTexCoord2f(0,0);
+				glVertex2f(800,0);
+				glTexCoord2f(1,0);
+				glVertex2f(0,0);				
+				glEnd();
+			glPopMatrix();
+			glDisable(GL_BLEND);
+		glPopMatrix();
+		glDisable(GL_TEXTURE_2D);
+		break;
+	case 4:
+		glEnable(GL_TEXTURE_2D);
+		glPushMatrix();
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture (GL_TEXTURE_2D, EventTexture[7].id);
+			glPushMatrix();
+				glTranslatef(100,50,-1);
+				glScalef(0.75,0.75,0.75);
+				glBegin(GL_QUADS);
+				glTexCoord2f(1,1);
+				glVertex2f(0,600);
+				glTexCoord2f(0,1);
+				glVertex2f(800,600);
+				glTexCoord2f(0,0);
+				glVertex2f(800,0);
+				glTexCoord2f(1,0);
+				glVertex2f(0,0);				
+				glEnd();
+			glPopMatrix();
+			glDisable(GL_BLEND);
+		glPopMatrix();
+		glDisable(GL_TEXTURE_2D);
+		break;
+	}
+	
 }
