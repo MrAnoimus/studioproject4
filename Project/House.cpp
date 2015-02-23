@@ -18,6 +18,8 @@ void House::Init(Vector3D pos)
 	SetSize(50);
 	SetPosition(pos);
 	SetBPercentage(0);
+	SetCost(500);
+	SetTier(0);
 }
 void House::Update()
 {
@@ -50,14 +52,16 @@ void House::DrawBuildingbar()
 }
 void House::Draw()
 {
-	//DrawBuildingbar();
-	
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 	glPushMatrix();
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glTranslatef(GetPosition().x,GetPosition().y,GetPosition().z);
-		glBindTexture(GL_TEXTURE_2D, HouseTexture.id);
+		if(GetTier() == 0)
+		{
+			glBindTexture(GL_TEXTURE_2D, HouseTexture.id);
+		}
+		
 		glPushMatrix();
 			glBegin(GL_QUADS);
 				glTexCoord2f(1,1);

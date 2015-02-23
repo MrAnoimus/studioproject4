@@ -5,9 +5,9 @@
 #include <time.h>
 extern "C" 
 {
-#include "lua.h"
-#include "lualib.h"
-#include "lauxlib.h"
+	#include "lua.h"
+	#include "lualib.h"
+	#include "lauxlib.h"
 }
 
 CPlayState CPlayState::thePlayState;
@@ -96,8 +96,8 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				mouseInfo.mLButtonUp = state;
 				mouseInfo.lastX = x;
 				mouseInfo.lastY = y;
-				float SelectorX2 = (-mouseInfo.lastX +800) / 100;
-				float SelectorY2 = (-mouseInfo.lastY +600) / 100;
+				float SelectorX2 = (-mouseInfo.lastX +800)/ 100;
+				float SelectorY2 = (-mouseInfo.lastY +600)/ 100;
 				for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 				{
 					Citizen *Citizens = *it;
@@ -140,13 +140,13 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 						{
 							/*if(moving == true)
 							{
-							Target.x = as.closeList[i]->x*100;
-							Target.y = as.closeList[i]->y*100;
-							index++;
+								Target.x = as.closeList[i]->x*100;
+								Target.y = as.closeList[i]->y*100;
+								index++;
 							}
 							else
 							{
-							i--;
+								i--;
 							}
 							break;*/
 
@@ -164,7 +164,6 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 									{
 										Citizens->SetPosition(Vector3D(Citizens->GetPosition().x ,as.closeList[i]->y*100 ,Citizens->GetPosition().z));
 									}	
-
 									/*if(moving)
 									{
 										if ((Target - Citizens->GetPosition()).LengthSquared() > 0)
@@ -310,6 +309,7 @@ void CPlayState::KeyboardUp(unsigned char key, int x, int y)
 
 bool CPlayState::Init()
 {
+	typeS = 0;
 	index=0;
 	moving = false;
 	movingX = false;
@@ -429,6 +429,27 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 	if(myKeys[27]==true)
 	{
 		exit(0);
+	}
+	if(myKeys['h']==true)
+	{
+		if(myTile[SelectorY][SelectorX].GetBtype()==0)
+		{
+			myTile[SelectorY][SelectorX].SetBtype(1);
+		}else
+		{
+			myTile[SelectorY][SelectorX].SetBtype(0);
+		}
+		
+	}
+	if(myKeys['j']==true)
+	{
+		if(myTile[SelectorY][SelectorX].GetBtype()==0)
+		{
+			myTile[SelectorY][SelectorX].SetBtype(2);
+		}else
+		{
+			myTile[SelectorY][SelectorX].SetBtype(0);
+		}
 	}
 	if(myKeys['w']==true)
 	{
@@ -660,28 +681,28 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 
 	glEnable(GL_TEXTURE_2D);
 	glPushMatrix();
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBindTexture (GL_TEXTURE_2D, BackgroundTexture.id);
-	glPushMatrix();
-	glBegin(GL_QUADS);
-	glTexCoord2f(1,1);
-	glVertex2f(0,600);
-	glTexCoord2f(0,1);
-	glVertex2f(800,600);
-	glTexCoord2f(0,0);
-	glVertex2f(800,0);
-	glTexCoord2f(1,0);
-	glVertex2f(0,0);				
-	glEnd();
-	glPopMatrix();
-	glDisable(GL_BLEND);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBindTexture (GL_TEXTURE_2D, BackgroundTexture.id);
+		glPushMatrix();
+			glBegin(GL_QUADS);
+			glTexCoord2f(1,1);
+			glVertex2f(0,600);
+			glTexCoord2f(0,1);
+			glVertex2f(800,600);
+			glTexCoord2f(0,0);
+			glVertex2f(800,0);
+			glTexCoord2f(1,0);
+			glVertex2f(0,0);				
+			glEnd();
+		glPopMatrix();
+		glDisable(GL_BLEND);
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 
 	//for mini game
 	if(mgstuffs.minigame)
-		{
+	{
 		//DRAW THIS STUFF IN THE MINIGAME CLASS PLEASE
 		glPushMatrix();
 		glTranslatef(150,50,-1);
@@ -720,6 +741,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	// Enable 2D text display and HUD
 	theCamera->SetHUD( true);
 	print(our_font,0,550,"Cam posX :%f\nCam posY :%f\nCam PosZ:%f",theCamera->GetPosition().x ,theCamera->GetPosition().y,theCamera->GetPosition().z);
+	print(our_font,0,300,"type: %d",myTile[SelectorY][SelectorX].GetBtype());
 	RenderUI();
 	theCamera->SetHUD( false );
 	// Flush off any entity which is not drawn yet, so that we maintain the frame rate.

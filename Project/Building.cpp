@@ -2,9 +2,8 @@
 
 
 Building::Building(void)
-: Size(50),Cost(100.0f)
+: Size(50),Cost(0)
 {
-	this->Cost = 100.0f;
 }
 
 Building::~Building(void)
@@ -12,6 +11,11 @@ Building::~Building(void)
 	
 }
 //getter
+int Building::GetTier()
+{
+	return this->Tier;
+}
+
 float Building::GetBPercentage()
 {
 	return this->BuildPercentage;
@@ -29,6 +33,14 @@ Vector3D Building::GetPosition()
 	return this->Position;
 }
 //setter
+void Building::SetTier(int t)
+{
+	this->Tier = t;
+}
+void Building::SetCost(float c)
+{
+	this->Cost = c;
+}
 void Building::SetBPercentage(float pc)
 {
 	this->BuildPercentage = pc;

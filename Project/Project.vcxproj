@@ -89,6 +89,7 @@
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Citizen.cpp" />
+    <ClCompile Include="FoodCourt.cpp" />
     <ClCompile Include="FreeType.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameStateManager.cpp" />
@@ -113,6 +114,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Citizen.h" />
     <ClInclude Include="Definitions.h" />
+    <ClInclude Include="FoodCourt.h" />
     <ClInclude Include="FreeType.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameState.h" />
@@ -128,11 +130,15 @@
     <ClInclude Include="PlayState.h" />
     <ClInclude Include="RandomEvent.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="resource1.h" />
     <ClInclude Include="ResultState.h" />
     <ClInclude Include="SettingState.h" />
     <ClInclude Include="TextureImage.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="vector3D.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Project.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

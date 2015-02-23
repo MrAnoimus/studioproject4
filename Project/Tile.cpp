@@ -22,8 +22,11 @@ void Tile::Init()
 	this->ClickedOn = false;
 	this->ModeOn = false;
 	this->startbuild = false;
+	//building stuff
+	this->Btype = 0;
 	myGaugeBar.init(1,0,1,this->Position);
 	myHouse.Init(this->Position);
+	myFCourt.Init(this->Position);
 }
 void Tile::Update()
 {
@@ -36,6 +39,7 @@ void Tile::Update()
 		}
 		if(ClickedOn)
 		{
+			//check which building the player want
 			startbuild= true;
 			this->Color.Set(1,1,0);
 		}
@@ -52,6 +56,18 @@ void Tile::Update()
 		if(startbuild)
 		{
 			myGaugeBar.update();
+			switch(Btype)
+			{
+				case 1:
+				{
+					myHouse.Update();
+				}break;
+				case 2:
+				{
+					myFCourt.Update();
+				}break;
+
+			}
 		}
 	}
 }
@@ -89,25 +105,6 @@ void Tile::DrawTile()
 		glPushMatrix();
 			glTranslatef(this->Position.x,this->Position.y,this->Position.z);
 			glColor4f(this->Color.x,this->Color.y,this->Color.z,Alpha);
-			//switch(Type)
-			//{
-			//	case GRASS:
-			//	{
-			//		//glBindTexture (GL_TEXTURE_2D, TileTexture.texID);
-			//	}break;
-			//	case SOIL:
-			//	{
-			//		//glBindTexture (GL_TEXTURE_2D, TileTexture.texID);
-			//	}break;
-			//	case ROCK:
-			//	{
-			//		//glBindTexture (GL_TEXTURE_2D, TileTexture.texID);
-			//	}break;
-			//	case BAD:
-			//	{
-			//		//glBindTexture (GL_TEXTURE_2D, TileTexture.texID);
-			//	}break;
-			//}
 			glBegin(GL_QUADS);
 				glTexCoord2f(0,0);
 				glVertex2f(-Size,Size);
@@ -128,16 +125,6 @@ void Tile::Draw()
 	{
 		DrawTileOutLine();
 		DrawTile();
-		if(ClickedOn)
-		{
-			if(Empty)
-			{
-				Vector3D temp;
-				temp.Set(0,0,-3);
-				myHouse.SetPosition(this->Position+temp);
-				myHouse.Draw();
-			}
-		}
 	}else
 	{
 		if(ClickedOn)
@@ -148,18 +135,50 @@ void Tile::Draw()
 				Vector3D temp,temp2;
 				temp.Set(0,0,-3);
 				temp2.Set(50,50,-4);
-				myHouse.SetPosition(this->Position+temp);
+
 				myGaugeBar.setPos(this->Position+temp2);
-				myGaugeBar.draw();
-				if(myGaugeBar.getdone()==true)
+				if(myGaugeBar.getdone()==false)
 				{
-					myHouse.Draw();
+					myGaugeBar.draw();
+					switch(Btype)
+					{
+						case 1:
+						{
+							myHouse.SetPosition(this->Position+temp);
+							myHouse.DrawBuildingbar();
+						}break;
+						case 2:
+						{
+							myFCourt.SetPosition(this->Position+temp);
+							myFCourt.DrawBuildingbar();
+						}break;
+					}
+				}else
+				{
+					switch(Btype)
+					{
+						case 1:
+						{
+							myHouse.Draw();
+						}break;
+						case 2:
+						{
+							myFCourt.Draw();
+						}break;
+
+					}
 				}
-				
 			}
 		}
 	}
 	
+}
+
+
+
+int Tile::GetBtype()
+{
+	return Btype;
 }
 bool Tile::GetModeOn()
 {
@@ -192,6 +211,10 @@ Vector3D Tile::GetColor()
 
 //setter
 
+void Tile::SetBtype(int t)
+{
+	Btype = t;
+}
 void Tile::SetModeOn(bool m)
 {
 	ModeOn = m;
