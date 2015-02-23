@@ -66,7 +66,6 @@ void Tile::Update()
 				{
 					myFCourt.Update();
 				}break;
-
 			}
 		}
 	}
