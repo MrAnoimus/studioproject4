@@ -69,7 +69,7 @@ void GaugeBar::draw()
 void GaugeBar::update()
 {
 
-	Percentage+=0.1f;
+	Percentage+=1.0f;
 	if(Percentage>=100)
 	{
 		Percentage=100;

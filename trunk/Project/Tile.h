@@ -2,6 +2,7 @@
 #include "vector3D.h"
 #include "LoadTGA.h"
 #include "House.h"
+#include "FoodCourt.h"
 
 class Tile
 {
@@ -25,7 +26,10 @@ class Tile
 		Vector3D Color;
 		float Alpha;
 		int Size;
+		//building stuff
+		int Btype;
 		House myHouse;
+		FoodCourt myFCourt;
 		//don't want people to use this two drawing function outside of this class
 		void DrawTileOutLine();
 		void DrawTile();
@@ -40,6 +44,8 @@ class Tile
 		//
 		void Draw();
 
+		//Getter
+		int GetBtype();
 		bool GetModeOn();
 		bool IsSelected();
 		int GetType();
@@ -48,7 +54,8 @@ class Tile
 		Vector3D GetColor();
 		bool IsClickedOn();
 
-
+		//Setter
+		void SetBtype(int t);
 		void SetModeOn(bool m);
 		void SetIsSelected(bool s);
 		void SetType(int type);
@@ -56,6 +63,7 @@ class Tile
 		void SetPosition(Vector3D pos);
 		void SetColor(Vector3D c);
 		void SetIsClickedOn(bool co);
+
 
 };
 

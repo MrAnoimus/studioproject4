@@ -7,10 +7,8 @@
 #include "freeType.h"
 #include "Citizen.h"
 #include "Tile.h"
-
 //for resource management
 #include "Resource.h"
-
 //for mini game
 #include "GameObject.h"
 #include "MyMath.h"
@@ -130,6 +128,8 @@ class CPlayState : public CGameState
 		//minigame stuffs
 		MiniGame* minigameobjects;
 		MiniGame mgstuffs;
-		std::vector<GameObject *> m_goList;	
+		std::vector<GameObject *> m_goList;
+
+		int typeS;
 };
 #endif

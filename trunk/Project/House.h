@@ -7,7 +7,6 @@ class House : public Building
 		std::string	Owner;
 		float rotationSpeed;
 	public:
-		TextureImage IsBuilding;
 		TextureImage HouseTexture;
 		House(void);
 		~House(void);

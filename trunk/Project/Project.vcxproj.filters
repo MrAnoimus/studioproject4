@@ -42,11 +42,17 @@
       <Filter>MiniGame</Filter>
     </ClCompile>
     <ClCompile Include="Resource.cpp" />
-    <ClCompile Include="GaugeBar.cpp" />
     <ClCompile Include="RandomEvent.cpp" />
     <ClCompile Include="Astar.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="House.cpp">
+      <Filter>Building</Filter>
+    </ClCompile>
+    <ClCompile Include="GaugeBar.cpp">
+      <Filter>MISC</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaFuncs.cpp" />
+    <ClCompile Include="FoodCourt.cpp">
       <Filter>Building</Filter>
     </ClCompile>
   </ItemGroup>
@@ -103,11 +109,21 @@
       <Filter>MiniGame</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="GaugeBar.h" />
     <ClInclude Include="RandomEvent.h" />
     <ClInclude Include="Astar.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="House.h">
+      <Filter>Building</Filter>
+    </ClInclude>
+    <ClInclude Include="GaugeBar.h">
+      <Filter>MISC</Filter>
+    </ClInclude>
+    <ClInclude Include="Definitions.h">
+      <Filter>MISC</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaFuncs.h" />
+    <ClInclude Include="resource1.h" />
+    <ClInclude Include="FoodCourt.h">
       <Filter>Building</Filter>
     </ClInclude>
   </ItemGroup>
@@ -139,5 +155,11 @@
     <Filter Include="MiniGame">
       <UniqueIdentifier>{783140f3-b920-4b29-97ff-83a64638922e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PathFinding">
+      <UniqueIdentifier>{7a2818a2-6ff2-43c6-ac51-216efa88b651}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Project.rc" />
   </ItemGroup>
 </Project>
