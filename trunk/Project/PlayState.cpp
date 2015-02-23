@@ -335,6 +335,65 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 {
 	myKeys[key]= true;
+	//keyboard input
+	if(myKeys[27]==true)
+	{
+		exit(0);
+	}
+	if(myKeys['1']==true)
+	{
+		if(myTile[SelectorY][SelectorX].GetBtype()==0)
+		{
+			myTile[SelectorY][SelectorX].SetBtype(1);
+		}else
+		{
+			myTile[SelectorY][SelectorX].SetBtype(0);
+
+		}
+		
+	}
+	if(myKeys['2']==true)
+	{
+		if(myTile[SelectorY][SelectorX].GetBtype()==0)
+		{
+			myTile[SelectorY][SelectorX].SetBtype(2);
+		}else
+		{
+			myTile[SelectorY][SelectorX].SetBtype(0);
+		}
+	}
+	if(myKeys['w']==true)
+	{
+		TheChoice->SetPopup(true);
+	}
+
+	if(myKeys['m'] == true)
+	{
+		mgstuffs.minigame = true;
+		//theCamera->canPan = !theCamera->canPan;
+	}
+	if(myKeys['s'] == true)
+	{
+		//mgstuffs.minigame = true;
+		theCamera->canPan = !theCamera->canPan;
+	}
+	if(myKeys['n'] == true)
+	{
+		mgstuffs.minigame = false;
+	}
+
+	if(myKeys['p'] == true)
+	{
+		//minigame = false;
+		for(int y = 0; y < ROWS; y += 1)
+		{
+			for(int x = 0; x < COLS; x += 1)
+			{
+				myTile[y][x].SetModeOn(!myTile[y][x].GetModeOn());
+			}
+		}
+	}
+
 }
 
 void CPlayState::KeyboardUp(unsigned char key, int x, int y)
@@ -471,61 +530,7 @@ void CPlayState::Resume()
 
 void CPlayState::HandleEvents(CGameStateManager* theGSM)
 {
-	//keyboard input
-	if(myKeys[27]==true)
-	{
-		exit(0);
-	}
-	if(myKeys['1']==true)
-	{
-		if(myTile[SelectorY][SelectorX].GetBtype()==0)
-		{
-			myTile[SelectorY][SelectorX].SetBtype(1);
-		}else
-		{
-			myTile[SelectorY][SelectorX].SetBtype(0);
-
-		}
-		
-	}
-	if(myKeys['2']==true)
-	{
-		if(myTile[SelectorY][SelectorX].GetBtype()==0)
-		{
-			myTile[SelectorY][SelectorX].SetBtype(2);
-		}else
-		{
-			myTile[SelectorY][SelectorX].SetBtype(0);
-		}
-	}
-	if(myKeys['w']==true)
-	{
-		TheChoice->SetPopup(true);
-	}
-
-	if(myKeys['m'] == true)
-	{
-		mgstuffs.minigame = true;
-		theCamera->canPan = !theCamera->canPan;
-	}
-
-	if(myKeys['n'] == true)
-	{
-		mgstuffs.minigame = false;
-	}
-
-	if(myKeys['p'] == true)
-	{
-		//minigame = false;
-		for(int y = 0; y < ROWS; y += 1)
-		{
-			for(int x = 0; x < COLS; x += 1)
-			{
-				myTile[y][x].SetModeOn(!myTile[y][x].GetModeOn());
-			}
-		}
-	}
-
+	
 	if(mgstuffs.minigame)
 	{
 		for(std::vector<GameObject *>::iterator it2 = m_goList.begin(); it2 != m_goList.end(); ++it2)
