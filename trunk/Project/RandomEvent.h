@@ -7,7 +7,7 @@
 
 using namespace std;
 
-class CRandomEvent
+class CRandomEvent:CResource
 {
 private:
 	

@@ -7,8 +7,6 @@
 #include "freeType.h"
 #include "Citizen.h"
 #include "Tile.h"
-//for resource management
-#include "Resource.h"
 //for mini game
 #include "GameObject.h"
 #include "MyMath.h"
@@ -44,8 +42,6 @@ class CPlayState : public CGameState
 		bool movingX;
 		//render ui
 		void RenderUI(void);
-		//player resources
-		CResource PlayerResource;
 		float px,py;
 		bool Init();
 		void Cleanup();

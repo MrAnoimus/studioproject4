@@ -121,7 +121,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				if(myTile[SelectorY][SelectorX].GetModeOn() == true)
 				{
 					//only if tile is not clicked on)
-					if(myTile[SelectorY][SelectorX].IsClickedOn() == false && (PlayerResource.GetMoney())>=0)
+					if(myTile[SelectorY][SelectorX].IsClickedOn() == false && (resource.GetMoney())>=0)
 					{
 						myTile[SelectorY][SelectorX].SetIsClickedOn(true);
 
@@ -134,13 +134,13 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 						{
 							//once selected and click on set tile to not empty
 							myTile[SelectorY][SelectorX].SetEmpty(false);
-							PlayerResource.SetMoney(PlayerResource.GetMoney()-myTile[SelectorY][SelectorX].myHouse.GetCost());
+							resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myHouse.GetCost());
 						}
 						if(myTile[SelectorY][SelectorX].GetBtype() == 2)
 						{
 							//once selected and click on set tile to not empty
 							myTile[SelectorY][SelectorX].SetEmpty(false);
-							PlayerResource.SetMoney(PlayerResource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
+							resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
 						}
 						
 					}
@@ -358,24 +358,24 @@ bool CPlayState::Init()
 	//sets the player resources;
 	lua_getglobal(L2,"FOOD");
 	int food = lua_tointeger(L2,2);
-	PlayerResource.SetFood(food);
+	resource.SetFood(food);
 
 	lua_getglobal(L2,"MONEY");
 	float money= (float)lua_tonumber(L2,3);
-	PlayerResource.SetMoney(money);
+	resource.SetMoney(money);
 
 	lua_getglobal(L2, "MANPOWER");
 	int manpower = lua_tointeger(L2,4);
-	PlayerResource.SetManpower(manpower);
+	resource.SetManpower(manpower);
 
 	lua_getglobal(L2,"CITIZEN");
 	int numOfCitizen= lua_tointeger(L2,5);
-	PlayerResource.SetCitizen(numOfCitizen);
+	resource.SetCitizen(numOfCitizen);
 
-	std::cout <<"FOOD: "<< PlayerResource.GetFood() << std::endl;
-	std::cout << "Money: "<<PlayerResource.GetMoney() << std::endl;
-	std::cout <<"ManPower: "<< PlayerResource.GetManPower() << std::endl;
-	std::cout << "Citizen: "<<PlayerResource.GetCitizen() << std::endl;
+	std::cout <<"FOOD: "<< resource.GetFood() << std::endl;
+	std::cout << "Money: "<<resource.GetMoney() << std::endl;
+	std::cout <<"ManPower: "<< resource.GetManPower() << std::endl;
+	std::cout << "Citizen: "<<resource.GetCitizen() << std::endl;
 
 	lua_close(L2);
 
@@ -801,7 +801,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 
 void CPlayState::RenderUI(void)
 {
-	print(our_font,0,250,"Current Money :%.2f\nCurrent Manpower :%1i\nCurrent Citizen:%1i",PlayerResource.GetMoney() ,PlayerResource.GetManPower(),PlayerResource.GetCitizen());
+	print(our_font,0,250,"Current Money :%.2f\nCurrent Manpower :%1i\nCurrent Citizen:%1i",resource.GetMoney() ,resource.GetManPower(),resource.GetCitizen());
 }
 
 Citizen* CPlayState::FetchObject()
