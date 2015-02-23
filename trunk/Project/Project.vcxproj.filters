@@ -46,6 +46,13 @@
     <ClCompile Include="House.cpp">
       <Filter>Building</Filter>
     </ClCompile>
+<<<<<<< .mine
+    <ClCompile Include="LuaFuncs.cpp" />
+    <ClCompile Include="Human.cpp" />
+    <ClCompile Include="Choices.cpp">
+      <Filter>Choices</Filter>
+    </ClCompile>
+=======
     <ClCompile Include="GaugeBar.cpp">
       <Filter>MISC</Filter>
     </ClCompile>
@@ -62,6 +69,7 @@
     <ClCompile Include="Node.cpp">
       <Filter>PathFinding</Filter>
     </ClCompile>
+>>>>>>> .r58
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Citizen.h">
@@ -120,6 +128,14 @@
     <ClInclude Include="House.h">
       <Filter>Building</Filter>
     </ClInclude>
+<<<<<<< .mine
+    <ClInclude Include="Definitions.h" />
+    <ClInclude Include="LuaFuncs.h" />
+    <ClInclude Include="Human.h" />
+    <ClInclude Include="Choices.h">
+      <Filter>Choices</Filter>
+    </ClInclude>
+=======
     <ClInclude Include="GaugeBar.h">
       <Filter>MISC</Filter>
     </ClInclude>
@@ -142,6 +158,7 @@
     <ClInclude Include="resource1.h">
       <Filter>MISC</Filter>
     </ClInclude>
+>>>>>>> .r58
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Citizen">
@@ -171,9 +188,15 @@
     <Filter Include="MiniGame">
       <UniqueIdentifier>{783140f3-b920-4b29-97ff-83a64638922e}</UniqueIdentifier>
     </Filter>
+<<<<<<< .mine
+    <Filter Include="Choices">
+      <UniqueIdentifier>{b8b31d5d-9d78-4e79-bdec-00069704c30b}</UniqueIdentifier>
+    </Filter>
+=======
     <Filter Include="PathFinding">
       <UniqueIdentifier>{7a2818a2-6ff2-43c6-ac51-216efa88b651}</UniqueIdentifier>
     </Filter>
+>>>>>>> .r58
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Project.rc">

@@ -7,6 +7,7 @@
 #include "freeType.h"
 #include "Citizen.h"
 #include "Tile.h"
+#include "Choices.h"
 //for mini game
 #include "GameObject.h"
 #include "MyMath.h"
@@ -35,6 +36,8 @@ class CPlayState : public CGameState
 		int  lastX, lastY;
 	}theMouseInfo;
 	public:
+		//for choices
+		Choices *TheChoice;
 		//for movement of citizens to selected tile
 		Vector3D Target;
 		int index;
