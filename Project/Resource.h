@@ -3,10 +3,10 @@ class CResource
 {
 
 private:
-	int NumOfFood;
-	float NumOfMoney;
-	int NumOfManPower;
-	int NumOfCitizen;
+	static int NumOfFood;
+	static float NumOfMoney;
+	static int NumOfManPower;
+	static int NumOfCitizen;
 public:
 
 	int GetFood();
@@ -18,6 +18,7 @@ public:
 	void SetMoney(float NewMoney);
 	void SetManpower(int NewManPower);
 	void SetCitizen(int NewCitizen);
+
 
 	CResource(void);
 	~CResource(void);

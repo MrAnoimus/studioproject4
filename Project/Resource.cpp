@@ -3,20 +3,22 @@
 
 CResource::CResource(void)
 {
-	NumOfFood = 100;
-	NumOfMoney = 100.0f;
-	NumOfManPower = 100;
-	NumOfCitizen = 100;
-}
 
+
+}
 
 CResource::~CResource(void)
 {
 }
 
+int CResource::NumOfFood = 100;
+float CResource::NumOfMoney = 100.0f;
+int	CResource::NumOfManPower = 100;
+int	CResource::NumOfCitizen = 100;
+
 int CResource::GetFood(void)
 {
-	return NumOfFood;
+	return  NumOfFood;
 }
 
 int CResource::GetManPower()
