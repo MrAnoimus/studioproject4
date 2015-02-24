@@ -13,14 +13,7 @@ extern "C"
 CPlayState CPlayState::thePlayState;
 using namespace std;
 
-int Map[ROWS][COLS]={
-	{219,219,219,219,219,219,219,219},
-	{219,'.','.','.','.','.','.',219},
-	{219,'.','.','.','.','.','.',219},
-	{219,'.','.','.','.','.','.',219},
-	{219,'.','.','.','.','.','.',219},
-	{219,219,219,219,219,219,219,219}
-};
+int Map[ROWS][COLS];
 
 
 void CPlayState::changeSize(int w, int h)
@@ -140,18 +133,21 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 							//once selected and click on set tile to not empty
 							myTile[SelectorY][SelectorX].SetEmpty(false);
 							resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myHouse.GetCost());
+							Map[SelectorY][SelectorX]=1;
 						}
 						if(myTile[SelectorY][SelectorX].GetBtype() == 2)
 						{
 							//once selected and click on set tile to not empty
 							myTile[SelectorY][SelectorX].SetEmpty(false);
 							resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
+							Map[SelectorY][SelectorX]=2;
 						}
 						if(myTile[SelectorY][SelectorX].GetBtype() == 3)
 						{
 							//once selected and click on set tile to not empty
 							myTile[SelectorY][SelectorX].SetEmpty(false);
 							resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
+							Map[SelectorY][SelectorX]=3;
 						}
 					}
 					if(myTile[SelectorY][SelectorX].IsClickedOn())
@@ -380,6 +376,39 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 		}
 	}
 
+		if(myKeys['k'] == true)
+	{
+		ofstream fout("LuaScript/save2.txt");
+		//minigame = false;
+		if(fout.is_open())
+		{
+			cout <<endl;
+			cout << "File Opened successfully!!!. Writing data from array to file" << endl;
+			for(int y = 0; y < ROWS; y ++ )
+			{
+				for(int x = 0; x < COLS; x ++ )
+				{
+					fout << Map[y][x]<<" ";
+					cout <<Map[y][x]<<",";
+				}
+			}
+		}
+		fout.close();
+	}
+
+		if(myKeys['l'] == true)
+	{
+		cout <<endl;
+		for(int y = 0; y < ROWS; y ++ )
+		{
+			for(int x = 0; x < COLS; x ++ )
+			{
+				cout<<Map[y][x]<<",";
+			}
+		}
+	}
+
+
 }
 
 void CPlayState::KeyboardUp(unsigned char key, int x, int y)
@@ -389,6 +418,19 @@ void CPlayState::KeyboardUp(unsigned char key, int x, int y)
 
 bool CPlayState::Init()
 {
+
+	//getting the initial array
+	ifstream ifile("LuaScript/save2.txt");
+	for (int y = 0; y < ROWS; y ++ )
+	{
+		for(int x = 0; x < COLS; x ++ )
+		{
+			ifile>> Map[y][x];
+			cout <<Map[y][x]<<",";
+		}
+	}
+
+
 	width = glutGet(GLUT_SCREEN_WIDTH);
 	height = glutGet(GLUT_SCREEN_HEIGHT);
 	typeS = 0;
@@ -682,9 +724,38 @@ void CPlayState::DrawTileContent()
 	{
 		for(int x = 0; x < COLS; x += 1)
 		{
+			//myTile[y][x].SetIsClickedOn(true);
 			if(Map[y][x] == 219)
 			{//3 = UNBUILDABLE
 				myTile[y][x].SetType(3);
+			}
+			if(Map[y][x] == 1)
+			{//
+				myTile[y][x].SetBtype(1);
+				myTile[y][x].SetEmpty(true);
+				Vector3D temp(50 +x*100,50 +y*100,-3);
+				myTile[y][x].myHouse.SetPosition(temp);
+				myTile[y][x].myHouse.Draw();
+				//myTile[y][x].Draw();
+			}
+
+			if(Map[y][x] == 2)
+			{//
+				myTile[y][x].SetBtype(2);
+				myTile[y][x].SetEmpty(true);
+				Vector3D temp(50 +x*100,50 +y*100,-3);
+				myTile[y][x].myFCourt.SetPosition(temp);
+				myTile[y][x].myFCourt.Draw();
+				//myTile[y][x].Draw();
+			}
+			if(Map[y][x] == 3)
+			{//
+				myTile[y][x].SetBtype(3);
+				myTile[y][x].SetEmpty(true);
+				Vector3D temp(50 +x*100,50 +y*100,-3);
+				myTile[y][x].myGstore.SetPosition(temp);
+				myTile[y][x].myGstore.Draw();
+				//myTile[y][x].Draw();
 			}
 			Vector3D temp(50 + x*100,50 +y*100,-1);
 			myTile[y][x].SetPosition(temp);
@@ -996,7 +1067,7 @@ void CPlayState::ClearTileMap(void)
 		{
 			if(myTile[y][x].GetBtype()!=1&&myTile[y][x].GetBtype()!=2&&myTile[y][x].GetBtype()!=3&&myTile[y][x].GetBtype()!=0)
 			{
-				if(Map[y][x] != 219&&myTile[y][x].GetEmpty()==false)
+				if(Map[y][x] != 1&&Map[y][x] != 2&&Map[y][x] != 3&&Map[y][x] != 219&&myTile[y][x].GetEmpty()==false)
 				{
 					Map[y][x] = '.';
 				}

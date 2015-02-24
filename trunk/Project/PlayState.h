@@ -8,6 +8,7 @@
 #include "Citizen.h"
 #include "Tile.h"
 #include "Choices.h"
+#include <fstream>
 //for mini game
 #include "GameObject.h"
 #include "MyMath.h"
