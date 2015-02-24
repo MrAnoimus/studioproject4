@@ -407,8 +407,8 @@ void CPlayState::KeyboardUp(unsigned char key, int x, int y)
 
 bool CPlayState::Init()
 {
-	width = 800;
-	height = 600;
+	width = glutGet(GLUT_SCREEN_WIDTH);
+	height = glutGet(GLUT_SCREEN_HEIGHT);
 	typeS = 0;
 	index=0;
 	moving = false;
@@ -672,12 +672,25 @@ void CPlayState::Update(CGameStateManager* theGSM)
 	//tile selection check
 	//SelectorX = (-mouseInfo.lastX +width ) / 100;
 	//SelectorY = (-mouseInfo.lastY +height) / 100;
-	float testx;
-	float testy;
-	testx = width/8;
-	testy = height/6;
-	SelectorX = ((-mouseInfo.lastX +width)/ testx);
-	SelectorY =((-mouseInfo.lastY +height)/ testy);
+	int testx;
+	int testy;
+	testx = (width/8);
+	testy = (height/6);
+	if(mouseInfo.lastX > (width/2))
+	{
+		SelectorX = ((-mouseInfo.lastX + width-(testx/4))/ testx);
+	}else
+	{
+		SelectorX = ((-mouseInfo.lastX + width+(testx/4))/ testx);
+	}
+	if(mouseInfo.lastY > (height/2))
+	{
+		SelectorY =((-mouseInfo.lastY + height-(testy/4))/ testy);
+	}else
+	{
+		SelectorY = ((-mouseInfo.lastY + height+(testy/4))/ testy);
+	}
+	//////
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 	{
 		Citizen *Citizens = *it;
@@ -686,6 +699,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 			Citizens->MoodUpdate();
 		}
 	}
+
 	for(int y = 0; y < ROWS; y += 1)
 	{
 		for(int x = 0; x < COLS; x += 1)
@@ -700,8 +714,16 @@ void CPlayState::Update(CGameStateManager* theGSM)
 					myTile[y][x].SetIsSelected(false);
 				}
 				myTile[SelectorY][SelectorX].SetIsSelected(true);
+				
 			}
-			myTile[y][x].Update();
+			if(	myTile[y][x].GetModeOn() == true)
+			{
+				myTile[y][x].Update();
+			}else
+			{
+				myTile[y][x].Update();
+			}
+			
 		}
 	}
 	/*for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
