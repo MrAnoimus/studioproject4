@@ -12,6 +12,7 @@ Citizen::Citizen(void)
 	,AnimationCounter(0.0f)
 	,AnimationInvert(false)
 	,RenderMood(false)
+	,Name("JunHwee")
 {
 	glEnable(GL_TEXTURE_2D);
 	LoadTGA(&Okay, "Textures/Smiley.tga");
@@ -411,4 +412,14 @@ void Citizen::DrawInGameText(std::string Text)
     }
     
     glPopMatrix();
+}
+
+void Citizen::SetName(std::string InputName)
+{
+	this->Name= InputName;
+}
+
+std::string Citizen::GetName(void)
+{
+	return this->Name;
 }

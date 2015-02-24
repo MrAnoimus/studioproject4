@@ -6,6 +6,7 @@
 #include "FreeType.h"
 #include "Camera.h"
 #include "Human.h"
+#include <string>
 #pragma once
 
 using namespace std;
@@ -73,7 +74,9 @@ public:
 
 	void DrawInGameText(std::string Text);
 
+	void SetName(std::string Name);
 
+	std::string GetName(void);
 private:
 	int dir;
 	Vector3D Position;
@@ -83,5 +86,7 @@ private:
 	Favourite TheFavourites;
 	Mood TheMoods;
 	NearByBuilding TheBuildings;
+
+	std::string Name;
 };
 
