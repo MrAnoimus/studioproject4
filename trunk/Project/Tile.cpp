@@ -52,10 +52,6 @@ void Tile::Update()
 		{
 			this->Color.Set(1,1,1);
 		}
-		if(Btype==-1)
-		{
-			ClickedOn=false;
-		}
 	}else
 	{
 		if(startbuild)
@@ -189,6 +185,37 @@ void Tile::Draw()
 						}break;
 					}
 				}
+			}
+		}else
+		{
+			if(Btype == 1)
+			{
+				//ClickedOn = true;
+				startbuild = true;
+				Vector3D temp;
+				temp.Set(0,0,-3);
+				myHouse.SetPosition(this->Position+temp);
+				myHouse.Draw();
+					
+			}
+			if(Btype == 2)
+			{
+				//ClickedOn = true;
+				startbuild = true;
+				Vector3D temp;
+					temp.Set(0,0,-3);
+					myFCourt.SetPosition(this->Position+temp);
+					myFCourt.Draw();
+					
+			}
+			if(Btype == 3)
+			{
+				//ClickedOn = true;
+				startbuild = true;
+				Vector3D temp;
+				temp.Set(0,0,-3);
+				myGstore.SetPosition(this->Position+temp);
+				myGstore.Draw();	
 			}
 		}
 	}

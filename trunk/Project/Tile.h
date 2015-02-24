@@ -34,6 +34,7 @@ class Tile
 		void DrawTileOutLine();
 		void DrawTile();
 	public:
+		bool start;
 		House myHouse;
 		FoodCourt myFCourt;
 		Generalstore myGstore;
