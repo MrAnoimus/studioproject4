@@ -133,5 +133,6 @@ class CPlayState : public CGameState
 		std::vector<GameObject *> m_goList;
 
 		int typeS;
+		float width, height;
 };
 #endif
