@@ -23,7 +23,7 @@ void Tile::Init()
 	this->ModeOn = false;
 	this->startbuild = false;
 	//building stuff
-	this->Btype = 0;
+	this->Btype = -1;
 	myGaugeBar.init(1,0,1,this->Position);
 	myHouse.Init(this->Position);
 	myFCourt.Init(this->Position);
@@ -50,6 +50,10 @@ void Tile::Update()
 		if(!ClickedOn && !Selected && Type != UNBUILDABLE)
 		{
 			this->Color.Set(1,1,1);
+		}
+		if(Btype==-1)
+		{
+			ClickedOn=false;
 		}
 	}else
 	{
