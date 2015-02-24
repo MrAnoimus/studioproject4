@@ -38,6 +38,7 @@ class CPlayState : public CGameState
 		int  lastX, lastY;
 	}theMouseInfo;
 	public:
+		int Map[ROWS][COLS];
 		//for choices
 		Choices *TheChoice;
 		//for movement of citizens to selected tile
