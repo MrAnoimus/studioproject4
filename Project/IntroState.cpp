@@ -23,6 +23,7 @@ void CIntroState::changeSize(int w, int h)
 		h = 1;
 
 	float ratio = (float) (1.0f* w / h);
+	sizechanged = true;
 
 	// Reset the coordinate system before modifying
 	glMatrixMode(GL_PROJECTION);
@@ -64,33 +65,46 @@ void CIntroState::MouseMove(int x , int y)
 
 	mouseInfo.lastX = x;
 	mouseInfo.lastY = y;
+	
+	//check if mouse pointer is inside the button boundaries
+	for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
+		(*it)->UpdateMouseMove(x,y);
+
+	if(startbutton->buttonhover)
+	{hoverStart = true;}
+	else{hoverStart = false;}
+
+	if(settingsbutton->buttonhover){hoverSet = true;}
+	else{hoverSet = false;}
+
+	if(exitbutton->buttonhover){hoverExit = true;}
+	else{hoverExit = false;}
+
 
 	//Checking mouse boundary. //	 800 is the window width. You may need to change this to suit your program.
-	if  (mouseInfo.lastX > 800-20 || mouseInfo.lastX < 20)
-	{
-		mouseInfo.lastX = (800 >> 1);
-		glutWarpPointer(mouseInfo.lastX, mouseInfo.lastY);
-	}
-	//	 600 is the window height. You may need to change this to suit your program.
-	if (mouseInfo.lastY > 600-20 || mouseInfo.lastY < 20)
-	{
-		mouseInfo.lastY = (600 >> 1);
-		glutWarpPointer(mouseInfo.lastX, mouseInfo.lastY);
-	}
+	//if  (mouseInfo.lastX > 800-20 || mouseInfo.lastX < 20)
+	//{
+	//	mouseInfo.lastX = (800 >> 1);
+	//	glutWarpPointer(mouseInfo.lastX, mouseInfo.lastY);
+	//}
+	////	 600 is the window height. You may need to change this to suit your program.
+	//if (mouseInfo.lastY > 600-20 || mouseInfo.lastY < 20)
+	//{
+	//	mouseInfo.lastY = (600 >> 1);
+	//	glutWarpPointer(mouseInfo.lastX, mouseInfo.lastY);
+	//}
 
-	if (mouseInfo.lastX >=240 && mouseInfo.lastX <= 563 && mouseInfo.lastY >= 410 && mouseInfo.lastY <=450)
-	{hoverStart = true;
-		if(menuGUIstart == NULL)
+	if(hoverStart)
+	{	if(menuGUIstart == NULL)
 			{menuGUIstart = theSoundEngine->play2D ("SFX/misc_menu_2.wav", false, true);}		
 		else{menuGUIstart == NULL;
 			 menuGUIstart = theSoundEngine->play2D ("SFX/misc_menu_2.wav", false, true);}
 		if(menuGUIstart->getIsPaused() == true){menuGUIstart->setIsPaused(false);}
 		else if(menuGUIstart->isFinished() == true){menuGUIstart = NULL;}
 	}
-	else{hoverStart = false;}
 
-	if (mouseInfo.lastX >=300 && mouseInfo.lastX <= 500 && mouseInfo.lastY >= 460 && mouseInfo.lastY <=500)
-	{hoverSet = true;
+	if(hoverSet)
+	{
 		if(menuGUIset == NULL)
 			{menuGUIset = theSoundEngine->play2D ("SFX/misc_menu_3.wav", false, true);}		
 		else{menuGUIset == NULL;
@@ -98,20 +112,16 @@ void CIntroState::MouseMove(int x , int y)
 		if(menuGUIset->getIsPaused() == true){menuGUIset->setIsPaused(false);}
 		else if(menuGUIset->isFinished() == true){menuGUIset = NULL;}
 	}
-	else{hoverSet = false;}
 
-
-	if (mouseInfo.lastX >=350 && mouseInfo.lastX <= 465 && mouseInfo.lastY >= 520 && mouseInfo.lastY <=560)
-	{hoverExit = true;
+	if(hoverExit)
+	{
 		if(menuGUIexit == NULL)
 			{menuGUIexit = theSoundEngine->play2D ("SFX/misc_menu_4.wav", false, true);}		
 		else{menuGUIexit == NULL;
 			 menuGUIexit = theSoundEngine->play2D ("SFX/misc_menu_4.wav", false, true);}
 		if(menuGUIexit->getIsPaused() == true){menuGUIexit->setIsPaused(false);}
 		else if(menuGUIexit->isFinished() == true){menuGUIexit = NULL;}
-		cout << volume;
 	}
-	else{hoverExit = false;}
 }
 void CIntroState::MouseClick(int button , int state , int x , int y)
 {
@@ -124,9 +134,23 @@ void CIntroState::MouseClick(int button , int state , int x , int y)
 			
 			mouseInfo.lastX = x;
 			mouseInfo.lastY = y;
-			if (mouseInfo.lastX >=350 && mouseInfo.lastX <= 465 && mouseInfo.lastY >= 520 && mouseInfo.lastY <=560)
+			
+			if (!mouseInfo.mLButtonUp)
 			{
-				exit(0);
+				for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
+				{
+					if ((*it)->buttonhover)
+						(*it)->buttonclicked = true;
+				}
+			}
+
+			else
+			{
+				for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
+				{
+					if ((*it)->buttonhover)
+						(*it)->buttonclicked = false;
+				}
 			}
 
 
@@ -198,6 +222,23 @@ bool CIntroState::Init()
 	hoverSet = false;
 	hoverExit = false;
 
+	startbutton = new ButtonClass();
+	LoadTGA(&startbutton->button[0],"Textures/startup.tga");
+	LoadTGA(&startbutton->button[1],"Textures/startdown.tga");
+	startbutton->Set(240,580,400,460);
+	ListofButtons.push_back(startbutton);
+
+	settingsbutton = new ButtonClass();
+	LoadTGA(&settingsbutton->button[0],"Textures/settingsup.tga");
+	LoadTGA(&settingsbutton->button[1],"Textures/settingsdown.tga");
+	settingsbutton->Set(300,520,460,520);
+	ListofButtons.push_back(settingsbutton);
+
+	exitbutton = new ButtonClass();
+	LoadTGA(&exitbutton->button[0],"Textures/exitup.tga");
+	LoadTGA(&exitbutton->button[1],"Textures/exitdown.tga");
+	exitbutton->Set(350,450,520,580);
+	ListofButtons.push_back(exitbutton);
 
 	return true;
 }
@@ -206,6 +247,9 @@ void CIntroState::Cleanup()
 	//cout << "CIntroState::Cleanup\n" << endl;
 	//Delete sound engine
 	if (theSoundEngine != NULL){theSoundEngine->drop();}
+
+	if (!ListofButtons.empty()){ListofButtons.clear();}
+
 }
 
 void CIntroState::Pause()
@@ -222,7 +266,7 @@ void CIntroState::HandleEvents(CGameStateManager* theGSM)
 {
 	if (mouseInfo.mLButtonUp) 
 	{
-		if (mouseInfo.lastX >=240 && mouseInfo.lastX <= 563 && mouseInfo.lastY >= 410 && mouseInfo.lastY <=450)
+		/*if (mouseInfo.lastX >=240 && mouseInfo.lastX <= 563 && mouseInfo.lastY >= 410 && mouseInfo.lastY <=450)
 		{
 			theGSM->ChangeState( CPlayState::Instance() );
 			mouseInfo.mLButtonUp = false;
@@ -233,7 +277,7 @@ void CIntroState::HandleEvents(CGameStateManager* theGSM)
 			theGSM->ChangeState( CSettingState::Instance() );
 			mouseInfo.mLButtonUp = false;
 		}
-		mouseInfo.mLButtonUp = false;
+		mouseInfo.mLButtonUp = false;*/
 	}
 	if(myKeys[27]==true)
 	{
@@ -247,7 +291,30 @@ void CIntroState::HandleEvents(CGameStateManager* theGSM)
 
 void CIntroState::Update(CGameStateManager* theGSM)
 {
+	if (sizechanged)
+	{
+		startbutton->Set(240,580,400,460);
+		settingsbutton->Set(300,520,460,520);
+		exitbutton->Set(350,450,520,580);
+		sizechanged = false;
+	}
 
+	if(startbutton->buttonclicked)
+	{
+		theGSM->ChangeState( CPlayState::Instance() );
+		mouseInfo.mLButtonUp = false;
+	}
+
+	if(settingsbutton->buttonclicked)
+	{
+		theGSM->ChangeState( CSettingState::Instance() );
+		mouseInfo.mLButtonUp = false;
+	}
+
+	if(exitbutton->buttonclicked)
+	{
+		exit(0);
+	}
 	//cout << "CIntroState::Update\n" << endl;
 	//MouseMove(mouseInfo.lastX,mouseInfo.lastY);
 	//std::cout<<mouseInfo.lastX<<","<<mouseInfo.lastY<<std::endl;
@@ -292,24 +359,17 @@ void CIntroState::Draw(CGameStateManager* theGSM)
 		//glDisable(GL_BLEND);
 	glPopMatrix();
 
-	//able to use push pop to move rotate change color if you want
 	glPushMatrix();
-		if(hoverStart){glColor3f(0,1,0);}
-		else{glColor3f(1,1,1);}
-		print(our_font, 250, 150, "Start Game", cnt1);
+		startbutton->Render();
 	glPopMatrix();
 
 	glPushMatrix();
-		if(hoverSet){glColor3f(0,1,0);}
-		else{glColor3f(1,1,1);}
-		print(our_font, 300, 100, "Setting", cnt1);
-	glPopMatrix();
+		settingsbutton->Render();
+	glPushMatrix();
 
 	glPushMatrix();
-		if(hoverExit){glColor3f(0,1,0);}
-		else{glColor3f(1,1,1);}
-		print(our_font, 350, 40, "Exit", cnt1);
-	glPopMatrix();
+		exitbutton->Render();
+	glPushMatrix();
 
 	glDisable(GL_TEXTURE_2D);
 	drawFPS();

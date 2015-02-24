@@ -74,6 +74,7 @@
     <ClCompile Include="MiniGame.cpp">
       <Filter>MiniGame</Filter>
     </ClCompile>
+    <ClCompile Include="ButtonClass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IntroState.h">
@@ -163,6 +164,7 @@
     <ClInclude Include="vector3D.h">
       <Filter>MISC</Filter>
     </ClInclude>
+    <ClInclude Include="ButtonClass.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameState">

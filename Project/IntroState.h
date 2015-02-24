@@ -6,6 +6,9 @@
 #include "GameState.h"
 #include "freeType.h"
 
+#include "Definitions.h"
+#include "ButtonClass.h"
+
 //sound
 #include <irrKlang.h>
 using namespace irrklang;
@@ -64,6 +67,8 @@ class CIntroState : public CGameState
 	private:
 		static CIntroState theIntroState;
 		
+		bool sizechanged;
+
 		// The camera
 		Camera* theCamera;
 		// Camera
@@ -108,6 +113,11 @@ class CIntroState : public CGameState
 		ISound* menuGUIstart;
 		ISound* menuGUIset;
 		ISound* menuGUIexit;
+
+		ButtonClass* startbutton;
+		ButtonClass* settingsbutton;
+		ButtonClass* exitbutton;
+		std::vector<ButtonClass*> ListofButtons;
 
 };
 
