@@ -215,7 +215,10 @@ Vector3D Tile::GetColor()
 }
 
 //setter
-
+void Tile::SetSize(int sz)
+{
+	Size = sz;
+}
 void Tile::SetBtype(int t)
 {
 	Btype = t;

@@ -55,6 +55,7 @@ class Tile
 		bool IsClickedOn();
 
 		//Setter
+		void SetSize(int sz);
 		void SetBtype(int t);
 		void SetModeOn(bool m);
 		void SetIsSelected(bool s);

@@ -44,6 +44,9 @@ void CPlayState::changeSize(int w, int h)
 	// Set the correct perspective.
 	gluPerspective(45,ratio,1,1000);
 	glMatrixMode(GL_MODELVIEW);
+
+	width = w;
+	height = h;
 }
 void CPlayState::MouseMove(int x , int y)
 {
@@ -104,8 +107,9 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				mouseInfo.mLButtonUp = state;
 				mouseInfo.lastX = x;
 				mouseInfo.lastY = y;
-				float SelectorX2 = (-mouseInfo.lastX +800)/ 100;
-				float SelectorY2 = (-mouseInfo.lastY +600)/ 100;
+				float SelectorX2 = (((-mouseInfo.lastX +800)/ 100)* width)/800;
+				float SelectorY2 =(((-mouseInfo.lastY +600)/ 100)* width)/600;
+				
 				for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 				{
 					Citizen *Citizens = *it;
@@ -280,8 +284,8 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 					theCamera->isZoomOut = true;
 					if(mouseLC == NULL)
 					{
-						mouseLC = theSoundEngine->play2D ("SFX/zoomout.wav", false, true);}
-					else
+						mouseLC = theSoundEngine->play2D ("SFX/zoomout.wav", false, true);
+					}else
 					{
 						mouseLC == NULL;
 						mouseLC = theSoundEngine->play2D ("SFX/zoomout.wav", false, true);
@@ -403,6 +407,8 @@ void CPlayState::KeyboardUp(unsigned char key, int x, int y)
 
 bool CPlayState::Init()
 {
+	width = 800;
+	height = 600;
 	typeS = 0;
 	index=0;
 	moving = false;
@@ -664,8 +670,14 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		}
 	}
 	//tile selection check
-	SelectorX = (-mouseInfo.lastX +800 ) / 100;
-	SelectorY = (-mouseInfo.lastY +600) / 100;
+	//SelectorX = (-mouseInfo.lastX +width ) / 100;
+	//SelectorY = (-mouseInfo.lastY +height) / 100;
+	float testx;
+	float testy;
+	testx = width/8;
+	testy = height/6;
+	SelectorX = ((-mouseInfo.lastX +width)/ testx);
+	SelectorY =((-mouseInfo.lastY +height)/ testy);
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 	{
 		Citizen *Citizens = *it;
@@ -793,20 +805,20 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 			Citizens->Draw();
 		}
 	}
-	// Enable 2D text display and HUD
+	//Enable 2D text display and HUD
 	theCamera->SetHUD( true);
 	//print(our_font,0,550,"Cam posX :%f\nCam posY :%f\nCam PosZ:%f",theCamera->GetPosition().x ,theCamera->GetPosition().y,theCamera->GetPosition().z);
 	print(our_font,0,550,"type: %d",myTile[SelectorY][SelectorX].GetBtype());
+	print(our_font,0,400,"screenW: %f\nscreenH: %f",width,height);
+	print(our_font,0,250,"pickX: %d\npickY: %d",SelectorX,SelectorY);
+	print(our_font,0,150,"MouseX: %d\nMouseY: %d",mouseInfo.lastX,mouseInfo.lastY);
 	RenderUI();
 	TheChoice->Draw();
-
-	
 	if (REvent.IsDisplay == true)
 	{
 		HandleREvents(REvent.type);
 
 	}
-
 	theCamera->SetHUD( false );
 	// Flush off any entity which is not drawn yet, so that we maintain the frame rate.
 	glFlush();
@@ -836,7 +848,6 @@ Citizen* CPlayState::FetchObject()
 	CitizenList.push_back(go);
 	return go;
 }
-
 void CPlayState::DrawMGBG()
 {
 	//DRAW THIS STUFF IN THE MINIGAME CLASS PLEASE
@@ -863,7 +874,6 @@ void CPlayState::DrawMGBG()
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);*/
 }
-
 void CPlayState::DrawObject(GameObject *go)
 {
 	//DRAW THIS STUFF IN THE MINIGAME CLASS PLEASE
@@ -894,7 +904,6 @@ void CPlayState::DrawObject(GameObject *go)
 		break;
 	}
 }
-
 void CPlayState::HandleREvents(int type)
 {
 	switch (type)
