@@ -94,6 +94,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 	{
 		case GLUT_LEFT_BUTTON:
 		{
+			
 			if (REvent.IsDisplay == true)
 			{
 				if (mouseInfo.lastX >=325 && mouseInfo.lastX <= 475 && mouseInfo.lastY >= 395 && mouseInfo.lastY <=465)
@@ -104,11 +105,12 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 			}
 			if (state == GLUT_DOWN)
 			{
+				ClearTileMap();
 				mouseInfo.mLButtonUp = state;
 				mouseInfo.lastX = x;
 				mouseInfo.lastY = y;
 				float SelectorX2 = (((-mouseInfo.lastX +800)/ 100)* width)/800;
-				float SelectorY2 =(((-mouseInfo.lastY +600)/ 100)* width)/600;
+				float SelectorY2 = (((-mouseInfo.lastY +600)/ 100)* height)/600;
 				
 				for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 				{
@@ -150,13 +152,15 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 					}
 
 
+					
+
+				}
+				if(myTile[SelectorY][SelectorX].GetBtype()==1)
+				{
 					Astar as(px,py,SelectorX2,SelectorY2);
-					CNode *Test = new CNode;
-					as.AddCloseList(Test);
-					
+				
 					bool result = as.Search(Map);
-					
-					
+		
 					CNode* Node = new CNode;
 					Node->x = SelectorX2;
 					Node->y = SelectorY2;
@@ -180,8 +184,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 							}
 							break;*/
 
-							if(myTile[SelectorY][SelectorX].GetBtype()==1)
-							{
+							
 							for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 							{
 								Citizen *Citizens = *it;
@@ -218,9 +221,6 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 							}
 						}
 					}
-
-				}
-
 				if(mouseLC == NULL)
 				{
 					mouseLC = theSoundEngine->play2D ("SFX/LMBdown.wav", false, true);
@@ -346,24 +346,24 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 	}
 	if(myKeys['1']==true)
 	{
-		if(myTile[SelectorY][SelectorX].GetBtype()==0)
+		if(myTile[SelectorY][SelectorX].GetBtype()==-1)
 		{
 			myTile[SelectorY][SelectorX].SetBtype(1);
 		}else
 		{
-			myTile[SelectorY][SelectorX].SetBtype(0);
+			myTile[SelectorY][SelectorX].SetBtype(-1);
 
 		}
 		
 	}
 	if(myKeys['2']==true)
 	{
-		if(myTile[SelectorY][SelectorX].GetBtype()==0)
+		if(myTile[SelectorY][SelectorX].GetBtype()==-1)
 		{
 			myTile[SelectorY][SelectorX].SetBtype(2);
 		}else
 		{
-			myTile[SelectorY][SelectorX].SetBtype(0);
+			myTile[SelectorY][SelectorX].SetBtype(-1);
 		}
 	}
 	if(myKeys['w']==true)
@@ -709,6 +709,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 				myTile[y][x].SetIsSelected(false);
 			}else
 			{
+				
 				if(myTile[y][x].IsSelected())
 				{
 					myTile[y][x].SetIsSelected(false);
@@ -1056,4 +1057,21 @@ void CPlayState::HandleREvents(int type)
 		break;
 	}
 	
+}
+
+void CPlayState::ClearTileMap(void)
+{
+	for(int y = 0;y<ROWS;y+=1)
+	{
+		for(int x = 0;x<COLS;x+=1)
+		{
+			if(myTile[y][x].GetBtype()!=1&&myTile[y][x].GetBtype()!=2&&myTile[y][x].GetBtype()!=3&&myTile[y][x].GetBtype()!=0)
+			{
+				if(Map[y][x] != 219&&myTile[y][x].GetEmpty()==false)
+				{
+					Map[y][x] = '.';
+				}
+			}
+		}
+	}
 }

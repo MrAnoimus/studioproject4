@@ -73,7 +73,7 @@ class CPlayState : public CGameState
 		{
 			return &thePlayState;
 		}
-
+		void ClearTileMap();
 	protected:
 		CPlayState()
 		:	theCamera(NULL)
