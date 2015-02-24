@@ -87,6 +87,7 @@
   <ItemGroup>
     <ClCompile Include="Astar.cpp" />
     <ClCompile Include="Building.cpp" />
+    <ClCompile Include="ButtonClass.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Choices.cpp" />
     <ClCompile Include="Citizen.cpp" />
@@ -114,6 +115,7 @@
   <ItemGroup>
     <ClInclude Include="Astar.h" />
     <ClInclude Include="Building.h" />
+    <ClInclude Include="ButtonClass.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Choices.h" />
     <ClInclude Include="Citizen.h" />
