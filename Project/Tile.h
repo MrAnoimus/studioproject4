@@ -3,6 +3,7 @@
 #include "LoadTGA.h"
 #include "House.h"
 #include "FoodCourt.h"
+#include "Generalstore.h"
 
 class Tile
 {
@@ -35,6 +36,7 @@ class Tile
 	public:
 		House myHouse;
 		FoodCourt myFCourt;
+		Generalstore myGstore;
 		Tile(void);
 		~Tile(void);
 		TextureImage TileTexture;

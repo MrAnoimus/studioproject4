@@ -27,6 +27,7 @@ void Tile::Init()
 	myGaugeBar.init(1,0,1,this->Position);
 	myHouse.Init(this->Position);
 	myFCourt.Init(this->Position);
+	myGstore.Init(this->Position);
 }
 void Tile::Update()
 {
@@ -61,11 +62,8 @@ void Tile::Update()
 		{
 			switch(Btype)
 			{
-				
 				case 1:
 				{
-					//myGaugeBar.update(myHouse.GetRSpeed());
-					
 					myGaugeBar.update(1.0f);
 					myHouse.Update();
 				}break;
@@ -73,6 +71,11 @@ void Tile::Update()
 				{
 					myGaugeBar.update(0.5f);
 					myFCourt.Update();
+				}break;
+				case 3:
+				{
+					myGaugeBar.update(0.5f);
+					myGstore.Update();
 				}break;
 			}
 		}
@@ -161,6 +164,12 @@ void Tile::Draw()
 							myFCourt.SetPosition(this->Position+temp);
 							myFCourt.DrawBuildingbar(myFCourt.GetRSpeed());
 						}break;
+						case 3:
+						{
+							//set building speed
+							myGstore.SetPosition(this->Position+temp);
+							myGstore.DrawBuildingbar(myGstore.GetRSpeed());
+						}break;
 					}
 				}else
 				{
@@ -174,7 +183,10 @@ void Tile::Draw()
 						{
 							myFCourt.Draw();
 						}break;
-
+						case 3:
+						{
+							myGstore.Draw();
+						}break;
 					}
 				}
 			}
@@ -217,7 +229,6 @@ Vector3D Tile::GetColor()
 {
 	return Color;
 }
-
 //setter
 void Tile::SetSize(int sz)
 {
@@ -235,7 +246,6 @@ void Tile::SetIsClickedOn(bool co )
 {
 	ClickedOn = co;
 }
-
 void Tile::SetIsSelected(bool s )
 {
 	Selected = s;
