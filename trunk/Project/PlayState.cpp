@@ -147,6 +147,12 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 							myTile[SelectorY][SelectorX].SetEmpty(false);
 							resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
 						}
+						if(myTile[SelectorY][SelectorX].GetBtype() == 3)
+						{
+							//once selected and click on set tile to not empty
+							myTile[SelectorY][SelectorX].SetEmpty(false);
+							resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
+						}
 					}
 					if(myTile[SelectorY][SelectorX].IsClickedOn())
 					{
@@ -289,7 +295,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				}
 			}
 		}break;
-	case GLUT_MIDDLE_BUTTON:
+		case GLUT_MIDDLE_BUTTON:
 		{
 			if(state == GLUT_DOWN)
 			{
@@ -314,18 +320,6 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 	}
 	if(myKeys['1']==true)
 	{
-		/*for(int y = 0; y < ROWS; y += 1)
-		{
-			for(int x = 0; x < COLS; x += 1)
-			{	
-				if(myTile[y][x].GetBtype() != 1 && myTile[y][x].GetBtype() != 2)
-				{
-					myTile[y][x].SetBtype(0);
-					myTile[SelectorY][SelectorX].SetBtype(1);
-				}
-				
-			}
-		}*/
 		if(myTile[SelectorY][SelectorX].GetBtype()==0)
 		{
 			myTile[SelectorY][SelectorX].SetBtype(1);
@@ -339,6 +333,16 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 		if(myTile[SelectorY][SelectorX].GetBtype()==0)
 		{
 			myTile[SelectorY][SelectorX].SetBtype(2);
+		}else
+		{
+			myTile[SelectorY][SelectorX].SetBtype(0);
+		}
+	}
+	if(myKeys['3']==true)
+	{
+		if(myTile[SelectorY][SelectorX].GetBtype()==0)
+		{
+			myTile[SelectorY][SelectorX].SetBtype(3);
 		}else
 		{
 			myTile[SelectorY][SelectorX].SetBtype(0);
