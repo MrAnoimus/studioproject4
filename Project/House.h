@@ -1,12 +1,13 @@
 #pragma once
 #include "Building.h"
-
+#include "Citizen.h"
 class House : public Building
 {
 	private:
 		std::string	Owner;
 		float rotationSpeed;
 	public:
+		
 		TextureImage HouseTexture;
 		House(void);
 		~House(void);

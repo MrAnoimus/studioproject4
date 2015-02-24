@@ -3,7 +3,7 @@
 
 House::House(void)
 {
-
+	Owner= "Hi";
 }
 
 House::~House(void)
@@ -62,4 +62,14 @@ float House::GetRSpeed()
 void House::SetRspeed(float rs)
 {
 	this->rotationSpeed = rs;
+}
+
+std::string House::GetOwner(void)
+{
+	return this->Owner;
+}
+
+void House::SetOwner(std::string name)
+{
+	this->Owner = name;
 }

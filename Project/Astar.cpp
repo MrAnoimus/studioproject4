@@ -49,7 +49,7 @@ CNode* Astar::GetSuccessor(CNode *current,int i,int (&grid)[ROWS2][COLS2])
 	CNode *n = NULL;										// Null Initialisation
 	int x = current->x + succ[i].x;						// Get x,y Position By Index
 	int y = current->y + succ[i].y;
-	if(grid[y][x] == '.')
+	if(grid[y][x] == '.' )
 	{								// If Grid Element Contains Empty Space
 		n = new CNode;									// Create A Node Object
 		n->x = x;										// Initialise To x-y Value Of Successor

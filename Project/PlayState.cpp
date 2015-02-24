@@ -13,9 +13,6 @@ extern "C"
 CPlayState CPlayState::thePlayState;
 using namespace std;
 
-int Map[ROWS][COLS];
-
-
 void CPlayState::changeSize(int w, int h)
 {
 	// Prevent a divide by zero, when window is too short
@@ -132,6 +129,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 							myTile[SelectorY][SelectorX].SetEmpty(false);
 							resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myHouse.GetCost());
 							Map[SelectorY][SelectorX]=1;
+							
 						}
 						if(myTile[SelectorY][SelectorX].GetBtype() == 2)
 						{
@@ -183,19 +181,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 
 						for(int i=index;i<(int)as.closeList.size();i++)
 						{
-							/*if(moving == true)
-							{
-								Target.x = as.closeList[i]->x*100;
-								Target.y = as.closeList[i]->y*100;
-								index++;
-							}
-							else
-							{
-								i--;
-							}
-							break;*/
 
-							
 							for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 							{
 								Citizen *Citizens = *it;
@@ -203,30 +189,18 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 								{
 									if((Citizens->GetPosition().x != as.closeList[i]->x*100))
 									{
-										Citizens->SetPosition(Vector3D(as.closeList[i]->x*100 ,Citizens->GetPosition().y ,Citizens->GetPosition().z));
+										Citizens->SetPosition(Vector3D(as.closeList[i]->x*100 ,Citizens->GetPosition().y ,Citizens->GetPosition().z));	
 									}
 									
 									if((Citizens->GetPosition().y != as.closeList[i]->y*100))
 									{
 										Citizens->SetPosition(Vector3D(Citizens->GetPosition().x ,as.closeList[i]->y*100 ,Citizens->GetPosition().z));
-									}	
-									/*if(moving)
+									}
+									if((Citizens->GetPosition().x != as.closeList[i]->x*100)&&(Citizens->GetPosition().y != as.closeList[i]->y*100))
 									{
-										if ((Target - Citizens->GetPosition()).LengthSquared() > 0)
-										{
-											Vector3D direction(Target-Citizens->GetPosition());
-
-											Vector3D newPosition((Citizens->GetPosition().x)+direction.Normalized().x*100,(Citizens->GetPosition().y)+direction.Normalized().y*100,direction.Normalized().z);
-
-											Citizens->SetPosition(Vector3D(newPosition.x,newPosition.y,newPosition.z));
-											break;
-										}
-										else 
-										{
-											moving=false;
-										}
-										
-									}*/
+										myTile[SelectorY][SelectorX].myHouse.SetOwner(Citizens->GetName());
+									}
+									
 								}
 							}
 							}
@@ -405,7 +379,7 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 	}
 
 		if(myKeys['k'] == true)
-	{
+		{
 		ofstream fout("LuaScript/save2.txt");
 		//minigame = false;
 		if(fout.is_open())
@@ -458,7 +432,7 @@ bool CPlayState::Init()
 		}
 	}
 
-
+	
 	width = glutGet(GLUT_SCREEN_WIDTH);
 	height = glutGet(GLUT_SCREEN_HEIGHT);
 	typeS = 0;
@@ -861,6 +835,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	theCamera->SetHUD( true);
 	//print(our_font,0,550,"Cam posX :%f\nCam posY :%f\nCam PosZ:%f",theCamera->GetPosition().x ,theCamera->GetPosition().y,theCamera->GetPosition().z);
 	print(our_font,0,height-100,"type: %d",myTile[SelectorY][SelectorX].GetBtype());
+	print(our_font,0,height-600,"OwnerName: %s",myTile[SelectorY][SelectorX].myHouse.GetOwner().c_str());
 	print(our_font,0,height-200,"screenW: %f\nscreenH: %f",width,height);
 	print(our_font,0,height-350,"pickX: %d\npickY: %d",SelectorX,SelectorY);
 	print(our_font,0,height-500,"MouseX: %d\nMouseY: %d",mouseInfo.lastX,mouseInfo.lastY);
@@ -1110,7 +1085,7 @@ void CPlayState::ClearTileMap(void)
 		{
 			if(myTile[y][x].GetBtype()!=1&&myTile[y][x].GetBtype()!=2&&myTile[y][x].GetBtype()!=3&&myTile[y][x].GetBtype()!=0)
 			{
-				if(Map[y][x] != 1&&Map[y][x] != 2&&Map[y][x] != 3&&Map[y][x] != 219&&myTile[y][x].GetEmpty()==false)
+				if(Map[y][x] != 1&&Map[y][x] != 2&&Map[y][x] != 3&&Map[y][x] != 219)
 				{
 					Map[y][x] = '.';
 				}
