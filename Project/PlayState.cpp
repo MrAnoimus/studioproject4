@@ -25,7 +25,6 @@ int Map[ROWS][COLS]={
 
 void CPlayState::changeSize(int w, int h)
 {
-
 	// Prevent a divide by zero, when window is too short
 	// (you cant make a window of zero width).
 	if(h == 0)
@@ -148,9 +147,21 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 							myTile[SelectorY][SelectorX].SetEmpty(false);
 							resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
 						}
-						
 					}
-
+					if(myTile[SelectorY][SelectorX].IsClickedOn())
+					{
+						for(int y = 0; y < ROWS; y += 1)
+						{
+							for(int x = 0; x < COLS; x += 1)
+							{	
+								if(myTile[y][x].IsClickedOn() == false)
+								{
+									//set everything else to noting
+									myTile[y][x].SetBtype(0);
+								}
+							}
+						}
+					}
 
 					
 
@@ -172,19 +183,6 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 
 						for(int i=index;i<(int)as.closeList.size();i++)
 						{
-							/*if(moving == true)
-							{
-								Target.x = as.closeList[i]->x*100;
-								Target.y = as.closeList[i]->y*100;
-								index++;
-							}
-							else
-							{
-								i--;
-							}
-							break;*/
-
-							
 							for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 							{
 								Citizen *Citizens = *it;
@@ -198,29 +196,12 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 									if((Citizens->GetPosition().y != as.closeList[i]->y*100))
 									{
 										Citizens->SetPosition(Vector3D(Citizens->GetPosition().x ,as.closeList[i]->y*100 ,Citizens->GetPosition().z));
-									}	
-									/*if(moving)
-									{
-										if ((Target - Citizens->GetPosition()).LengthSquared() > 0)
-										{
-											Vector3D direction(Target-Citizens->GetPosition());
-
-											Vector3D newPosition((Citizens->GetPosition().x)+direction.Normalized().x*100,(Citizens->GetPosition().y)+direction.Normalized().y*100,direction.Normalized().z);
-
-											Citizens->SetPosition(Vector3D(newPosition.x,newPosition.y,newPosition.z));
-											break;
-										}
-										else 
-										{
-											moving=false;
-										}
-										
-									}*/
+									}
 								}
-							}
 							}
 						}
 					}
+				}
 				if(mouseLC == NULL)
 				{
 					mouseLC = theSoundEngine->play2D ("SFX/LMBdown.wav", false, true);
@@ -274,50 +255,37 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 
 			}
 		}break;
-	case GLUT_RIGHT_BUTTON:
+		case GLUT_RIGHT_BUTTON:
 		{
 			mouseInfo.mRButtonUp = state;
 			if(state == GLUT_DOWN)
 			{
-				if(theCamera->GetPosition().z >=-500)
+				if(myTile[SelectorY][SelectorX].GetModeOn() == false)
 				{
-					theCamera->isZoomOut = true;
-					if(mouseLC == NULL)
+					if(theCamera->GetPosition().z >=-500)
 					{
-						mouseLC = theSoundEngine->play2D ("SFX/zoomout.wav", false, true);
-					}else
-					{
-						mouseLC == NULL;
-						mouseLC = theSoundEngine->play2D ("SFX/zoomout.wav", false, true);
+						theCamera->isZoomOut = true;
+						if(mouseLC == NULL)
+						{
+							mouseLC = theSoundEngine->play2D ("SFX/zoomout.wav", false, true);
+						}else
+						{
+							mouseLC == NULL;
+							mouseLC = theSoundEngine->play2D ("SFX/zoomout.wav", false, true);
+						}
 					}
-					/*if(mouseLC->getIsPaused() == true)
+					if(theCamera->GetPosition().z <=-725)
 					{
-					mouseLC->setIsPaused(false);
+						theCamera->isZoomIn = true;
+						if(mouseLC == NULL)
+						{
+							mouseLC = theSoundEngine->play2D ("SFX/zoomin.wav", false, true);
+						}else
+						{
+							mouseLC == NULL;
+							mouseLC = theSoundEngine->play2D ("SFX/zoomin.wav", false, true);
+						}
 					}
-					else if(mouseLC->isFinished() == true)
-					{
-					mouseLC = NULL;
-					}*/
-				}
-				if(theCamera->GetPosition().z <=-725)
-				{
-					theCamera->isZoomIn = true;
-					if(mouseLC == NULL)
-					{
-						mouseLC = theSoundEngine->play2D ("SFX/zoomin.wav", false, true);
-					}else
-					{
-						mouseLC == NULL;
-						mouseLC = theSoundEngine->play2D ("SFX/zoomin.wav", false, true);
-					}
-					/*if(mouseLC->getIsPaused() == true)
-					{
-					mouseLC->setIsPaused(false);
-					}
-					else if(mouseLC->isFinished() == true)
-					{
-					mouseLC = NULL;
-					}*/
 				}
 			}
 		}break;
@@ -346,24 +314,34 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 	}
 	if(myKeys['1']==true)
 	{
-		if(myTile[SelectorY][SelectorX].GetBtype()==-1)
+		/*for(int y = 0; y < ROWS; y += 1)
+		{
+			for(int x = 0; x < COLS; x += 1)
+			{	
+				if(myTile[y][x].GetBtype() != 1 && myTile[y][x].GetBtype() != 2)
+				{
+					myTile[y][x].SetBtype(0);
+					myTile[SelectorY][SelectorX].SetBtype(1);
+				}
+				
+			}
+		}*/
+		if(myTile[SelectorY][SelectorX].GetBtype()==0)
 		{
 			myTile[SelectorY][SelectorX].SetBtype(1);
 		}else
 		{
-			myTile[SelectorY][SelectorX].SetBtype(-1);
-
+			myTile[SelectorY][SelectorX].SetBtype(0);
 		}
-		
 	}
 	if(myKeys['2']==true)
 	{
-		if(myTile[SelectorY][SelectorX].GetBtype()==-1)
+		if(myTile[SelectorY][SelectorX].GetBtype()==0)
 		{
 			myTile[SelectorY][SelectorX].SetBtype(2);
 		}else
 		{
-			myTile[SelectorY][SelectorX].SetBtype(-1);
+			myTile[SelectorY][SelectorX].SetBtype(0);
 		}
 	}
 	if(myKeys['w']==true)
@@ -565,183 +543,132 @@ void CPlayState::Update(CGameStateManager* theGSM)
 {
 	if (REvent.IsDisplay ==false)
 	{
-	//for movement of ai		
-	//std::cout <<"Index: " << index << std::endl;
-	//for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
-	//	{
-	//		Citizen *Citizens = *it;
-	//		if (Citizens->active == true)
-	//		{
-	//			/*if((Citizens->GetPosition().x != as.closeList[i]->x*100))
-	//			{
-	//				Citizens->SetPosition(Vector3D(as.closeList[i]->x*100 ,Citizens->GetPosition().y ,Citizens->GetPosition().z));
-	//			}*/
-	//			if(moving)
-	//			{
-	//				if ((Target - Citizens->GetPosition()).LengthSquared() > 0)
-	//				{
-	//					Vector3D direction(Target-Citizens->GetPosition());
-
-	//					Vector3D newPosition((Citizens->GetPosition().x)+direction.Normalized().x*100,(Citizens->GetPosition().y)+direction.Normalized().y*100,direction.Normalized().z);
-	//								
-	//					Citizens->SetPosition(Vector3D(newPosition.x,newPosition.y,newPosition.z));
-	//					break;
-	//				}
-	//				else 
-	//				{
-	//					moving=false;
-	//				}
-	//				/*if((Citizens->GetPosition().y != as.closeList[i]->y*100))
-	//				{
-	//					Citizens->SetPosition(Vector3D(Citizens->GetPosition().x ,as.closeList[i]->y*100 ,Citizens->GetPosition().z));
-	//				}*/	
-	//			}
-	//			}
-	//		}
-
-	//for mini game
-	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
-	{
-		Citizen *Citizens = *it;
-		if (Citizens->active == true)
+		//tile selection check
+		int offsetX;
+		int offsetY;
+		offsetX = (width/8);
+		offsetY = (height/6);
+		if(mouseInfo.lastX > (width/2))
 		{
-			Citizens->MoodUpdate();
-			px = Citizens->GetPosition().x*0.01f;
-			py = Citizens->GetPosition().y*0.01f;
+			SelectorX = ((-mouseInfo.lastX + width-(offsetX/4))/ offsetX);
+		}else
+		{
+			SelectorX = ((-mouseInfo.lastX + width+(offsetX/4))/ offsetX);
 		}
-	}
-	//for mini game
-	static int frame = 0;
-	static int lastTime = glutGet(GLUT_ELAPSED_TIME);
-	++frame;
-	int time = glutGet(GLUT_ELAPSED_TIME);
-	float dt = (time - lastTime) / 1000.f;
-
-	lastTime = time;
-	mgstuffs.spawntime -= dt*0.001;
-	if(mgstuffs.minigame)
-	{
-		for(std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
+		if(mouseInfo.lastY > (height/2))
 		{
-			GameObject *mg = (GameObject *)*it;
-			if(mg->active)
-			{
-				if(mg->type == GameObject::GO_COIN)
-				{//coin falling update
-					mg->vel +=  mgstuffs.gravity * dt;
-					mg->pos += mgstuffs.fallspeed * (mg->vel + (mg->vel + mgstuffs.gravity * dt)) * 0.5 * dt;
-
-					if(mg->pos.y <= (600 - 590 + theCamera->GetPosition().y - 300))
-					{
-						mg->active = false;
-						mg->pos.x = 800 - Math::RandIntMinMax(320, 780) + theCamera->GetPosition().x - 400;
-						mg->pos.y = 600 - Math::RandIntMinMax(110, 150) + theCamera->GetPosition().y - 300;
-						if(mg->vel.y <= -200)
-						{mg->vel.y = -200;}
-					}
-
-					for(std::vector<GameObject *>::iterator it2 = m_goList.begin(); it2 != m_goList.end(); ++it2)
-					{//coin and catcher update
-						GameObject* other = (GameObject*)*it2;
-						if(other->active)
-						{
-							if(other->type == GameObject::GO_CATCHER)
-							{
-								if((other->pos-mg->pos).Length()<=20)
-								{
-									mg->active = false;
-								}
-								if(other->pos.x <= 20){other->pos.x = 20;}
-								if(other->pos.x >= 480){other->pos.x = 480;}
-							}
-						}
-					}
-
-				}
-			}
-			else
-			{
-				if(mgstuffs.spawntime <= 0)
-				{
-					mgstuffs.spawntime = SPAWN_TIME;
-					mg->active = true;
-				}
-			}
+			SelectorY =((-mouseInfo.lastY + height-(offsetY/4))/ offsetY);
+		}else
+		{
+			SelectorY = ((-mouseInfo.lastY + height+(offsetY/4))/ offsetY);
 		}
-	}
-	//tile selection check
-	//SelectorX = (-mouseInfo.lastX +width ) / 100;
-	//SelectorY = (-mouseInfo.lastY +height) / 100;
-	int testx;
-	int testy;
-	testx = (width/8);
-	testy = (height/6);
-	if(mouseInfo.lastX > (width/2))
-	{
-		SelectorX = ((-mouseInfo.lastX + width-(testx/4))/ testx);
-	}else
-	{
-		SelectorX = ((-mouseInfo.lastX + width+(testx/4))/ testx);
-	}
-	if(mouseInfo.lastY > (height/2))
-	{
-		SelectorY =((-mouseInfo.lastY + height-(testy/4))/ testy);
-	}else
-	{
-		SelectorY = ((-mouseInfo.lastY + height+(testy/4))/ testy);
-	}
-	//////
-	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
-	{
-		Citizen *Citizens = *it;
-		if (Citizens->active == true)
+		//////
+		for(int y = 0; y < ROWS; y += 1)
 		{
-			Citizens->MoodUpdate();
-		}
-	}
-
-	for(int y = 0; y < ROWS; y += 1)
-	{
-		for(int x = 0; x < COLS; x += 1)
-		{
-			if(SelectorX != x && SelectorY != y)
+			for(int x = 0; x < COLS; x += 1)
 			{
-				myTile[y][x].SetIsSelected(false);
-			}else
-			{
-				
-				if(myTile[y][x].IsSelected())
+				if(SelectorX != x && SelectorY != y)
 				{
 					myTile[y][x].SetIsSelected(false);
+				}else
+				{
+					if(myTile[y][x].IsSelected())
+					{
+						myTile[y][x].SetIsSelected(false);
+					}
+					myTile[SelectorY][SelectorX].SetIsSelected(true);
 				}
-				myTile[SelectorY][SelectorX].SetIsSelected(true);
-				
+				if(	myTile[y][x].GetModeOn() == true)
+				{
+					myTile[y][x].Update();
+				}else
+				{	
+					if(myTile[y][x].IsClickedOn() == false)
+					{
+						myTile[y][x].SetBtype(0);
+					}
+					myTile[y][x].Update();
+				}
 			}
-			if(	myTile[y][x].GetModeOn() == true)
-			{
-				myTile[y][x].Update();
-			}else
-			{
-				myTile[y][x].Update();
-			}
-			
 		}
-	}
-	/*for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
-	{
-	Citizen *Citizens = *it;
-	if (Citizens->active == true)
-	{
-	Citizens->MoodUpdate();
-	if(mouseInfo.lastX<Citizens->GetPosition().x+25&&mouseInfo.lastX>Citizens->GetPosition().x-25)
-	{
-	Citizens->RenderMood=true;
-	}else
-	{
-	//Citizens->RenderMood=false;
-	}
-	}
-	}*/
+
+		for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+		{
+			Citizen *Citizens = *it;
+			if (Citizens->active == true)
+			{
+				Citizens->MoodUpdate();
+			}
+		}
+		for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+		{
+			Citizen *Citizens = *it;
+			if (Citizens->active == true)
+			{
+				Citizens->MoodUpdate();
+				px = Citizens->GetPosition().x*0.01f;
+				py = Citizens->GetPosition().y*0.01f;
+			}
+		}
+		//for mini game
+		static int frame = 0;
+		static int lastTime = glutGet(GLUT_ELAPSED_TIME);
+		++frame;
+		int time = glutGet(GLUT_ELAPSED_TIME);
+		float dt = (time - lastTime) / 1000.f;
+
+		lastTime = time;
+		mgstuffs.spawntime -= dt*0.001;
+		if(mgstuffs.minigame)
+		{
+			for(std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
+			{
+				GameObject *mg = (GameObject *)*it;
+				if(mg->active)
+				{
+					if(mg->type == GameObject::GO_COIN)
+					{//coin falling update
+						mg->vel +=  mgstuffs.gravity * dt;
+						mg->pos += mgstuffs.fallspeed * (mg->vel + (mg->vel + mgstuffs.gravity * dt)) * 0.5 * dt;
+
+						if(mg->pos.y <= (600 - 590 + theCamera->GetPosition().y - 300))
+						{
+							mg->active = false;
+							mg->pos.x = 800 - Math::RandIntMinMax(320, 780) + theCamera->GetPosition().x - 400;
+							mg->pos.y = 600 - Math::RandIntMinMax(110, 150) + theCamera->GetPosition().y - 300;
+							if(mg->vel.y <= -200)
+							{mg->vel.y = -200;}
+						}
+
+						for(std::vector<GameObject *>::iterator it2 = m_goList.begin(); it2 != m_goList.end(); ++it2)
+						{//coin and catcher update
+							GameObject* other = (GameObject*)*it2;
+							if(other->active)
+							{
+								if(other->type == GameObject::GO_CATCHER)
+								{
+									if((other->pos-mg->pos).Length()<=20)
+									{
+										mg->active = false;
+									}
+									if(other->pos.x <= 20){other->pos.x = 20;}
+									if(other->pos.x >= 480){other->pos.x = 480;}
+								}
+							}
+						}
+
+					}
+				}
+				else
+				{
+					if(mgstuffs.spawntime <= 0)
+					{
+						mgstuffs.spawntime = SPAWN_TIME;
+						mg->active = true;
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -767,8 +694,6 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	theCamera->Update();
-
-	
 
 	glEnable(GL_TEXTURE_2D);
 	glPushMatrix();
@@ -831,10 +756,10 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	//Enable 2D text display and HUD
 	theCamera->SetHUD( true);
 	//print(our_font,0,550,"Cam posX :%f\nCam posY :%f\nCam PosZ:%f",theCamera->GetPosition().x ,theCamera->GetPosition().y,theCamera->GetPosition().z);
-	print(our_font,0,550,"type: %d",myTile[SelectorY][SelectorX].GetBtype());
-	print(our_font,0,400,"screenW: %f\nscreenH: %f",width,height);
-	print(our_font,0,250,"pickX: %d\npickY: %d",SelectorX,SelectorY);
-	print(our_font,0,150,"MouseX: %d\nMouseY: %d",mouseInfo.lastX,mouseInfo.lastY);
+	print(our_font,0,height-100,"type: %d",myTile[SelectorY][SelectorX].GetBtype());
+	print(our_font,0,height-200,"screenW: %f\nscreenH: %f",width,height);
+	print(our_font,0,height-350,"pickX: %d\npickY: %d",SelectorX,SelectorY);
+	print(our_font,0,height-500,"MouseX: %d\nMouseY: %d",mouseInfo.lastX,mouseInfo.lastY);
 	RenderUI();
 	TheChoice->Draw();
 	if (REvent.IsDisplay == true)
