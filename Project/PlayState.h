@@ -84,6 +84,15 @@ class CPlayState : public CGameState
 		,	minigameobjects(NULL)
 		,	catcher(NULL)
 		{ 
+			ifstream ifile("LuaScript/save2.txt");
+				for (int y = 0; y < ROWS; y ++ )
+				{
+					for(int x = 0; x < COLS; x ++ )
+					{
+						ifile>> Map[y][x];
+						cout << Map[y][x] <<",";
+					}
+				}
 		}
 		~CPlayState()
 		{

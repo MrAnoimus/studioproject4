@@ -110,60 +110,6 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 						}
 					}
 				}
-				//check mode
-				if(myTile[SelectorY][SelectorX].GetModeOn() == true)
-				{
-					//only if tile is not clicked on)
-					if(myTile[SelectorY][SelectorX].IsClickedOn() == false && (resource.GetMoney())>=0)
-					{
-						myTile[SelectorY][SelectorX].SetIsClickedOn(true);
-
-						if(myTile[SelectorY][SelectorX].GetBtype() == 0)
-						{
-							myTile[SelectorY][SelectorX].SetEmpty(true);
-							myTile[SelectorY][SelectorX].SetIsClickedOn(false);
-						}
-						if(myTile[SelectorY][SelectorX].GetBtype() == 1)
-						{
-							//once selected and click on set tile to not empty
-							myTile[SelectorY][SelectorX].SetEmpty(false);
-							resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myHouse.GetCost());
-							Map[SelectorY][SelectorX]=1;
-							
-						}
-						if(myTile[SelectorY][SelectorX].GetBtype() == 2)
-						{
-							//once selected and click on set tile to not empty
-							myTile[SelectorY][SelectorX].SetEmpty(false);
-							resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
-							Map[SelectorY][SelectorX]=2;
-						}
-						if(myTile[SelectorY][SelectorX].GetBtype() == 3)
-						{
-							//once selected and click on set tile to not empty
-							myTile[SelectorY][SelectorX].SetEmpty(false);
-							resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
-							Map[SelectorY][SelectorX]=3;
-						}
-					}
-					if(myTile[SelectorY][SelectorX].IsClickedOn())
-					{
-						for(int y = 0; y < ROWS; y += 1)
-						{
-							for(int x = 0; x < COLS; x += 1)
-							{	
-								if(myTile[y][x].IsClickedOn() == false)
-								{
-									//set everything else to noting
-									myTile[y][x].SetBtype(0);
-								}
-							}
-						}
-					}
-
-					
-
-				}
 				if(myTile[SelectorY][SelectorX].GetBtype()==1)
 				{
 					Astar as(px,py,SelectorX,SelectorY);
@@ -206,6 +152,66 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 							}
 						}
 				}
+				//check mode
+				if(myTile[SelectorY][SelectorX].GetModeOn() == true)
+				{
+					//only if tile is not clicked on)
+					if(myTile[SelectorY][SelectorX].IsClickedOn() == false && (resource.GetMoney())>=0)
+					{
+						myTile[SelectorY][SelectorX].SetIsClickedOn(true);
+
+						if(myTile[SelectorY][SelectorX].GetBtype() == 0)
+						{
+							myTile[SelectorY][SelectorX].SetEmpty(true);
+							myTile[SelectorY][SelectorX].SetIsClickedOn(false);
+							Map[SelectorY][SelectorX]=10;
+						}
+						if(myTile[SelectorY][SelectorX].GetBtype() == 1)
+						{
+							//once selected and click on set tile to not empty
+							myTile[SelectorY][SelectorX].SetEmpty(false);
+							resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myHouse.GetCost());
+							if(Map[SelectorY][SelectorX] != 1)
+							{
+								Map[SelectorY][SelectorX]=1;
+							}
+							
+							
+						}
+						else if(myTile[SelectorY][SelectorX].GetBtype() == 2)
+						{
+							//once selected and click on set tile to not empty
+							myTile[SelectorY][SelectorX].SetEmpty(false);
+							resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
+							Map[SelectorY][SelectorX]=2;
+						}
+						else if(myTile[SelectorY][SelectorX].GetBtype() == 3)
+						{
+							//once selected and click on set tile to not empty
+							myTile[SelectorY][SelectorX].SetEmpty(false);
+							resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
+							Map[SelectorY][SelectorX]=3;
+						}
+					}
+					if(myTile[SelectorY][SelectorX].IsClickedOn())
+					{
+						for(int y = 0; y < ROWS; y += 1)
+						{
+							for(int x = 0; x < COLS; x += 1)
+							{	
+								if(myTile[y][x].IsClickedOn() == false)
+								{
+									//set everything else to noting
+									myTile[y][x].SetBtype(0);
+								}
+							}
+						}
+					}
+
+					
+
+				}
+				
 				if(mouseLC == NULL)
 				{
 					mouseLC = theSoundEngine->play2D ("SFX/LMBdown.wav", false, true);
@@ -418,15 +424,7 @@ bool CPlayState::Init()
 {
 
 	//getting the initial array
-	ifstream ifile("LuaScript/save2.txt");
-	for (int y = 0; y < ROWS; y ++ )
-	{
-		for(int x = 0; x < COLS; x ++ )
-		{
-			ifile>> Map[y][x];
-			cout <<Map[y][x]<<",";
-		}
-	}
+	
 
 	
 	width = glutGet(GLUT_SCREEN_WIDTH);
@@ -588,14 +586,14 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 
 void CPlayState::Update(CGameStateManager* theGSM) 
 {
-	cout << "minigame status: " << minigameobjects->minigame << endl;
+	//cout << "minigame status: " << minigameobjects->minigame << endl;
 
 	if (REvent.IsDisplay ==false)
 	{
 		//tile selection check
 		int offsetX;
 		int offsetY;
-		offsetX = (width/8);
+		offsetX =(width/8);
 		offsetY = (height/6);
 		if(mouseInfo.lastX > (width/2))
 		{
@@ -1110,7 +1108,7 @@ void CPlayState::ClearTileMap(void)
 			{
 				if(Map[y][x] != 1&&Map[y][x] != 2&&Map[y][x] != 3&&Map[y][x] != 219)
 				{
-					Map[y][x] = '.';
+					Map[y][x] = 10;
 				}
 			}
 		}
