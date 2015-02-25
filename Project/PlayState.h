@@ -26,8 +26,8 @@ using namespace irrklang;
 
 
 //for mini game
-#define MAX_COIN 10
-const int SPAWN_TIME = 1;
+
+
 // Declare Number Of Rows & Columns For Map Grid
 const int ROWS = 6;	
 const int COLS = 8;
@@ -82,11 +82,12 @@ class CPlayState : public CGameState
 			return &thePlayState;
 		}
 		void ClearTileMap();
+		
 	protected:
 		CPlayState()
 		:	theCamera(NULL)
 		,	minigameobjects(NULL)
-		,	catcher(NULL)
+		//,	catcher(NULL)
 		{ 
 			ifstream ifile("LuaScript/save2.txt");
 				for (int y = 0; y < ROWS; y ++ )
@@ -132,10 +133,7 @@ class CPlayState : public CGameState
 		TextureImage BackgroundTexture;
 		TextureImage MenuTexture[2];
 		TextureImage EventTexture[10];
-		TextureImage MGBackgroundTexture;
-		TextureImage CoinTexture;
-		TextureImage CatcherTexture;
-
+		
 		//keyboard and mouse
 		bool myKeys[255];
 		theMouseInfo mouseInfo;
@@ -158,11 +156,11 @@ class CPlayState : public CGameState
 		
 		//minigame stuffs
 		MiniGame* minigameobjects;
-		std::vector<GameObject *> m_goList;
-		GameObject* catcher;
+		/*std::vector<GameObject *> m_goList;
+		GameObject* catcher;*/
 		//mg time (separate to other times)
-		int spritectime, spriteptime, tctime, tptime, timer;
-		ISound* mgsfx;
+		/*int spritectime, spriteptime, tctime, tptime, timer;
+		ISound* mgsfx;*/
 
 
 		int typeS;
