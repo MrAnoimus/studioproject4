@@ -22,6 +22,7 @@ void CPlayState::changeSize(int w, int h)
 		h = 1;
 	}
 	float ratio = (float) (1.0f* w / h);
+	sizechanged = true;
 
 	// Reset the coordinate system before modifying
 	glMatrixMode(GL_PROJECTION);
@@ -43,6 +44,13 @@ void CPlayState::MouseMove(int x , int y)
 	int diffY = y - mouseInfo.lastY;
 	mouseInfo.lastX = x;
 	mouseInfo.lastY = y;
+
+	//check if mouse pointer is inside the button boundaries
+	for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
+	{
+		(*it)->UpdateMouseMove(x,y);
+	}
+
 	//to check where camera pan
 	if(theCamera->canPan == true)
 	{
@@ -84,14 +92,35 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 		case GLUT_LEFT_BUTTON:
 		{
 			
-			if (REvent.IsDisplay == true)
+		/*	if (REvent.IsDisplay == true)
 			{
 				if (mouseInfo.lastX >=325 && mouseInfo.lastX <= 475 && mouseInfo.lastY >= 395 && mouseInfo.lastY <=465)
 				{
 					REvent.IsDisplay = false;
 					theCamera->canPan = true;
 				}
+			}*/
+
+			if (!mouseInfo.mLButtonUp)
+			{
+				for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
+				{
+					if ((*it)->buttonhover)
+						(*it)->buttonclicked = true;
+				}
 			}
+
+			else
+			{
+				for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
+				{
+					if ((*it)->buttonhover)
+						(*it)->buttonclicked = false;
+				}
+			}
+
+			if (REvent.IsDisplay == false)
+			{
 			if (state == GLUT_DOWN)
 			{
 				ClearTileMap();
@@ -212,6 +241,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 
 				}
 				
+				
 				if(mouseLC == NULL)
 				{
 					mouseLC = theSoundEngine->play2D ("SFX/LMBdown.wav", false, true);
@@ -265,6 +295,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 
 			}
 		}break;
+		}
 		case GLUT_RIGHT_BUTTON:
 		{
 			mouseInfo.mRButtonUp = state;
@@ -303,13 +334,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 		{
 			if(state == GLUT_DOWN)
 			{
-				REvent.IsDisplay = true;
-				REvent.Random();
-				REvent.CreateEventz(REvent.type);
-				/*cout <<mouseInfo.lastX <<endl;
-				cout <<mouseInfo.lastY <<endl;*/
-				cout <<REvent.type<<endl;
-				theCamera->canPan = false;
+			
 			}break;
 		}
 	}
@@ -322,94 +347,97 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 	{
 		exit(0);
 	}
-	if(myKeys['1']==true)
+	if(REvent.IsDisplay == false)
 	{
-		if(myTile[SelectorY][SelectorX].GetBtype()==0)
+		if(myKeys['1']==true)
 		{
-			myTile[SelectorY][SelectorX].SetBtype(1);
-		}else
-		{
-			myTile[SelectorY][SelectorX].SetBtype(0);
-		}
-	}
-	if(myKeys['2']==true)
-	{
-		if(myTile[SelectorY][SelectorX].GetBtype()==0)
-		{
-			myTile[SelectorY][SelectorX].SetBtype(2);
-		}else
-		{
-			myTile[SelectorY][SelectorX].SetBtype(0);
-		}
-	}
-	if(myKeys['3']==true)
-	{
-		if(myTile[SelectorY][SelectorX].GetBtype()==0)
-		{
-			myTile[SelectorY][SelectorX].SetBtype(3);
-		}else
-		{
-			myTile[SelectorY][SelectorX].SetBtype(0);
-		}
-	}
-	if(myKeys['w']==true)
-	{
-		TheChoice->SetPopup(true);
-	}
-
-	if(myKeys['m'] == true)
-	{
-		minigameobjects->minigame = true;
-		//theCamera->canPan = !theCamera->canPan;
-	}
-	if(myKeys['s'] == true)
-	{
-		theCamera->canPan = !theCamera->canPan;
-	}
-	if(myKeys['n'] == true)
-	{
-		minigameobjects->minigame = false;
-	}
-
-	if(myKeys['p'] == true)
-	{
-		for(int y = 0; y < ROWS; y += 1)
-		{
-			for(int x = 0; x < COLS; x += 1)
+			if(myTile[SelectorY][SelectorX].GetBtype()==0)
 			{
-				myTile[y][x].SetModeOn(!myTile[y][x].GetModeOn());
+				myTile[SelectorY][SelectorX].SetBtype(1);
+			}else
+			{
+				myTile[SelectorY][SelectorX].SetBtype(0);
 			}
 		}
-	}
+		if(myKeys['2']==true)
+		{
+			if(myTile[SelectorY][SelectorX].GetBtype()==0)
+			{
+				myTile[SelectorY][SelectorX].SetBtype(2);
+			}else
+			{
+				myTile[SelectorY][SelectorX].SetBtype(0);
+			}
+		}
+		if(myKeys['3']==true)
+		{
+			if(myTile[SelectorY][SelectorX].GetBtype()==0)
+			{
+				myTile[SelectorY][SelectorX].SetBtype(3);
+			}else
+			{
+				myTile[SelectorY][SelectorX].SetBtype(0);
+			}
+		}
+		if(myKeys['w']==true)
+		{
+			TheChoice->SetPopup(true);
+		}
+
+		if(myKeys['m'] == true)
+		{
+			minigameobjects->minigame = true;
+			//theCamera->canPan = !theCamera->canPan;
+		}
+		if(myKeys['s'] == true)
+		{
+			theCamera->canPan = !theCamera->canPan;
+		}
+		if(myKeys['n'] == true)
+		{
+			minigameobjects->minigame = false;
+		}
+
+		if(myKeys['p'] == true)
+		{
+			for(int y = 0; y < ROWS; y += 1)
+			{
+				for(int x = 0; x < COLS; x += 1)
+				{
+					myTile[y][x].SetModeOn(!myTile[y][x].GetModeOn());
+				}
+			}
+		}
 
 		if(myKeys['k'] == true)
 		{
-		ofstream fout("LuaScript/save2.txt");
-		//minigame = false;
-		if(fout.is_open())
+			ofstream fout("LuaScript/save2.txt");
+			//minigame = false;
+			if(fout.is_open())
+			{
+				cout <<endl;
+				cout << "File Opened successfully!!!. Writing data from array to file" << endl;
+				for(int y = 0; y < ROWS; y ++ )
+				{
+					for(int x = 0; x < COLS; x ++ )
+					{
+						fout << Map[y][x]<<" ";
+						cout <<Map[y][x]<<",";
+					}
+				}
+			}
+			fout.close();
+		}
+
+		if(myKeys['l'] == true)
 		{
 			cout <<endl;
-			cout << "File Opened successfully!!!. Writing data from array to file" << endl;
 			for(int y = 0; y < ROWS; y ++ )
 			{
 				for(int x = 0; x < COLS; x ++ )
 				{
-					fout << Map[y][x]<<" ";
-					cout <<Map[y][x]<<",";
+					cout<<Map[y][x]<<",";
 				}
-			}
-		}
-		fout.close();
-	}
-
-	if(myKeys['l'] == true)
-	{
-		cout <<endl;
-		for(int y = 0; y < ROWS; y ++ )
-		{
-			for(int x = 0; x < COLS; x ++ )
-			{
-				cout<<Map[y][x]<<",";
 			}
 		}
 	}
@@ -542,6 +570,16 @@ bool CPlayState::Init()
 	catcher->pos.x = 400;
 	catcher->pos.y = 50;
 
+	OKbutton = new ButtonClass();
+	LoadTGA(&OKbutton->button[0],"Textures/ok.tga");
+	LoadTGA(&OKbutton->button[1],"Textures/ok.tga");
+	OKbutton->Set(240,580,400,460);
+	ListofButtons.push_back(OKbutton);
+
+	//Day progress
+	day = 1;
+	Dtimer = 0;
+
 	spritectime = 0, spriteptime = 0, tctime = 0, tptime = 0, timer = 300;
 
 	return true;
@@ -588,8 +626,39 @@ void CPlayState::Update(CGameStateManager* theGSM)
 {
 	//cout << "minigame status: " << minigameobjects->minigame << endl;
 
+	if (sizechanged)
+		{
+			OKbutton->Set(240,580,400,460);
+			sizechanged = false;
+		}
+
+		if(OKbutton->buttonclicked)
+		{
+			theCamera->canPan = true;
+			REvent.IsDisplay = false;
+			mouseInfo.mLButtonUp = false;
+			OKbutton->buttonclicked = false;
+		}
+
 	if (REvent.IsDisplay ==false)
 	{
+		//Time progression
+		if(Dtimer < 302)
+		{
+			Dtimer++;
+			
+			if (Dtimer >= 300)
+			{
+				day +=1;
+				REvent.IsDisplay = true;
+				REvent.Random();
+				REvent.CreateEventz(REvent.type);
+				cout <<REvent.type<<endl;
+				theCamera->canPan = false;
+				Dtimer = 0;
+			}
+		}
+
 		//tile selection check
 		int offsetX;
 		int offsetY;
@@ -885,18 +954,21 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	//Enable 2D text display and HUD
 	theCamera->SetHUD( true);
 	//print(our_font,0,550,"Cam posX :%f\nCam posY :%f\nCam PosZ:%f",theCamera->GetPosition().x ,theCamera->GetPosition().y,theCamera->GetPosition().z);
-	print(our_font,0,height-100,"type: %d",myTile[SelectorY][SelectorX].GetBtype());
+	/*print(our_font,0,height-100,"type: %d",myTile[SelectorY][SelectorX].GetBtype());
 	print(our_font,0,height-600,"OwnerName: %s",myTile[SelectorY][SelectorX].myHouse.GetOwner().c_str());
 	print(our_font,0,height-200,"screenW: %f\nscreenH: %f",width,height);
 	print(our_font,0,height-350,"pickX: %d\npickY: %d",SelectorX,SelectorY);
-	print(our_font,0,height-500,"MouseX: %d\nMouseY: %d",mouseInfo.lastX,mouseInfo.lastY);
+	print(our_font,0,height-500,"MouseX: %d\nMouseY: %d",mouseInfo.lastX,mouseInfo.lastY);*/
+	print(our_font,0,height-300,"Day: %d\n", day);
+	print(our_font,0,height-400,"Timer: %d\n", Dtimer);
+
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 	{	
 		Citizen *Citizens = *it;
 		if (Citizens->active == true)
 		{
 			//Citizens->MoodUpdate(Citizen::EATINGPLACE, Citizen::FOOD);
-			print(our_font,0,height-500,"MouseX: %s",Citizens->GetName().c_str());
+			//print(our_font,0,height-500,"MouseX: %s",Citizens->GetName().c_str());
 		}
 	}
 	RenderUI();
@@ -904,6 +976,9 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	if (REvent.IsDisplay == true)
 	{
 		HandleREvents(REvent.type);
+		glPushMatrix();
+			OKbutton->Render();
+		glPopMatrix();
 
 	}
 	theCamera->SetHUD( false );
