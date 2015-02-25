@@ -49,7 +49,7 @@ CNode* Astar::GetSuccessor(CNode *current,int i,int (&grid)[ROWS2][COLS2])
 	CNode *n = NULL;										// Null Initialisation
 	int x = current->x + succ[i].x;						// Get x,y Position By Index
 	int y = current->y + succ[i].y;
-	if(grid[y][x] == '.' )
+	if(grid[y][x] == 10 )
 	{								// If Grid Element Contains Empty Space
 		n = new CNode;									// Create A Node Object
 		n->x = x;										// Initialise To x-y Value Of Successor
@@ -135,7 +135,7 @@ bool Astar::Search(int (&grid)[ROWS2][COLS2])
 		cout << "Matching  (" << n->x << "," << n->y << ") with  goal " ; 
 		cout << "(" << goal->x << "," << goal->y << ")"<< endl; 
 		//cin.get();									// UNCOMMENT TO SEE INTERMEDIATE RESULTS
-		
+		ShowPath(n,grid);
 		if ((n->x==goal->x) && (n->y==goal->y))			// If Current Node 'n' Matches Goal Node in x,y Values
 		{
 			// Show Path In Text Mode & Return True(Found For Search)									// ie: Reached Goal
@@ -205,21 +205,21 @@ bool Astar::Search(int (&grid)[ROWS2][COLS2])
 void Astar::ShowPath(CNode *walker,int (&grid)[ROWS2][COLS2])
 {
 	cout << "\nBEST PATH SOLUTION";
-	grid[goal->y][goal->x] = 'G';		// Mark "Goal" Node On Grid Array
+	//grid[goal->y][goal->x] = 'G';		// Mark "Goal" Node On Grid Array
 	//walker=walker->parent;				// Get Node On Best Path Linked To Goal 
 	while(walker->parent != NULL)		// If Start Point IS Not NULL
 	{
-		grid[walker->y][walker->x]='*';	// Grid Map Node Is Marked As Best Path Node
+		//grid[walker->y][walker->x]= 10;	// Grid Map Node Is Marked As Best Path Node
 		walker = walker->parent;		// Go To Next Link To The Path
 	}
-	grid[start->y][start->x]='S';		// Mark "Start" Node On Grid Array
+	//grid[start->y][start->x]='S';		// Mark "Start" Node On Grid Array
 
 	cout << "\n";
 	for (int y=0;y<ROWS2;y++)			// Loop Through 2D Array To Show Map & Path
 	{
 		for (int x=0;x<COLS2;x++)
 		{
-			cout << (char)grid[y][x];
+			cout << grid[y][x]<< ",";
 		}
 		cout <<  "\n";
 	}
