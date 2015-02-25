@@ -18,6 +18,10 @@
 //sound
 #include <irrKlang.h>
 using namespace irrklang;
+//button
+#include "ButtonClass.h"
+#include "freeType.h"
+#include "Definitions.h"
 
 
 
@@ -106,10 +110,17 @@ class CPlayState : public CGameState
 				theSoundEngine->drop();
 			}
 		}
+		bool sizechanged;
 
 	private:
 		static CPlayState thePlayState;
-	
+
+		//Day progressino
+		int day;
+		int Dtimer;
+		//button
+		ButtonClass* OKbutton;
+		std::vector<ButtonClass*> ListofButtons;
 		// The camera
 		Camera* theCamera;
 		// Camera
