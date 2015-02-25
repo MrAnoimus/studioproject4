@@ -105,6 +105,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MiniGame.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="PlayState.cpp" />
     <ClCompile Include="RandomEvent.cpp" />
     <ClCompile Include="Resource.cpp" />
@@ -135,6 +136,7 @@
     <ClInclude Include="MiniGame.h" />
     <ClInclude Include="MyMath.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="Obstacle.h" />
     <ClInclude Include="PlayState.h" />
     <ClInclude Include="RandomEvent.h" />
     <ClInclude Include="Resource.h" />

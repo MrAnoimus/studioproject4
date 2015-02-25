@@ -4,6 +4,7 @@
 #include "House.h"
 #include "FoodCourt.h"
 #include "Generalstore.h"
+#include "Obstacle.h"
 
 class Tile
 {
@@ -34,10 +35,11 @@ class Tile
 		void DrawTileOutLine();
 		void DrawTile();
 	public:
-		bool start;
 		House myHouse;
 		FoodCourt myFCourt;
 		Generalstore myGstore;
+		Obstacle myObstacle;
+
 		Tile(void);
 		~Tile(void);
 		TextureImage TileTexture;
