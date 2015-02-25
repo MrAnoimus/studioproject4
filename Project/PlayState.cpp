@@ -227,11 +227,13 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 						for(int y = 0; y < ROWS; y += 1)
 						{
 							for(int x = 0; x < COLS; x += 1)
-							{	
-								if(myTile[y][x].IsClickedOn() == false)
+							{
+								if(myTile[SelectorY][SelectorX].GetBtype() == 5)
 								{
-									//set everything else to noting
-									myTile[y][x].SetBtype(0);
+									//once selected and click on set tile to not empty
+									myTile[y][x].SetEmpty(false);
+									//resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
+									Map[SelectorY][SelectorX]=10;
 								}
 							}
 						}
@@ -727,6 +729,11 @@ void CPlayState::DrawTileContent()
 			if(Map[y][x] == 3)
 			{//
 				myTile[y][x].SetBtype(3);
+			}
+			if(Map[y][x] == 10)
+			{
+				myTile[y][x].SetType(0);
+				//myTile[y][x].SetBtype(0);
 			}
 			Vector3D temp(50 + x*100,50 +y*100,-1);
 			myTile[y][x].SetPosition(temp);

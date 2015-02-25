@@ -19,6 +19,7 @@ class Tile
 	private:
 		GaugeBar myGaugeBar;
 		bool startbuild;
+		bool startdestory;
 		bool ModeOn;
 		int Type;
 		bool Empty;
