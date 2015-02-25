@@ -14,6 +14,7 @@ struct GameObject
 		GO_CATCHER,
 		GO_TOTAL, //must be last
 	};
+	static int counter;
 	GAMEOBJECT_TYPE type;
 	Vector3D pos;
 	Vector3D vel;
