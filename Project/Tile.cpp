@@ -36,13 +36,13 @@ void Tile::Update()
 	{
 		if(Selected)
 		{
-			this->Color.Set(0,1,0);
+			this->Color.Set(0,1,0);//green
 		}
 		if(ClickedOn)
 		{
 			//check which building the player want
 			startbuild= true;
-			this->Color.Set(1,1,0);
+			this->Color.Set(1,1,0);//yellow
 		}
 		if(Type == UNBUILDABLE)
 		{
@@ -54,6 +54,13 @@ void Tile::Update()
 		}
 	}else
 	{
+		if(ClickedOn)
+		{
+			if(!Empty)
+			{
+				startbuild= true;
+			}
+		}
 		if(startbuild)
 		{
 			switch(Btype)
@@ -131,6 +138,24 @@ void Tile::Draw()
 	{
 		DrawTileOutLine();
 		DrawTile();
+		if(ClickedOn)
+		{
+			if(!Empty)
+			{
+				if(Btype == 1)
+				{
+					ClickedOn = true;
+				}
+				if(Btype == 2)
+				{
+					ClickedOn = true;
+				}
+				if(Btype == 3)
+				{
+					ClickedOn = true;
+				}
+			}
+		}
 	}else
 	{
 		if(ClickedOn)
@@ -190,32 +215,30 @@ void Tile::Draw()
 		{
 			if(Btype == 1)
 			{
-				//ClickedOn = true;
-				startbuild = true;
 				Vector3D temp;
 				temp.Set(0,0,-3);
 				myHouse.SetPosition(this->Position+temp);
 				myHouse.Draw();
-					
+				ClickedOn = true;
+				Empty = false;
 			}
 			if(Btype == 2)
 			{
-				//ClickedOn = true;
-				startbuild = true;
 				Vector3D temp;
-					temp.Set(0,0,-3);
-					myFCourt.SetPosition(this->Position+temp);
-					myFCourt.Draw();
-					
+				temp.Set(0,0,-3);
+				myFCourt.SetPosition(this->Position+temp);
+				myFCourt.Draw();
+				ClickedOn = true;
+				Empty = false;
 			}
 			if(Btype == 3)
 			{
-				//ClickedOn = true;
-				startbuild = true;
 				Vector3D temp;
 				temp.Set(0,0,-3);
 				myGstore.SetPosition(this->Position+temp);
-				myGstore.Draw();	
+				myGstore.Draw();
+				ClickedOn = true;
+				Empty = false;
 			}
 		}
 	}

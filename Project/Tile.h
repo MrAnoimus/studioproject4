@@ -9,9 +9,9 @@ class Tile
 {
 	enum
 	{
-		GRASS = 0,
-		SOIL,
-		ROCK,
+		HOUSE = 0,
+		FCOURT,
+		GSTORE,
 		UNBUILDABLE,
 		LAST
 	}TileType;
