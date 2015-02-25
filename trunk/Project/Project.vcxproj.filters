@@ -45,16 +45,16 @@
       <Filter>Tiles</Filter>
     </ClCompile>
     <ClCompile Include="Building.cpp">
-      <Filter>Building</Filter>
+      <Filter>Tiles\Building</Filter>
     </ClCompile>
     <ClCompile Include="FoodCourt.cpp">
-      <Filter>Building</Filter>
+      <Filter>Tiles\Building</Filter>
     </ClCompile>
     <ClCompile Include="Generalstore.cpp">
-      <Filter>Building</Filter>
+      <Filter>Tiles\Building</Filter>
     </ClCompile>
     <ClCompile Include="House.cpp">
-      <Filter>Building</Filter>
+      <Filter>Tiles\Building</Filter>
     </ClCompile>
     <ClCompile Include="Citizen.cpp">
       <Filter>ManPower</Filter>
@@ -75,6 +75,9 @@
       <Filter>MiniGame</Filter>
     </ClCompile>
     <ClCompile Include="ButtonClass.cpp" />
+    <ClCompile Include="Obstacle.cpp">
+      <Filter>Tiles\Building</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IntroState.h">
@@ -132,16 +135,16 @@
       <Filter>Tiles</Filter>
     </ClInclude>
     <ClInclude Include="Building.h">
-      <Filter>Building</Filter>
+      <Filter>Tiles\Building</Filter>
     </ClInclude>
     <ClInclude Include="FoodCourt.h">
-      <Filter>Building</Filter>
+      <Filter>Tiles\Building</Filter>
     </ClInclude>
     <ClInclude Include="Generalstore.h">
-      <Filter>Building</Filter>
+      <Filter>Tiles\Building</Filter>
     </ClInclude>
     <ClInclude Include="House.h">
-      <Filter>Building</Filter>
+      <Filter>Tiles\Building</Filter>
     </ClInclude>
     <ClInclude Include="Citizen.h">
       <Filter>ManPower</Filter>
@@ -165,6 +168,9 @@
       <Filter>MISC</Filter>
     </ClInclude>
     <ClInclude Include="ButtonClass.h" />
+    <ClInclude Include="Obstacle.h">
+      <Filter>Tiles\Building</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameState">
@@ -191,9 +197,6 @@
     <Filter Include="Tiles">
       <UniqueIdentifier>{d931d7e9-8ad9-42fb-add4-9075f80bd561}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Building">
-      <UniqueIdentifier>{8d7948b9-575b-4b98-8304-046253e6095b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ManPower">
       <UniqueIdentifier>{e10b1a5b-ca25-4e3d-b6f5-e81a61ac027b}</UniqueIdentifier>
     </Filter>
@@ -202,6 +205,9 @@
     </Filter>
     <Filter Include="MiniGame">
       <UniqueIdentifier>{00bc4e08-6a27-41a7-9189-0b02ff3e12ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tiles\Building">
+      <UniqueIdentifier>{8d7948b9-575b-4b98-8304-046253e6095b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

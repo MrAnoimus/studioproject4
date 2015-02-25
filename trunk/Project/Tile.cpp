@@ -28,6 +28,7 @@ void Tile::Init()
 	myHouse.Init(this->Position);
 	myFCourt.Init(this->Position);
 	myGstore.Init(this->Position);
+	myObstacle.Init(this->Position);
 }
 void Tile::Update()
 {
@@ -79,6 +80,11 @@ void Tile::Update()
 				{
 					myGaugeBar.update(0.5f);
 					myGstore.Update();
+				}break;
+				case 5:
+				{
+					myGaugeBar.update(0.5f);
+					myObstacle.Update();
 				}break;
 			}
 		}
@@ -154,6 +160,10 @@ void Tile::Draw()
 				{
 					ClickedOn = true;
 				}
+				if(Btype == 5)
+				{
+					ClickedOn = true;
+				}
 			}
 		}
 	}else
@@ -191,6 +201,12 @@ void Tile::Draw()
 							myGstore.SetPosition(this->Position+temp);
 							myGstore.DrawBuildingbar(myGstore.GetRSpeed());
 						}break;
+						case 5:
+						{
+							//set building speed
+							myObstacle.SetPosition(this->Position+temp);
+							myObstacle.DrawBuildingbar(myObstacle.GetRSpeed());
+						}break;
 					}
 				}else
 				{
@@ -207,6 +223,10 @@ void Tile::Draw()
 						case 3:
 						{
 							myGstore.Draw();
+						}break;
+						case 5:
+						{
+							myObstacle.Draw();
 						}break;
 					}
 				}
@@ -240,12 +260,19 @@ void Tile::Draw()
 				ClickedOn = true;
 				Empty = false;
 			}
+			if(Btype == 5)
+			{
+				Vector3D temp;
+				temp.Set(0,0,-3);
+				myObstacle.SetPosition(this->Position+temp);
+				myObstacle.Draw();
+				//ClickedOn = true;
+				Empty = false;
+			}
 		}
 	}
 	
 }
-
-
 
 int Tile::GetBtype()
 {
