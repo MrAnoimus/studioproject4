@@ -14,6 +14,7 @@
 #include "GameObject.h"
 #include "MyMath.h"
 #include "MiniGame.h"
+#include <time.h>
 //sound
 #include <irrKlang.h>
 using namespace irrklang;
@@ -21,6 +22,7 @@ using namespace irrklang;
 
 
 //for mini game
+#define MAX_COIN 10
 const int SPAWN_TIME = 1;
 // Declare Number Of Rows & Columns For Map Grid
 const int ROWS = 6;	
@@ -59,10 +61,9 @@ class CPlayState : public CGameState
 		void HandleEvents(CGameStateManager* theGSM);
 		void Update(CGameStateManager* theGSM);
 		//draw function start here
+		
 		//minigame
 		void DrawMGBG();
-		void DrawTextureBase();
-		void DrawObject(GameObject *go);
 		//
 		void DrawTileContent();
 		void Draw(CGameStateManager* theGSM);
@@ -81,6 +82,7 @@ class CPlayState : public CGameState
 		CPlayState()
 		:	theCamera(NULL)
 		,	minigameobjects(NULL)
+		,	catcher(NULL)
 		{ 
 		}
 		~CPlayState()
@@ -110,6 +112,10 @@ class CPlayState : public CGameState
 		TextureImage BackgroundTexture;
 		TextureImage MenuTexture[2];
 		TextureImage EventTexture[10];
+		TextureImage MGBackgroundTexture;
+		TextureImage CoinTexture;
+		TextureImage CatcherTexture;
+
 		//keyboard and mouse
 		bool myKeys[255];
 		theMouseInfo mouseInfo;
@@ -132,8 +138,12 @@ class CPlayState : public CGameState
 		
 		//minigame stuffs
 		MiniGame* minigameobjects;
-		MiniGame mgstuffs;
 		std::vector<GameObject *> m_goList;
+		GameObject* catcher;
+		//mg time (separate to other times)
+		int spritectime, spriteptime, tctime, tptime, timer;
+		ISound* mgsfx;
+
 
 		int typeS;
 		float width, height;

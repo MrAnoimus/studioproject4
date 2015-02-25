@@ -17,27 +17,25 @@ public:
 
 	void Update();
 
-	int AnimationCounter;
-
-	void SetAnimationCounter(int AnimationCounter);
-	int GetAnimationCounter(void);
-	void RenderCoin();
-
 	void DrawMGBG();
 	void DrawTextureBase();
-	void DrawObject(GameObject *mg);
+	void DrawTextureBaseNotInvert();
+	void DrawTextureBaseInvert();
+	void DrawObject(GameObject *mg, const GLuint Texture);
 
 	TextureImage coin;
 
 	//minigame stuffs
-	bool minigame;	
-	GameObject ghost;
+	bool minigame;
 	float speed;
 	int CposX;
 	int CposY;
 	Vector3D gravity;
 	float fallspeed;
 	int spawntime;
+
+	int mgctr, mgctr2;
+	bool inverted;
 
 };
 

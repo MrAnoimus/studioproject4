@@ -1,10 +1,7 @@
 #include "MiniGame.h"
 
 MiniGame::MiniGame(void)
-	:AnimationCounter(0)
-{
-	glEnable(GL_TEXTURE_2D);
-	LoadTGA(&coin, "Textures/MaleCitizen.tga");
+{	
 	//for mini game
 	minigame = false;
 	gravity.Set(0, -9.8f, 0);
@@ -12,6 +9,10 @@ MiniGame::MiniGame(void)
 	CposX = Math::RandIntMinMax(320, 780);
 	CposY = 110;
 	spawntime = 0;
+
+	//animation
+	mgctr = 0, mgctr2 = 0;
+	inverted = true;
 }
 
 
@@ -21,51 +22,8 @@ MiniGame::~MiniGame(void)
 
 void MiniGame::Update()
 {
-	int time = glutGet(GLUT_ELAPSED_TIME);
-	static int ctime = glutGet(GLUT_ELAPSED_TIME);
-
-	if (time - ctime > 300) 
-	{
-		this->AnimationCounter--;
-		if (this->AnimationCounter == 0)
-		{
-			this->AnimationCounter = 2;
-		}
-		ctime = time;
-	}
-
 }
 
-void MiniGame::SetAnimationCounter(int AnimationCounter)
-{
-	this->AnimationCounter=AnimationCounter;
-}
-
-int MiniGame::GetAnimationCounter(void)
-{
-	return this->AnimationCounter;
-}
-
-void MiniGame::RenderCoin(void)
-{
-	glPushMatrix();
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_BLEND);
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glBindTexture(GL_TEXTURE_2D, coin.id);
-	glBegin(GL_QUADS);
-		glTexCoord2f(/*0.125 * AnimationCounter*/1 , 1); 
-		glVertex2f(10, 10);
-		glTexCoord2f(/*0.125 * AnimationCounter*/1 , 0); 
-		glVertex2f(10, 0);
-		glTexCoord2f(/*0.125 * AnimationCounter*/1 + 0.25, 0);
-		glVertex2f(0, 0);
-		glTexCoord2f(/*0.125 * AnimationCounter*/1 + 0.25, 1);
-		glVertex2f(0, 10);
-	glEnd();
-	glPopMatrix();
-}
 
 void MiniGame::DrawMGBG()
 {
@@ -94,33 +52,85 @@ void MiniGame::DrawMGBG()
 	glDisable(GL_TEXTURE_2D);*/
 }
 
-void MiniGame::DrawObject(GameObject *mg)
+void MiniGame::DrawTextureBase()
 {
-	//DRAW THIS STUFF IN THE MINIGAME CLASS PLEASE
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.125 * mgctr , 1);glVertex2f(30, 30);
+		glTexCoord2f(0.125 * mgctr , 0);glVertex2f(30, 0);
+		glTexCoord2f(0.125 * mgctr + 0.125, 0);glVertex2f(0, 0);
+		glTexCoord2f(0.125 * mgctr + 0.125, 1);glVertex2f(0, 30);
+	glEnd();
+
+}
+
+void MiniGame::DrawTextureBaseNotInvert()
+{
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.125 * mgctr2 + 0.125, 1);glVertex2f(60, 60);
+		glTexCoord2f(0.125 * mgctr2 + 0.125, 0);glVertex2f(60, 0);
+		glTexCoord2f(0.125 * mgctr2, 0);glVertex2f(0,0);
+		glTexCoord2f(0.125 * mgctr2, 1);glVertex2f(0, 60);
+	glEnd();
+}
+
+void MiniGame::DrawTextureBaseInvert()
+{
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.125 * mgctr2 , 1);glVertex2f(60, 60);
+		glTexCoord2f(0.125 * mgctr2 , 0);glVertex2f(60, 0);
+		glTexCoord2f(0.125 * mgctr2 + 0.125, 0);glVertex2f(0, 0);
+		glTexCoord2f(0.125 * mgctr2 + 0.125, 1);glVertex2f(0, 60);
+	glEnd();
+}
+
+void MiniGame::DrawObject(GameObject *mg, const GLuint Texture)
+{
 	switch(mg->type)
 	{
 	case GameObject::GO_COIN:
 		{
-			//glEnable(GL_TEXTURE_2D);
+			glColor3f(1, 1, 1);
+			glEnable(GL_TEXTURE_2D);
 			glPushMatrix();
-			glColor3f(0,0,0);
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture (GL_TEXTURE_2D, Texture);
+			glPushMatrix();
 			glTranslatef(mg->pos.x, mg->pos.y, mg->pos.z);
 			glScalef(mg->scale.x, mg->scale.y, mg->scale.z);
-			glutSolidSphere(10,32,32);
+			DrawTextureBase();
 			glPopMatrix();
-			//glDisable(GL_TEXTURE_2D);
+			glDisable(GL_BLEND);
+			glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
 		}
 		break;
 	case GameObject::GO_CATCHER:
 		{
-			//glEnable(GL_TEXTURE_2D);
+			glColor3f(1, 1, 1);
+			glEnable(GL_TEXTURE_2D);
 			glPushMatrix();
-			glColor3f(1,0,0);
+			glEnable(GL_BLEND); 
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture (GL_TEXTURE_2D, Texture);
+			glPushMatrix();
 			glTranslatef(mg->pos.x, mg->pos.y, mg->pos.z);
 			glScalef(mg->scale.x, mg->scale.y, mg->scale.z);
-			glutSolidSphere(10,32,32);
+
+			if(!inverted)
+			{
+				DrawTextureBaseNotInvert();
+			}
+			else
+			{
+				DrawTextureBaseInvert();
+			}
+
 			glPopMatrix();
-			//glDisable(GL_TEXTURE_2D);
+			glDisable(GL_BLEND);
+			glPopMatrix();
+			glDisable(GL_TEXTURE_2D);
+
 		}
 		break;
 	}
