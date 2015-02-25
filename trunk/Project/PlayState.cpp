@@ -735,30 +735,15 @@ void CPlayState::DrawTileContent()
 			if(Map[y][x] == 1)
 			{//
 				myTile[y][x].SetBtype(1);
-				myTile[y][x].SetEmpty(true);
-				Vector3D temp(50 +x*100,50 +y*100,-3);
-				myTile[y][x].myHouse.SetPosition(temp);
-				myTile[y][x].myHouse.Draw();
-				//myTile[y][x].Draw();
 			}
 
 			if(Map[y][x] == 2)
-			{//
+			{
 				myTile[y][x].SetBtype(2);
-				myTile[y][x].SetEmpty(true);
-				Vector3D temp(50 +x*100,50 +y*100,-3);
-				myTile[y][x].myFCourt.SetPosition(temp);
-				myTile[y][x].myFCourt.Draw();
-				//myTile[y][x].Draw();
 			}
 			if(Map[y][x] == 3)
 			{//
 				myTile[y][x].SetBtype(3);
-				myTile[y][x].SetEmpty(true);
-				Vector3D temp(50 +x*100,50 +y*100,-3);
-				myTile[y][x].myGstore.SetPosition(temp);
-				myTile[y][x].myGstore.Draw();
-				//myTile[y][x].Draw();
 			}
 			Vector3D temp(50 + x*100,50 +y*100,-1);
 			myTile[y][x].SetPosition(temp);
