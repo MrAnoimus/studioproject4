@@ -278,21 +278,6 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				{
 					mouseLC = NULL;
 				}
-				for(std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
-				{
-					GameObject *go = *it;
-					if(!go->active)
-					{
-						go->active = true;
-						go->type = GameObject::GO_COIN;
-						go->pos.x = 800 - mouseInfo.lastX + theCamera->GetPosition().x - 400;
-						go->pos.y = 600 - mouseInfo.lastY + theCamera->GetPosition().y - 300;
-						/*go->pos.z = -2;*/
-						//cout << "posX: " << go->pos.x << ", " << "posY: " << go->pos.y << endl;
-						break;
-					}
-				}
-
 			}
 		}break;
 		}
@@ -450,7 +435,6 @@ void CPlayState::KeyboardUp(unsigned char key, int x, int y)
 
 bool CPlayState::Init()
 {
-
 	//getting the initial array
 	
 
@@ -514,9 +498,7 @@ bool CPlayState::Init()
 	LoadTGA(&EventTexture[5],"Textures/good1.tga");
 	LoadTGA(&EventTexture[6],"Textures/good2.tga");
 	LoadTGA(&EventTexture[7],"Textures/good3.tga");
-	LoadTGA(&MGBackgroundTexture,"Textures/mgbg.tga");
-	LoadTGA(&CoinTexture,"Textures/coinsprite.tga");
-	LoadTGA(&CatcherTexture,"Textures/catchersprite.tga");
+
 	//load ttf fonts
 	our_font.init("Fonts/FFF_Tusj.TTF", 42);
 	//init keyboard values
@@ -554,22 +536,12 @@ bool CPlayState::Init()
 
 	//mg init
 	minigameobjects = new MiniGame();
+	minigameobjects->Init(theCamera);
+	LoadTGA(&minigameobjects->MGBackgroundTexture,"Textures/mgbg.tga");
+	LoadTGA(&minigameobjects->CoinTexture,"Textures/coinsprite.tga");
+	LoadTGA(&minigameobjects->CatcherTexture,"Textures/catchersprite.tga");
 
-	//mini game coins
-	for (int i = 0; i <10; ++i)
-	{
-		GameObject *mg = new GameObject(GameObject::GO_COIN);
-		m_goList.push_back(mg);
-		mg->vel.y = -200;
-		mg->pos.x = 800 - Math::RandIntMinMax(320, 780) + theCamera->GetPosition().x - 400;
-		mg->pos.y = 600 - Math::RandIntMinMax(110, 310) + theCamera->GetPosition().y - 300;
-	}
-	//mini game catcher
-	catcher = new GameObject(GameObject::GO_CATCHER);
-	catcher->active = true; 
-	catcher->pos.x = 400;
-	catcher->pos.y = 50;
-
+	
 	OKbutton = new ButtonClass();
 	LoadTGA(&OKbutton->button[0],"Textures/ok.tga");
 	LoadTGA(&OKbutton->button[1],"Textures/ok.tga");
@@ -579,9 +551,6 @@ bool CPlayState::Init()
 	//Day progress
 	day = 1;
 	Dtimer = 0;
-
-	spritectime = 0, spriteptime = 0, tctime = 0, tptime = 0, timer = 300;
-
 	return true;
 }
 void CPlayState::Cleanup()
@@ -600,14 +569,14 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 {
 	if(minigameobjects->minigame)
 	{
-		GameObject* catcher2 = (GameObject*)catcher;
+		GameObject* catcher2 = (GameObject*)minigameobjects->catcher;
 		if(catcher2->active)
 		{
 			if(catcher2->type == GameObject::GO_CATCHER)
 			{
 				if(myKeys['a'] == true)
 				{
-					minigameobjects->mgctr2++;
+					minigameobjects->mgctr2++; 
 					minigameobjects->inverted = true;
 					catcher2->pos.x += 2;
 				}
@@ -624,8 +593,6 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 
 void CPlayState::Update(CGameStateManager* theGSM) 
 {
-	//cout << "minigame status: " << minigameobjects->minigame << endl;
-
 	if (sizechanged)
 		{
 			OKbutton->Set(240,580,400,460);
@@ -728,123 +695,10 @@ void CPlayState::Update(CGameStateManager* theGSM)
 			}
 		}
 		
-		//START FOR ALL OF MINI GAME==================================================
-		//for mini game animation
-	static int frame = 0;
-	static int lastTime = glutGet(GLUT_ELAPSED_TIME);
-	++frame;
-	int time = glutGet(GLUT_ELAPSED_TIME);
-	float dt = (time - lastTime) / 1000.f;
-
-	lastTime = time;
-
-	minigameobjects->spawntime -= dt*0.001;
-
-	tctime = glutGet(GLUT_ELAPSED_TIME);
-	int timeInterval2 = tctime - tptime;
-
-	if(minigameobjects->minigame)
-	{
-		if(timeInterval2 > 1000)
+		if(minigameobjects->minigame)
 		{
-			tptime = tctime;
-			timer--;
-			if(timer <= 0)
-			{
-				timer = 0;
-			}
+			minigameobjects->Update();
 		}
-	}
-
-	spritectime = glutGet(GLUT_ELAPSED_TIME);
-	int timeInterval = spritectime - spriteptime;
-	if(timeInterval > 150)
-	{
-		spriteptime = spritectime;
-		minigameobjects->mgctr++;
-	}
-
-	if (minigameobjects->mgctr == 7)
-	{
-		minigameobjects->mgctr = 0;
-	}
-
-
-	if(minigameobjects->minigame)
-	{
-		for(std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
-		{
-			GameObject *mg = (GameObject *)*it;
-			if(mg->active)
-			{
-				if(mg->type == GameObject::GO_COIN)
-				{//coin falling update
-					/*mg->vel +=  minigameobjects->gravity * dt;*/
-					mg->vel.y = -200;
-					if(mg->vel.y <= -200)
-					{mg->vel.y = -200;}
-					mg->pos += minigameobjects->fallspeed * (mg->vel + (mg->vel + minigameobjects->gravity * dt)) * 0.5 * dt;
-
-					/*if(mg->pos.y <= (600 - 200 + theCamera->GetPosition().y - 350))*/
-					if(mg->pos.y <= catcher->pos.y)
-					{
-						mg->vel.y = -200;
-						mg->pos.x = 800 - Math::RandIntMinMax(320, 780) + theCamera->GetPosition().x - 400;
-						mg->pos.y = 600 - Math::RandIntMinMax(110, 310) + theCamera->GetPosition().y - 300;
-					}
-
-					if(catcher->active)
-					{
-						if(catcher->type == GameObject::GO_CATCHER)
-						{
-							if((catcher->pos-mg->pos).Length()<=60)
-							{
-								mg->counter--;
-								it = m_goList.erase(it);
-								resource.SetMoney(resource.GetMoney()+100);
-
-								if(mgsfx == NULL)
-								{
-									mgsfx = theSoundEngine->play2D ("SFX/coin.wav", false, true);
-								}else
-								{
-									mgsfx == NULL;
-									mgsfx = theSoundEngine->play2D ("SFX/coin.wav", false, true);
-								}
-								if(mgsfx->getIsPaused() == true)
-								{
-									mgsfx->setIsPaused(false);
-								}
-								else if(mgsfx->isFinished() == true)
-								{
-									mgsfx = NULL;
-								}
-								break;
-							}
-							if(catcher->pos.x <= 150){catcher->pos.x = 150;}
-							if(catcher->pos.x >= 590){catcher->pos.x = 590;}
-						}
-
-					}
-				}
-			}
-			else if((minigameobjects->spawntime <= 0) && (mg->counter < MAX_COIN) && timer > 0)
-			{
-				minigameobjects->spawntime = SPAWN_TIME;
-				GameObject *mg2 = new GameObject(GameObject::GO_COIN);
-				mg2->vel.y = -200;
-				if(mg2->vel.y <= -200)
-				{mg2->vel.y = -200;}
-				mg2->active = true;
-				mg2->counter++;
-				mg2->pos.x = 800 - Math::RandIntMinMax(320, 780) + theCamera->GetPosition().x - 400;
-				mg2->pos.y = 600 - Math::RandIntMinMax(110, 150) + theCamera->GetPosition().y - 300;
-				m_goList.push_back(mg2);
-				break;
-			}
-		}
-	}
-		//END FOR ALL OF MINI GAME==================================================
 
 	}
 }
@@ -886,6 +740,8 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	theCamera->Update();
+	
+	minigameobjects->theCamera = theCamera;
 
 	glEnable(GL_TEXTURE_2D);
 	glPushMatrix();
@@ -906,40 +762,11 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 		glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 
-
-	//for mini game
 	if(minigameobjects->minigame)
-	{
-		//DRAW THIS STUFF IN THE MINIGAME CLASS PLEASE
-		glPushMatrix();
-		glTranslatef(150,50,-1);
-		glBindTexture (GL_TEXTURE_2D, MGBackgroundTexture.id);
-		minigameobjects->DrawMGBG();
-
-		//rendering of coins
-		for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
 		{
-			GameObject *mg = (GameObject *)*it;
-			if (mg->active)
-			{
-				glPushMatrix();
-				glTranslatef(0,0,-5);
-				minigameobjects->DrawObject(mg, CoinTexture.id);
-				glPopMatrix();
-			}
-		}
-		//rendering of catcher
-		GameObject *catcher2 = (GameObject *)catcher;
-			if (catcher2->active)
-			{
-				glPushMatrix();
-				glTranslatef(0,0,-5);
-				minigameobjects->DrawObject(catcher2, CatcherTexture.id);
-				glPopMatrix();
-			}
-
-		glPopMatrix();
-	}
+			glTranslatef(0,0,-10);
+			minigameobjects->Draw();
+		}	
 
 	DrawTileContent();
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
