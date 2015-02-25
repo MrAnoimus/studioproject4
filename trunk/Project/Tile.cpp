@@ -24,6 +24,7 @@ void Tile::Init()
 	this->startbuild = false;
 	//building stuff
 	this->Btype = 0;
+	this->startdestory = false;
 	myGaugeBar.init(1,0,1,this->Position);
 	myHouse.Init(this->Position);
 	myFCourt.Init(this->Position);
@@ -42,16 +43,20 @@ void Tile::Update()
 		if(ClickedOn)
 		{
 			//check which building the player want
-			startbuild= true;
+			if(!Empty)
+			{
+				startbuild= true;
+			}
+			
 			this->Color.Set(1,1,0);//yellow
 		}
 		if(Type == UNBUILDABLE)
 		{
-			this->Color.Set(1,0,0);
+			this->Color.Set(1,0,0);//red
 		}
 		if(!ClickedOn && !Selected && Type != UNBUILDABLE)
 		{
-			this->Color.Set(1,1,1);
+			this->Color.Set(1,1,1);//white
 		}
 	}else
 	{
@@ -62,6 +67,12 @@ void Tile::Update()
 				startbuild= true;
 			}
 		}
+		/*
+			if(Btype == 5)
+			{
+				myGaugeBar.update(1.0f);
+				myObstacle.Update();
+			}*/
 		if(startbuild)
 		{
 			switch(Btype)
@@ -148,19 +159,7 @@ void Tile::Draw()
 		{
 			if(!Empty)
 			{
-				if(Btype == 1)
-				{
-					ClickedOn = true;
-				}
-				if(Btype == 2)
-				{
-					ClickedOn = true;
-				}
-				if(Btype == 3)
-				{
-					ClickedOn = true;
-				}
-				if(Btype == 5)
+				if(Btype != 0)
 				{
 					ClickedOn = true;
 				}
@@ -226,7 +225,17 @@ void Tile::Draw()
 						}break;
 						case 5:
 						{
-							myObstacle.Draw();
+							if(Empty)
+							{
+								myObstacle.Draw();
+							}else
+							{
+								Selected = false;
+								ClickedOn = false;
+								Empty = false;
+								myGaugeBar.setDone(false);
+								myGaugeBar.setPercentage(0);
+							}
 						}break;
 					}
 				}
@@ -266,8 +275,7 @@ void Tile::Draw()
 				temp.Set(0,0,-3);
 				myObstacle.SetPosition(this->Position+temp);
 				myObstacle.Draw();
-				//ClickedOn = true;
-				Empty = false;
+				//Empty = true;
 			}
 		}
 	}
