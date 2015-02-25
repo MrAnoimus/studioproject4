@@ -790,6 +790,7 @@ void CPlayState::DrawTileContent()
 			if(Map[y][x] == 219)
 			{//3 = UNBUILDABLE
 				myTile[y][x].SetType(3);
+				myTile[y][x].SetBtype(5);
 			}
 			if(Map[y][x] == 1)
 			{//
@@ -938,32 +939,6 @@ Citizen* CPlayState::FetchObject()
 	go->SetName(str);
 	CitizenList.push_back(go);
 	return go;
-}
-void CPlayState::DrawMGBG()
-{
-	//DRAW THIS STUFF IN THE MINIGAME CLASS PLEASE
-
-	/*glEnable(GL_TEXTURE_2D);
-	glPushMatrix();
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
-	glColor3f(0.5,0.5,0.5);
-	glPushMatrix();
-	glBegin(GL_QUADS);
-	glTexCoord2f(1,1);
-	glVertex2f(0,500);
-	glTexCoord2f(0,1);
-	glVertex2f(500,500);
-	glTexCoord2f(0,0);
-	glVertex2f(500,0);
-	glTexCoord2f(1,0);
-	glVertex2f(0,0);				
-	glEnd();
-	glPopMatrix();
-	glColor3f(1,1,1);
-	/*glDisable(GL_BLEND);
-	glPopMatrix();
-	glDisable(GL_TEXTURE_2D);*/
 }
 
 void CPlayState::HandleREvents(int type)
