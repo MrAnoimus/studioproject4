@@ -240,15 +240,15 @@ std::string Citizen::GetPlace(void)
 void Citizen::Draw()
 {
 	glEnable(GL_TEXTURE_2D);
-	if(RenderMood==true)
+	if(this->RenderMood==true)
 	{
 		glPushMatrix();
-			glTranslatef(GetPosition().x-220,GetPosition().y,-2);
-			StatsBoard();
+			glTranslatef(this->GetPosition().x-220,this->GetPosition().y,-3);
+			this->StatsBoard();
 		glPopMatrix();
 	}
 	glPushMatrix();
-		glTranslatef(GetPosition().x,GetPosition().y,-2);
+		glTranslatef(this->GetPosition().x,this->GetPosition().y,-2);
 		RenderCitizen();
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
