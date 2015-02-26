@@ -74,12 +74,21 @@
     <ClCompile Include="MiniGame.cpp">
       <Filter>MiniGame</Filter>
     </ClCompile>
-    <ClCompile Include="ButtonClass.cpp" />
     <ClCompile Include="Obstacle.cpp">
       <Filter>Tiles\Building</Filter>
     </ClCompile>
     <ClCompile Include="Shelter.cpp">
       <Filter>Tiles\Building</Filter>
+    </ClCompile>
+    <ClCompile Include="Destination.cpp" />
+    <ClCompile Include="GameUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonClass.cpp">
+      <Filter>MISC</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTime.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -170,12 +179,21 @@
     <ClInclude Include="vector3D.h">
       <Filter>MISC</Filter>
     </ClInclude>
-    <ClInclude Include="ButtonClass.h" />
     <ClInclude Include="Obstacle.h">
       <Filter>Tiles\Building</Filter>
     </ClInclude>
     <ClInclude Include="Shelter.h">
       <Filter>Tiles\Building</Filter>
+    </ClInclude>
+    <ClInclude Include="Destination.h" />
+    <ClInclude Include="GameUI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonClass.h">
+      <Filter>MISC</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTime.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +232,9 @@
     </Filter>
     <Filter Include="Tiles\Building">
       <UniqueIdentifier>{8d7948b9-575b-4b98-8304-046253e6095b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{681bc940-7c84-40fd-a56e-f5816ba190d6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

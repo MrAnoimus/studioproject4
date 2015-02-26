@@ -48,7 +48,14 @@ void Tile::Update()
 			{
 				startbuild= true;
 			}
-			this->Color.Set(1,1,0);//yellow
+			if(Selected)
+			{
+				this->Color.Set(0,1,0);//green
+			}else
+			{
+				this->Color.Set(1,1,0);//yellow
+			}
+			
 		}
 		if(Type == UNBUILDABLE)
 		{

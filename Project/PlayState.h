@@ -16,16 +16,15 @@
 #include "MyMath.h"
 #include "MiniGame.h"
 #include <time.h>
-//sound
-#include <irrKlang.h>
-using namespace irrklang;
 //button
 #include "ButtonClass.h"
 #include "freeType.h"
 #include "Definitions.h"
+#include "GameUI.h"
 
-
-
+//sound
+#include <irrKlang.h>
+using namespace irrklang;
 //for mini game
 
 
@@ -92,14 +91,14 @@ class CPlayState : public CGameState
 		//,	catcher(NULL)
 		{ 
 			ifstream ifile("LuaScript/save2.txt");
-				for (int y = 0; y < ROWS; y ++ )
+			for (int y = 0; y < ROWS; y ++ )
+			{
+				for(int x = 0; x < COLS; x ++ )
 				{
-					for(int x = 0; x < COLS; x ++ )
-					{
-						ifile>> Map[y][x];
-						cout << Map[y][x] <<",";
-					}
+					ifile>> Map[y][x];
+					cout << Map[y][x] <<",";
 				}
+			}
 		}
 		~CPlayState()
 		{
@@ -165,9 +164,9 @@ class CPlayState : public CGameState
 		//mg time (separate to other times)
 		/*int spritectime, spriteptime, tctime, tptime, timer;
 		ISound* mgsfx;*/
-
-
 		int typeS;
 		float width, height;
+
+		GameUI myGameUI;
 };
 #endif
