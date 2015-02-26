@@ -91,16 +91,6 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 	{
 		case GLUT_LEFT_BUTTON:
 		{
-			
-		/*	if (REvent.IsDisplay == true)
-			{
-				if (mouseInfo.lastX >=325 && mouseInfo.lastX <= 475 && mouseInfo.lastY >= 395 && mouseInfo.lastY <=465)
-				{
-					REvent.IsDisplay = false;
-					theCamera->canPan = true;
-				}
-			}*/
-
 			if (!mouseInfo.mLButtonUp)
 			{
 				for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
@@ -109,7 +99,6 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 						(*it)->buttonclicked = true;
 				}
 			}
-
 			else
 			{
 				for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
@@ -121,167 +110,154 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 
 			if (REvent.IsDisplay == false)
 			{
-			if (state == GLUT_DOWN)
-			{
-				ClearTileMap();
-				mouseInfo.mLButtonUp = state;
-				mouseInfo.lastX = x;
-				mouseInfo.lastY = y;
-				
-				for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+				if (state == GLUT_DOWN)
 				{
-					Citizen *Citizens = *it;
-					if (Citizens->active == true)
+					ClearTileMap();
+					mouseInfo.mLButtonUp = state;
+					mouseInfo.lastX = x;
+					mouseInfo.lastY = y;
+				
+					for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 					{
-						if(SelectorX==Citizens->GetPosition().x&&SelectorY==Citizens->GetPosition().y)
+						Citizen *Citizens = *it;
+						if (Citizens->active == true)
 						{
-							Citizens->RenderMood=true;
+							if(SelectorX==Citizens->GetPosition().x&&SelectorY==Citizens->GetPosition().y)
+							{
+								Citizens->RenderMood=true;
+							}
 						}
 					}
-				}
-				if(myTile[SelectorY][SelectorX].GetBtype()==1)
-				{
-					Astar as(px,py,SelectorX,SelectorY);
-				
-					bool result = as.Search(Map);
-		
-					CNode* Node = new CNode;
-					Node->x = SelectorX;
-					Node->y = SelectorY;
-					as.AddCloseList(Node);
-
-				
-					if(result)
+					if(myTile[SelectorY][SelectorX].GetBtype()==1)
 					{
-						moving = true;
-
-						for(int i=0;i<(int)as.closeList.size();i++)
+						Astar as(px,py,SelectorX,SelectorY);
+						bool result = as.Search(Map);
+						CNode* Node = new CNode;
+						Node->x = SelectorX;
+						Node->y = SelectorY;
+						as.AddCloseList(Node);
+						if(result)
 						{
-							//Citizen stuff
-							CNode* TheNode = new CNode();
-							TheNode->x = as.closeList[i]->x*100;
-							TheNode->y = as.closeList[i]->y*100;
-							cout <<"Size: " <<(int)as.closeList.size() <<std::endl;
-							for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+							moving = true;
+							for(int i=0;i<(int)as.closeList.size();i++)
 							{
-
-								Citizen *Citizens = *it;
-								if (Citizens->active == true)
+								//Citizen stuff
+								CNode* TheNode = new CNode();
+								TheNode->x = as.closeList[i]->x*100;
+								TheNode->y = as.closeList[i]->y*100;
+								cout <<"Size: " <<(int)as.closeList.size() <<std::endl;
+								for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 								{
-									if(i>=1)
+									Citizen *Citizens = *it;
+									if (Citizens->active == true)
 									{
-										Citizens->CitizenDestination->DestinationList.push_back(TheNode);
-									}/*if((Citizens->GetPosition().x != as.closeList[i]->x*100)&&(Citizens->GetPosition().y != as.closeList[i]->y*100))
+										if(i>=1)
+										{
+											Citizens->CitizenDestination->DestinationList.push_back(TheNode);
+										}/*if((Citizens->GetPosition().x != as.closeList[i]->x*100)&&(Citizens->GetPosition().y != as.closeList[i]->y*100))
+										{
+											myTile[SelectorY][SelectorX].myHouse.SetOwner(Citizens->GetName());
+										}*/
+									}
+								}
+							}
+						}
+					}
+					//check mode
+					if(myTile[SelectorY][SelectorX].GetModeOn() == true)
+					{
+						//only if tile is not clicked on)
+						if(myTile[SelectorY][SelectorX].IsClickedOn() == false)
+						{
+							myTile[SelectorY][SelectorX].SetIsClickedOn(true);
+							//reset gaugebar
+							myTile[SelectorY][SelectorX].myGaugeBar.setDone(false);
+							myTile[SelectorY][SelectorX].myGaugeBar.setPercentage(0);
+						}
+						//clicked on
+						if(myTile[SelectorY][SelectorX].IsClickedOn())
+						{
+							if(myTile[SelectorY][SelectorX].GetBtype() == 0)
+							{
+								myTile[SelectorY][SelectorX].SetEmpty(true);
+								myTile[SelectorY][SelectorX].SetIsClickedOn(false);
+								Map[SelectorY][SelectorX]=10;
+							}
+							if(myTile[SelectorY][SelectorX].GetBtype() == 1)
+							{
+								//once selected and click on set tile to not empty
+								myTile[SelectorY][SelectorX].SetEmpty(false);
+								resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myHouse.GetCost());
+								Map[SelectorY][SelectorX]=1;
+							}
+							else if(myTile[SelectorY][SelectorX].GetBtype() == 2)
+							{
+								//once selected and click on set tile to not empty
+								myTile[SelectorY][SelectorX].SetEmpty(false);
+								resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
+								Map[SelectorY][SelectorX]=2;
+							}
+							else if(myTile[SelectorY][SelectorX].GetBtype() == 3)
+							{
+								//once selected and click on set tile to not empty
+								myTile[SelectorY][SelectorX].SetEmpty(false);
+								resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
+								Map[SelectorY][SelectorX]=3;
+							}
+							for(int y = 0; y < ROWS; y += 1)
+							{
+								for(int x = 0; x < COLS; x += 1)
+								{
+									if(myTile[SelectorY][SelectorX].GetBtype() == 5)
 									{
-										myTile[SelectorY][SelectorX].myHouse.SetOwner(Citizens->GetName());
-									}*/
+										//once selected and click on set tile to not empty
+										myTile[y][x].SetEmpty(false);
+										//resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
+										Map[SelectorY][SelectorX]=10;
+									}
 									
 								}
 							}
-							}
-						}
-				}
-				//check mode
-				if(myTile[SelectorY][SelectorX].GetModeOn() == true)
-				{
-					//only if tile is not clicked on)
-					if(myTile[SelectorY][SelectorX].IsClickedOn() == false && (resource.GetMoney())>=0)
-					{
-						myTile[SelectorY][SelectorX].SetIsClickedOn(true);
-
-						if(myTile[SelectorY][SelectorX].GetBtype() == 0)
-						{
-							myTile[SelectorY][SelectorX].SetEmpty(true);
-							myTile[SelectorY][SelectorX].SetIsClickedOn(false);
-							Map[SelectorY][SelectorX]=10;
-						}
-						if(myTile[SelectorY][SelectorX].GetBtype() == 1)
-						{
-							//once selected and click on set tile to not empty
-							myTile[SelectorY][SelectorX].SetEmpty(false);
-							resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myHouse.GetCost());
-							if(Map[SelectorY][SelectorX] != 1)
-							{
-								Map[SelectorY][SelectorX]=1;
-							}
-							
-							
-						}
-						else if(myTile[SelectorY][SelectorX].GetBtype() == 2)
-						{
-							//once selected and click on set tile to not empty
-							myTile[SelectorY][SelectorX].SetEmpty(false);
-							resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
-							Map[SelectorY][SelectorX]=2;
-						}
-						else if(myTile[SelectorY][SelectorX].GetBtype() == 3)
-						{
-							//once selected and click on set tile to not empty
-							myTile[SelectorY][SelectorX].SetEmpty(false);
-							resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
-							Map[SelectorY][SelectorX]=3;
 						}
 					}
-					if(myTile[SelectorY][SelectorX].IsClickedOn())
+					if(mouseLC == NULL)
 					{
-						for(int y = 0; y < ROWS; y += 1)
-						{
-							for(int x = 0; x < COLS; x += 1)
-							{
-								if(myTile[SelectorY][SelectorX].GetBtype() == 5)
-								{
-									//once selected and click on set tile to not empty
-									myTile[y][x].SetEmpty(false);
-									//resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
-									Map[SelectorY][SelectorX]=10;
-								}
-							}
-						}
+						mouseLC = theSoundEngine->play2D ("SFX/LMBdown.wav", false, true);
+					}else
+					{
+						mouseLC == NULL;
+						mouseLC = theSoundEngine->play2D ("SFX/LMBdown.wav", false, true);
+					}
+					if(mouseLC->getIsPaused() == true)
+					{
+						mouseLC->setIsPaused(false);
+					}
+					else if(mouseLC->isFinished() == true)
+					{
+						mouseLC = NULL;
 					}
 
-					
-
-				}
-				
-				
-				if(mouseLC == NULL)
-				{
-					mouseLC = theSoundEngine->play2D ("SFX/LMBdown.wav", false, true);
 				}else
 				{
-					mouseLC == NULL;
-					mouseLC = theSoundEngine->play2D ("SFX/LMBdown.wav", false, true);
+					//cout << "LMB is up" << endl;
+					if(mouseLC == NULL)
+					{
+						mouseLC = theSoundEngine->play2D ("SFX/LMBup.wav", false, true);
+					}else
+					{
+						mouseLC == NULL;
+						mouseLC = theSoundEngine->play2D ("SFX/LMBup.wav", false, true);
+					}
+					if(mouseLC->getIsPaused() == true)
+					{
+						mouseLC->setIsPaused(false);
+					}
+					else if(mouseLC->isFinished() == true)
+					{
+						mouseLC = NULL;
+					}
 				}
-				if(mouseLC->getIsPaused() == true)
-				{
-					mouseLC->setIsPaused(false);
-				}
-				else if(mouseLC->isFinished() == true)
-				{
-					mouseLC = NULL;
-				}
-
-			}else
-			{
-				//cout << "LMB is up" << endl;
-				if(mouseLC == NULL)
-				{
-					mouseLC = theSoundEngine->play2D ("SFX/LMBup.wav", false, true);
-				}else
-				{
-					mouseLC == NULL;
-					mouseLC = theSoundEngine->play2D ("SFX/LMBup.wav", false, true);
-				}
-				if(mouseLC->getIsPaused() == true)
-				{
-					mouseLC->setIsPaused(false);
-				}
-				else if(mouseLC->isFinished() == true)
-				{
-					mouseLC = NULL;
-				}
-			}
-		}break;
+			}break;
 		}
 		case GLUT_RIGHT_BUTTON:
 		{
@@ -312,6 +288,34 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 						{
 							mouseLC == NULL;
 							mouseLC = theSoundEngine->play2D ("SFX/zoomin.wav", false, true);
+						}
+					}
+				}else
+				{
+					if(myTile[SelectorY][SelectorX].IsClickedOn() == true)
+					{
+						myTile[SelectorY][SelectorX].SetIsClickedOn(false);
+						//reset gaugebar
+						myTile[SelectorY][SelectorX].myGaugeBar.setDone(false);
+						myTile[SelectorY][SelectorX].myGaugeBar.setPercentage(0);
+					}
+					//clicked on
+					if(myTile[SelectorY][SelectorX].IsClickedOn() == false)
+					{
+						if(myTile[SelectorY][SelectorX].GetBtype() == 1)
+						{
+							myTile[SelectorY][SelectorX].SetEmpty(false);
+							Map[SelectorY][SelectorX]=219;
+						}
+						if(myTile[SelectorY][SelectorX].GetBtype() == 2)
+						{
+							myTile[SelectorY][SelectorX].SetEmpty(false);
+							Map[SelectorY][SelectorX]=219;
+						}
+						if(myTile[SelectorY][SelectorX].GetBtype() == 3)
+						{
+							myTile[SelectorY][SelectorX].SetEmpty(false);
+							Map[SelectorY][SelectorX]=219;
 						}
 					}
 				}
@@ -438,9 +442,6 @@ void CPlayState::KeyboardUp(unsigned char key, int x, int y)
 bool CPlayState::Init()
 {
 	//getting the initial array
-	
-
-	
 	width = glutGet(GLUT_SCREEN_WIDTH);
 	height = glutGet(GLUT_SCREEN_HEIGHT);
 	typeS = 0;
@@ -564,7 +565,6 @@ void CPlayState::Resume()
 {
 	//cout << "CMenuState::Resume\n" << endl;
 }
-
 void CPlayState::HandleEvents(CGameStateManager* theGSM)
 {
 	if(minigameobjects->minigame)
@@ -590,7 +590,6 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 		}
 	}
 }
-
 void CPlayState::Update(CGameStateManager* theGSM) 
 {
 	if (sizechanged)
@@ -612,9 +611,9 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		//Time progression
 		if(Dtimer < 302)
 		{
-			Dtimer++;
+			//Dtimer++;
 			
-			if (Dtimer >= 300)
+			/*if (Dtimer >= 300)
 			{
 				day +=1;
 				REvent.IsDisplay = true;
@@ -623,7 +622,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 				cout <<REvent.type<<endl;
 				theCamera->canPan = false;
 				Dtimer = 0;
-			}
+			}*/
 		}
 
 		//tile selection check
@@ -735,7 +734,7 @@ void CPlayState::DrawTileContent()
 			//myTile[y][x].SetIsClickedOn(true);
 			if(Map[y][x] == 219)
 			{//3 = UNBUILDABLE
-				myTile[y][x].SetType(3);
+				myTile[y][x].SetType(4);
 				myTile[y][x].SetBtype(5);
 			}
 			if(Map[y][x] == 1)
@@ -751,10 +750,13 @@ void CPlayState::DrawTileContent()
 			{//
 				myTile[y][x].SetBtype(3);
 			}
+			if(Map[y][x] == 4)
+			{
+				myTile[y][x].SetBtype(4);
+			}
 			if(Map[y][x] == 10)
 			{
-				myTile[y][x].SetType(0);
-				//myTile[y][x].SetBtype(0);
+				myTile[y][x].SetType(0);//tile color code
 			}
 			Vector3D temp(50 + x*100,50 +y*100,-1);
 			myTile[y][x].SetPosition(temp);
@@ -810,13 +812,13 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	//Enable 2D text display and HUD
 	theCamera->SetHUD( true);
 	//print(our_font,0,550,"Cam posX :%f\nCam posY :%f\nCam PosZ:%f",theCamera->GetPosition().x ,theCamera->GetPosition().y,theCamera->GetPosition().z);
-	/*print(our_font,0,height-100,"type: %d",myTile[SelectorY][SelectorX].GetBtype());
+	print(our_font,0,height-100,"type: %d",myTile[SelectorY][SelectorX].GetBtype());
 	print(our_font,0,height-600,"OwnerName: %s",myTile[SelectorY][SelectorX].myHouse.GetOwner().c_str());
-	print(our_font,0,height-200,"screenW: %f\nscreenH: %f",width,height);
+	print(our_font,0,height-200,"Clicked : %d",myTile[SelectorY][SelectorX].IsClickedOn());
 	print(our_font,0,height-350,"pickX: %d\npickY: %d",SelectorX,SelectorY);
-	print(our_font,0,height-500,"MouseX: %d\nMouseY: %d",mouseInfo.lastX,mouseInfo.lastY);*/
-	print(our_font,0,height-300,"Day: %d\n", day);
-	print(our_font,0,height-400,"Timer: %d\n", Dtimer);
+	print(our_font,0,height-500,"Empty : %d",myTile[SelectorY][SelectorX].GetEmpty());
+	/*print(our_font,0,height-300,"Day: %d\n", day);
+	print(our_font,0,height-400,"Timer: %d\n", Dtimer);*/
 
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 	{	

@@ -112,6 +112,7 @@
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResultState.cpp" />
     <ClCompile Include="SettingState.cpp" />
+    <ClCompile Include="Shelter.cpp" />
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +146,7 @@
     <ClInclude Include="resource1.h" />
     <ClInclude Include="ResultState.h" />
     <ClInclude Include="SettingState.h" />
+    <ClInclude Include="Shelter.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="vector3D.h" />
   </ItemGroup>

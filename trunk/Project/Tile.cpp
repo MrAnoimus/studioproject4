@@ -29,6 +29,7 @@ void Tile::Init()
 	myHouse.Init(this->Position);
 	myFCourt.Init(this->Position);
 	myGstore.Init(this->Position);
+	myShelter.Init(this->Position);
 	myObstacle.Init(this->Position);
 }
 void Tile::Update()
@@ -47,7 +48,6 @@ void Tile::Update()
 			{
 				startbuild= true;
 			}
-			
 			this->Color.Set(1,1,0);//yellow
 		}
 		if(Type == UNBUILDABLE)
@@ -59,20 +59,12 @@ void Tile::Update()
 			this->Color.Set(1,1,1);//white
 		}
 	}else
-	{
-		if(ClickedOn)
+	{//mode off
+
+		if(!Empty)
 		{
-			if(!Empty)
-			{
-				startbuild= true;
-			}
+			startbuild= true;
 		}
-		/*
-			if(Btype == 5)
-			{
-				myGaugeBar.update(1.0f);
-				myObstacle.Update();
-			}*/
 		if(startbuild)
 		{
 			switch(Btype)
@@ -91,6 +83,11 @@ void Tile::Update()
 				{
 					myGaugeBar.update(0.5f);
 					myGstore.Update();
+				}break;
+				case 4:
+				{
+					myGaugeBar.update(0.5f);
+					myShelter.Update();
 				}break;
 				case 5:
 				{
@@ -155,27 +152,15 @@ void Tile::Draw()
 	{
 		DrawTileOutLine();
 		DrawTile();
-		if(ClickedOn)
-		{
-			if(!Empty)
-			{
-				if(Btype != 0)
-				{
-					ClickedOn = true;
-				}
-			}
-		}
 	}else
-	{
+	{//mode off
+		Vector3D temp(0,0,-3);
 		if(ClickedOn)
 		{
 			if(!Empty)
 			{
 				//if not empty
-				Vector3D temp,temp2;
-				temp.Set(0,0,-3);
-				temp2.Set(50,50,-4);
-
+				Vector3D temp2(50,50,-4);
 				myGaugeBar.setPos(this->Position+temp2);
 				if(myGaugeBar.getdone()==false)
 				{
@@ -200,6 +185,11 @@ void Tile::Draw()
 							myGstore.SetPosition(this->Position+temp);
 							myGstore.DrawBuildingbar(myGstore.GetRSpeed());
 						}break;
+						case 4:
+						{
+							myShelter.SetPosition(this->Position+temp);
+							myShelter.DrawBuildingbar(myShelter.GetRSpeed());
+						}break;
 						case 5:
 						{
 							//set building speed
@@ -208,7 +198,7 @@ void Tile::Draw()
 						}break;
 					}
 				}else
-				{
+				{//bar 100%
 					switch(Btype)
 					{
 						case 1:
@@ -223,8 +213,14 @@ void Tile::Draw()
 						{
 							myGstore.Draw();
 						}break;
+						case 4:
+						{
+							myShelter.Draw();
+						}break;
 						case 5:
 						{
+							myGaugeBar.setDone(false);
+							myGaugeBar.setPercentage(0);
 							if(Empty)
 							{
 								myObstacle.Draw();
@@ -232,50 +228,57 @@ void Tile::Draw()
 							{
 								Selected = false;
 								ClickedOn = false;
-								Empty = false;
 								myGaugeBar.setDone(false);
 								myGaugeBar.setPercentage(0);
+								Empty = true;
 							}
 						}break;
 					}
 				}
 			}
 		}else
-		{
-			if(Btype == 1)
+		{//not clicked on
+			switch(Btype)
 			{
-				Vector3D temp;
-				temp.Set(0,0,-3);
-				myHouse.SetPosition(this->Position+temp);
-				myHouse.Draw();
-				ClickedOn = true;
-				Empty = false;
-			}
-			if(Btype == 2)
-			{
-				Vector3D temp;
-				temp.Set(0,0,-3);
-				myFCourt.SetPosition(this->Position+temp);
-				myFCourt.Draw();
-				ClickedOn = true;
-				Empty = false;
-			}
-			if(Btype == 3)
-			{
-				Vector3D temp;
-				temp.Set(0,0,-3);
-				myGstore.SetPosition(this->Position+temp);
-				myGstore.Draw();
-				ClickedOn = true;
-				Empty = false;
-			}
-			if(Btype == 5)
-			{
-				Vector3D temp;
-				temp.Set(0,0,-3);
-				myObstacle.SetPosition(this->Position+temp);
-				myObstacle.Draw();
-				//Empty = true;
+				case 0:
+				{
+				/*	Empty = true;
+					ClickedOn = false;*/
+				}break;
+				case 1:
+				{
+					myHouse.SetPosition(this->Position+temp);
+					myHouse.Draw();
+					ClickedOn = true;
+					Empty = false;
+				}break;
+				case 2:
+				{
+					myFCourt.SetPosition(this->Position+temp);
+					myFCourt.Draw();
+					ClickedOn = true;
+					Empty = false;
+				}break;
+				case 3:
+				{
+					myGstore.SetPosition(this->Position+temp);
+					myGstore.Draw();
+					ClickedOn = true;
+					Empty = false;
+
+				}break;
+				case 4:
+				{
+					myShelter.SetPosition(this->Position+temp);
+					myShelter.Draw();
+					ClickedOn = true;
+					Empty = false;
+				}break;
+				case 5:
+				{
+					myObstacle.SetPosition(this->Position+temp);
+					myObstacle.Draw();
+				}break;
 			}
 		}
 	}
