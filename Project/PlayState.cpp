@@ -129,40 +129,60 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 						}
 					}
 					if(myTile[SelectorY][SelectorX].GetBtype()==1)
+				{
+				/*	Citizen *go;
+					go = FetchObject();
+					go->active = true;
+					go->SetPosition(Vector3D(100,100,0));*/
+					Astar as(px,py,SelectorX,SelectorY);
+				
+					bool result = as.Search(Map);
+		
+					CNode* Node = new CNode;
+					Node->x = SelectorX;
+					Node->y = SelectorY;
+					as.AddCloseList(Node);
+
+				
+					if(result)
 					{
-						Astar as(px,py,SelectorX,SelectorY);
-						bool result = as.Search(Map);
-						CNode* Node = new CNode;
-						Node->x = SelectorX;
-						Node->y = SelectorY;
-						as.AddCloseList(Node);
-						if(result)
+						moving = true;
+
+						for(int i=0;i<(int)as.closeList.size();i++)
 						{
-							moving = true;
-							for(int i=0;i<(int)as.closeList.size();i++)
+							//Citizen stuff
+							CNode* TheNode = new CNode();
+							TheNode->x = as.closeList[i]->x*100;
+							TheNode->y = as.closeList[i]->y*100;
+							cout <<"Size: " <<(int)as.closeList.size() <<std::endl;
+							for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 							{
-								//Citizen stuff
-								CNode* TheNode = new CNode();
-								TheNode->x = as.closeList[i]->x*100;
-								TheNode->y = as.closeList[i]->y*100;
-								cout <<"Size: " <<(int)as.closeList.size() <<std::endl;
-								for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+								int j= (int)as.closeList.size();
+								Citizen *Citizens = *it;
+								if (Citizens->active == true&&Citizens->Movedout==false)
 								{
-									Citizen *Citizens = *it;
-									if (Citizens->active == true)
+									if(i+1>=j)
 									{
-										if(i>=1)
-										{
-											Citizens->CitizenDestination->DestinationList.push_back(TheNode);
-										}/*if((Citizens->GetPosition().x != as.closeList[i]->x*100)&&(Citizens->GetPosition().y != as.closeList[i]->y*100))
-										{
-											myTile[SelectorY][SelectorX].myHouse.SetOwner(Citizens->GetName());
-										}*/
+										Citizens->CitizenDestination->DestinationList.push_back(TheNode);
+										Citizens->Movedout=true;
+										break;
 									}
+									if(i>=1)
+									{				
+										Citizens->CitizenDestination->DestinationList.push_back(TheNode);
+										break;
+									}
+									
+									/*if((Citizens->GetPosition().x != as.closeList[i]->x*100)&&(Citizens->GetPosition().y != as.closeList[i]->y*100))
+									{
+										myTile[SelectorY][SelectorX].myHouse.SetOwner(Citizens->GetName());
+									}*/
+									
 								}
 							}
+							}
 						}
-					}
+				}
 					//check mode
 					if(myTile[SelectorY][SelectorX].GetModeOn() == true)
 					{
@@ -529,12 +549,14 @@ bool CPlayState::Init()
 
 	//end of choice
 
-	
-	Citizen *go;
-	go = FetchObject();
-	go->active = true;
-	go->SetPosition(Vector3D(100,100,0));
-	
+	for(int i =0; i< resource.GetCitizen(); i++)
+	{
+		Citizen *go;
+		go = FetchObject();
+		go->active = true;
+		go->Movedout=false;
+		go->SetPosition(Vector3D(100,100,0));
+	}
 	//mg init
 	minigameobjects = new MiniGame();
 	minigameobjects->Init(theCamera);
@@ -554,9 +576,11 @@ bool CPlayState::Init()
 	Dtimer = 0;
 	return true;
 }
+
 void CPlayState::Cleanup()
 {
 }
+
 void CPlayState::Pause()
 {
 	//cout << "CMenuState::Pause\n" << endl;
@@ -685,24 +709,26 @@ void CPlayState::Update(CGameStateManager* theGSM)
 				//Citizens->Position.x++;
 				if(myTile[SelectorY][SelectorX].GetModeOn()==false)
 				{
+
 				if(Citizens->CitizenDestination->DestinationList.size()>=1)
 				{
+					if(Citizens->Movedout==true)
+					{
 					Vector3D position;
 					position.x = Citizens->CitizenDestination->DestinationList[Citizens->index]->x;
 					position.y = Citizens->CitizenDestination->DestinationList[Citizens->index]->y;
 					position.z = Citizens->GetPosition().z;
-
-					
 					if ((position -Citizens->GetPosition()).LengthSquared() > (0))
 					{
 						Vector3D direction(position - Citizens->GetPosition());
 						Citizens->Position.x += direction.Normalized().x;
 						Citizens->Position.y += direction.Normalized().y;
-						std::cout <<"Citizen Index: " << Citizens->index << std::endl;
+						/*std::cout <<"Citizen Index: " << Citizens->index << std::endl;
 						std::cout <<"Index Position X: " << position.x << std::endl;
 						std::cout <<"Index Position Y: " << position.y << std::endl;
 						std::cout <<"Citizen Position X: "<< Citizens->Position.x << std::endl;
 						std::cout <<"Citizen Position Y: "<< Citizens->Position.y << std::endl;
+						*/
 					}
 					if(Citizens->GetPosition().x== position.x && Citizens->GetPosition().y == position.y)
 					{
@@ -711,6 +737,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 						Citizens->index++;
 						}
 					}
+				}
 				}
 				}
 			}
@@ -804,8 +831,6 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 		Citizen *Citizens = *it;
 		if (Citizens->active == true)
 		{
-			glTranslatef(Citizens->Position.x, Citizens->Position.y, Citizens->Position.z-2);
-			//Citizens->MoodUpdate(Citizen::EATINGPLACE, Citizen::FOOD);
 			Citizens->Draw();
 		}
 	}
@@ -1018,6 +1043,10 @@ void CPlayState::ClearTileMap(void)
 				{
 					Map[y][x] = 10;
 				}
+			}
+			if(Map[y][x]==11)
+			{
+				Map[y][x]=10;
 			}
 		}
 	}

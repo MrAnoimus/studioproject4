@@ -80,6 +80,8 @@ public:
 	void SetName(std::string Name);
 
 	std::string GetName(void);
+
+	bool Movedout;
 private:
 	int dir;
 	
