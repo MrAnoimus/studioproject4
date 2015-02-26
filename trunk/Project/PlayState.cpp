@@ -466,6 +466,7 @@ bool CPlayState::Init()
 	typeS = 0;
 	moving = false;
 	movingX = false;
+	myGameUI.Init();
 	lua_State *L2 = lua_open();
 
 	luaL_openlibs(L2);
@@ -682,7 +683,8 @@ void CPlayState::Update(CGameStateManager* theGSM)
 				Dtimer = 0;
 			}*/
 		}
-
+		//
+		//myGameUI.Update();
 		//tile selection check
 		int offsetX;
 		int offsetY;
@@ -718,7 +720,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 						myTile[y][x].SetIsSelected(false);
 					}
 					myTile[SelectorY][SelectorX].SetIsSelected(true);
-				}
+				}//!clean up sometime later watch out list
 				if(	myTile[y][x].GetModeOn() == true)
 				{
 					myTile[y][x].Update();
@@ -743,41 +745,38 @@ void CPlayState::Update(CGameStateManager* theGSM)
 				//Citizens->Position.x++;
 				if(myTile[SelectorY][SelectorX].GetModeOn()==false)
 				{
-
-				if(Citizens->CitizenDestination->DestinationList.size()>=1)
-				{
-					if(Citizens->Movedout==true)
+					if(Citizens->CitizenDestination->DestinationList.size()>=1)
 					{
-					Vector3D position;
-					position.x = Citizens->CitizenDestination->DestinationList[Citizens->index]->x;
-					position.y = Citizens->CitizenDestination->DestinationList[Citizens->index]->y;
-					position.z = Citizens->GetPosition().z;
-					if ((position -Citizens->GetPosition()).LengthSquared() > (0))
-					{
-						Vector3D direction(position - Citizens->GetPosition());
-						Citizens->Position.x += direction.Normalized().x;
-						Citizens->Position.y += direction.Normalized().y;
-						/*std::cout <<"Citizen Index: " << Citizens->index << std::endl;
-						std::cout <<"Index Position X: " << position.x << std::endl;
-						std::cout <<"Index Position Y: " << position.y << std::endl;
-						std::cout <<"Citizen Position X: "<< Citizens->Position.x << std::endl;
-						std::cout <<"Citizen Position Y: "<< Citizens->Position.y << std::endl;
-						*/
-					}
-					if(Citizens->GetPosition().x== position.x && Citizens->GetPosition().y == position.y)
-					{
-						if(Citizens->index < Citizens->CitizenDestination->DestinationList.size()-1)
+						if(Citizens->Movedout==true)
 						{
-						Citizens->index++;
+							Vector3D position;
+							position.x = Citizens->CitizenDestination->DestinationList[Citizens->index]->x;
+							position.y = Citizens->CitizenDestination->DestinationList[Citizens->index]->y;
+							position.z = Citizens->GetPosition().z;
+							if ((position -Citizens->GetPosition()).LengthSquared() > (0))
+							{
+								Vector3D direction(position - Citizens->GetPosition());
+								Citizens->Position.x += direction.Normalized().x;
+								Citizens->Position.y += direction.Normalized().y;
+								/*std::cout <<"Citizen Index: " << Citizens->index << std::endl;
+								std::cout <<"Index Position X: " << position.x << std::endl;
+								std::cout <<"Index Position Y: " << position.y << std::endl;
+								std::cout <<"Citizen Position X: "<< Citizens->Position.x << std::endl;
+								std::cout <<"Citizen Position Y: "<< Citizens->Position.y << std::endl;
+								*/
+							}
+							if(Citizens->GetPosition().x== position.x && Citizens->GetPosition().y == position.y)
+							{
+								if(Citizens->index < Citizens->CitizenDestination->DestinationList.size()-1)
+								{
+								Citizens->index++;
+								}
+							}
 						}
 					}
 				}
-				}
-				}
-			}
-			
+			}	
 		}
-		
 		if(minigameobjects->minigame)
 		{
 			minigameobjects->Update();
@@ -853,17 +852,15 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 		glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 
-	
-
 	if(minigameobjects->minigame)
-		{
-			//if(minigameobjects->timer <= 0)
-			//{
+	{
+		//if(minigameobjects->timer <= 0)
+		//{
 				
-			//}
-			glTranslatef(0,0,-10);
-			minigameobjects->Draw();
-		}	
+		//}
+		glTranslatef(0,0,-10);
+		minigameobjects->Draw();
+	}	
 
 	DrawTileContent();
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
@@ -874,30 +871,24 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 			Citizens->Draw();
 		}
 	}
-	
 	//Enable 2D text display and HUD
 	theCamera->SetHUD( true);
-	//print(our_font,0,550,"Cam posX :%f\nCam posY :%f\nCam PosZ:%f",theCamera->GetPosition().x ,theCamera->GetPosition().y,theCamera->GetPosition().z);
+	myGameUI.Draw(0,height - 50);
 	print(our_font,0,height-100,"type: %d",myTile[SelectorY][SelectorX].GetBtype());
-	print(our_font,0,height-600,"OwnerName: %s",myTile[SelectorY][SelectorX].myHouse.GetOwner().c_str());
-	print(our_font,0,height-200,"Clicked : %d",myTile[SelectorY][SelectorX].IsClickedOn());
-	print(our_font,0,height-350,"pickX: %d\npickY: %d",SelectorX,SelectorY);
-	print(our_font,0,height-500,"Empty : %d",myTile[SelectorY][SelectorX].GetEmpty());
+	print(our_font,0,height-300,"OwnerName: %s",myTile[SelectorY][SelectorX].myHouse.GetOwner().c_str());
 	/*print(our_font,0,height-300,"Day: %d\n", day);
 	print(our_font,0,height-400,"Timer: %d\n", Dtimer);*/
 	print(our_font,0,height-500,"Cash: %f\n", resource.GetMoney());
-
-	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
-	{	
-		Citizen *Citizens = *it;
-		if (Citizens->active == true)
-		{
-			//Citizens->MoodUpdate(Citizen::EATINGPLACE, Citizen::FOOD);
-			//print(our_font,0,height-500,"MouseX: %s",Citizens->GetName().c_str());
-		}
-	}
+	//for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+	//{	
+	//	Citizen *Citizens = *it;
+	//	if (Citizens->active == true)
+	//	{
+	//		//Citizens->MoodUpdate(Citizen::EATINGPLACE, Citizen::FOOD);
+	//		//print(our_font,0,height-500,"MouseX: %s",Citizens->GetName().c_str());
+	//	}
+	//}
 	RenderUI();
-	
 	if(minigameobjects->minigame)
 	{
 		if(minigameobjects->timer <= 0)
@@ -905,15 +896,13 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 			returnbutton->Render();
 		}
 	}
-
 	TheChoice->Draw();
-	if (REvent.IsDisplay == true)
+	if(REvent.IsDisplay == true)
 	{
 		HandleREvents(REvent.type);
 		glPushMatrix();
 			OKbutton->Render();
 		glPopMatrix();
-
 	}
 	theCamera->SetHUD( false );
 	// Flush off any entity which is not drawn yet, so that we maintain the frame rate.
@@ -933,7 +922,6 @@ void CPlayState::RenderUI(void)
 			print(minigameobjects->mgfont,width/2,height*0.8,"%d\n", minigameobjects->timer);
 			glColor3f(1,1,1);
 		glPopMatrix();
-
 		glPushMatrix();
 			glScalef(0.2,0.2,0.2);
 			glColor3f(0,0,0);
