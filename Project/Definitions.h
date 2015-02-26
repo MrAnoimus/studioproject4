@@ -21,4 +21,8 @@
 //Window Position
 #define COLORDEPTH LuaFuncs::getInstance()->GetColorDepth()
 
+//int glutScreenX = glutGet(GL_WINDOW_WIDTH);
+//int glutScreenY = glutGet(GL_WINDOW_HEIGHT);
+
+
 #endif

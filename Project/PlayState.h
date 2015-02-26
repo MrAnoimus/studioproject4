@@ -123,6 +123,8 @@ class CPlayState : public CGameState
 		int Dtimer;
 		//button
 		ButtonClass* OKbutton;
+		//minigame buttons
+		ButtonClass* returnbutton;
 		std::vector<ButtonClass*> ListofButtons;
 		// The camera
 		Camera* theCamera;

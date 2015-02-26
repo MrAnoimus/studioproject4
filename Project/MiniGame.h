@@ -6,7 +6,9 @@
 #include "Resource.h"
 
 #include "Camera.h"
+#include "ButtonClass.h"
 
+#include "freeType.h"
 #include <vector>
 
 //sound
@@ -37,10 +39,19 @@ public:
 	void DrawTextureBase();
 	void DrawTextureBaseNotInvert();
 	void DrawTextureBaseInvert();
+	void DrawTextureBaseHG();
+
 	void DrawObject(GameObject *mg, const GLuint Texture);
 
+	void DrawHourGlass(const GLuint Texture);
+	void DrawTimer(const GLuint Texture);
 
-	TextureImage coin;
+
+	void CoinPattern1(float posX, float posY, float width);
+
+
+	//fonts
+	freetype::font_data mgfont;
 
 	//minigame stuffs
 	bool minigame;
@@ -51,22 +62,26 @@ public:
 	float fallspeed;
 	int spawntime;
 
-	int mgctr, mgctr2;
 	bool inverted;
 
 	std::vector<GameObject *> m_goList;
 	GameObject* mg;
 	GameObject* catcher;
 
+	float cash;
+	bool addcash;
+	//indexes
+	//	coin   catcher hourglass
+	int mgctr, mgctr2, mgctr3;
+
+	//sprite delay and real-time based timer
 	int spritectime, spriteptime, tctime, tptime, timer;
 
 	//The sound engine vroom vroom
 	ISoundEngine* theSoundEngine;
 	ISound* mgsfx;
 
-	TextureImage MGBackgroundTexture;
-	TextureImage CoinTexture;
-	TextureImage CatcherTexture;
+	TextureImage MGTexture[10];
 
 };
 

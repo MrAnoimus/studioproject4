@@ -55,28 +55,28 @@ void CPlayState::MouseMove(int x , int y)
 	if(theCamera->canPan == true)
 	{
 		//stop making it one line.
-		if(mouseInfo.lastX >= 700)
+		if(mouseInfo.lastX >= width - 50)
 		{
 			theCamera->isPanRight = true;
 		}else
 		{
 			theCamera->isPanRight = false;
 		}
-		if(mouseInfo.lastX <= 100)
+		if(mouseInfo.lastX <= 50)
 		{
 			theCamera->isPanLeft = true;
 		}else
 		{
 			theCamera->isPanLeft = false;
 		}
-		if(mouseInfo.lastY <= 100)
+		if(mouseInfo.lastY <= height-50)
 		{
 			theCamera->isPanUp = true;
 		}else
 		{
 			theCamera->isPanUp = false;
 		}
-		if(mouseInfo.lastY >= 500)
+		if(mouseInfo.lastY >= 50)
 		{
 			theCamera->isPanDown = true;
 		}else
@@ -406,7 +406,6 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 		}
 		if(myKeys['n'] == true)
 		{
-			minigameobjects->minigame = false;
 		}
 
 		if(myKeys['p'] == true)
@@ -560,14 +559,26 @@ bool CPlayState::Init()
 	//mg init
 	minigameobjects = new MiniGame();
 	minigameobjects->Init(theCamera);
-	LoadTGA(&minigameobjects->MGBackgroundTexture,"Textures/mgbg.tga");
-	LoadTGA(&minigameobjects->CoinTexture,"Textures/coinsprite.tga");
-	LoadTGA(&minigameobjects->CatcherTexture,"Textures/catchersprite.tga");
 
-	
+	LoadTGA(&minigameobjects->MGTexture[0],"Textures/mgbg.tga");
+	LoadTGA(&minigameobjects->MGTexture[1],"Textures/coinsprite.tga");
+	LoadTGA(&minigameobjects->MGTexture[2],"Textures/catchersprite.tga");
+	LoadTGA(&minigameobjects->MGTexture[3],"Textures/hgsprite.tga");
+	LoadTGA(&minigameobjects->MGTexture[4],"Textures/mgframe.tga");
+
+	//minigame buttons init
+	returnbutton = new ButtonClass();
+	LoadTGA(&returnbutton->button[0],"Textures/returnup.tga");
+	LoadTGA(&returnbutton->button[1],"Textures/returndown.tga");
+	returnbutton->Set(360,460,230,260);
+	ListofButtons.push_back(returnbutton);
+
+	//load ttf fonts
+	minigameobjects->mgfont.init("Fonts/GretoonHighlight.TTF", 72);
+
 	OKbutton = new ButtonClass();
-	LoadTGA(&OKbutton->button[0],"Textures/ok.tga");
-	LoadTGA(&OKbutton->button[1],"Textures/ok.tga");
+	LoadTGA(&OKbutton->button[0],"Textures/okup.tga");
+	LoadTGA(&OKbutton->button[1],"Textures/okdown.tga");
 	OKbutton->Set(240,580,400,460);
 	ListofButtons.push_back(OKbutton);
 
@@ -591,6 +602,7 @@ void CPlayState::Resume()
 }
 void CPlayState::HandleEvents(CGameStateManager* theGSM)
 {
+
 	if(minigameobjects->minigame)
 	{
 		GameObject* catcher2 = (GameObject*)minigameobjects->catcher;
@@ -616,9 +628,31 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 }
 void CPlayState::Update(CGameStateManager* theGSM) 
 {
+	//cout << width << ", " << height << endl;
+
+	if(minigameobjects->minigame)
+	{
+		theCamera->canPan = false;
+		theCamera->isZoomIn = false;
+		theCamera->isZoomOut = false;
+	}
+
+	if(minigameobjects->addcash)
+	{
+		resource.SetMoney(resource.GetMoney() + minigameobjects->cash);
+		minigameobjects->addcash = false;
+	}
+
+	if(returnbutton->buttonclicked)
+	{
+		minigameobjects->minigame = false;
+		mouseInfo.mLButtonUp = false;
+	}
+
 	if (sizechanged)
 		{
 			OKbutton->Set(240,580,400,460);
+			returnbutton->Set(360,460,230,260);
 			sizechanged = false;
 		}
 
@@ -819,8 +853,14 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 		glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 
+	
+
 	if(minigameobjects->minigame)
 		{
+			//if(minigameobjects->timer <= 0)
+			//{
+				
+			//}
 			glTranslatef(0,0,-10);
 			minigameobjects->Draw();
 		}	
@@ -834,6 +874,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 			Citizens->Draw();
 		}
 	}
+	
 	//Enable 2D text display and HUD
 	theCamera->SetHUD( true);
 	//print(our_font,0,550,"Cam posX :%f\nCam posY :%f\nCam PosZ:%f",theCamera->GetPosition().x ,theCamera->GetPosition().y,theCamera->GetPosition().z);
@@ -844,6 +885,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	print(our_font,0,height-500,"Empty : %d",myTile[SelectorY][SelectorX].GetEmpty());
 	/*print(our_font,0,height-300,"Day: %d\n", day);
 	print(our_font,0,height-400,"Timer: %d\n", Dtimer);*/
+	print(our_font,0,height-500,"Cash: %f\n", resource.GetMoney());
 
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 	{	
@@ -855,6 +897,15 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 		}
 	}
 	RenderUI();
+	
+	if(minigameobjects->minigame)
+	{
+		if(minigameobjects->timer <= 0)
+		{
+			returnbutton->Render();
+		}
+	}
+
 	TheChoice->Draw();
 	if (REvent.IsDisplay == true)
 	{
@@ -875,6 +926,21 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 void CPlayState::RenderUI(void)
 {
 	//print(our_font,0,250,"Current Money :%.2f\nCurrent Manpower :%1i\nCurrent Citizen:%1i",PlayerResource.GetMoney() ,PlayerResource.GetManPower(),PlayerResource.GetCitizen());
+	if(minigameobjects->minigame)
+	{
+		glPushMatrix();
+			glColor3f(1,0,0);
+			print(minigameobjects->mgfont,width/2,height*0.8,"%d\n", minigameobjects->timer);
+			glColor3f(1,1,1);
+		glPopMatrix();
+
+		glPushMatrix();
+			glScalef(0.2,0.2,0.2);
+			glColor3f(0,0,0);
+			print(minigameobjects->mgfont,width*0.40,height*0.75,"Cash: %f\n", minigameobjects->cash);
+			glColor3f(1,1,1);
+		glPopMatrix();
+	}
 }
 
 Citizen* CPlayState::FetchObject()
