@@ -91,6 +91,22 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 	{
 		case GLUT_LEFT_BUTTON:
 		{
+			for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+			{
+				Citizen *Citizens = *it;
+				if (Citizens->active == true&&Citizens->Movedout==true)
+				{
+					if(myTile[SelectorY][SelectorX].myHouse.GetOwner() == Citizens->GetName())
+					{
+						Citizens->RenderMood=true;
+					}
+					else
+					{
+						Citizens->RenderMood=false;
+					}
+							
+				}
+			}
 			if (!mouseInfo.mLButtonUp)
 			{
 				for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
@@ -117,23 +133,11 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 					mouseInfo.lastX = x;
 					mouseInfo.lastY = y;
 				
-					for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
-					{
-						Citizen *Citizens = *it;
-						if (Citizens->active == true)
-						{
-							if(SelectorX==Citizens->GetPosition().x&&SelectorY==Citizens->GetPosition().y)
-							{
-								Citizens->RenderMood=true;
-							}
-						}
-					}
+					
 					if(myTile[SelectorY][SelectorX].GetBtype()==1)
-				{
-				/*	Citizen *go;
-					go = FetchObject();
-					go->active = true;
-					go->SetPosition(Vector3D(100,100,0));*/
+					{
+						
+				
 					Astar as(px,py,SelectorX,SelectorY);
 				
 					bool result = as.Search(Map);
@@ -164,6 +168,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 									if(i+1>=j)
 									{
 										Citizens->CitizenDestination->DestinationList.push_back(TheNode);
+										myTile[SelectorY][SelectorX].myHouse.SetOwner(Citizens->GetName());
 										Citizens->Movedout=true;
 										break;
 									}
@@ -758,12 +763,6 @@ void CPlayState::Update(CGameStateManager* theGSM)
 								Vector3D direction(position - Citizens->GetPosition());
 								Citizens->Position.x += direction.Normalized().x;
 								Citizens->Position.y += direction.Normalized().y;
-								/*std::cout <<"Citizen Index: " << Citizens->index << std::endl;
-								std::cout <<"Index Position X: " << position.x << std::endl;
-								std::cout <<"Index Position Y: " << position.y << std::endl;
-								std::cout <<"Citizen Position X: "<< Citizens->Position.x << std::endl;
-								std::cout <<"Citizen Position Y: "<< Citizens->Position.y << std::endl;
-								*/
 							}
 							if(Citizens->GetPosition().x== position.x && Citizens->GetPosition().y == position.y)
 							{
@@ -772,6 +771,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 								Citizens->index++;
 								}
 							}
+							
 						}
 					}
 				}
