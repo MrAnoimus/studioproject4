@@ -7,6 +7,8 @@
 #include "Camera.h"
 #include "Human.h"
 #include <string>
+#include "Destination.h"
+
 #pragma once
 
 using namespace std;
@@ -14,7 +16,8 @@ class Citizen: public Human
 {
 
 public:
-
+	int index;
+	Destination* CitizenDestination;
 	bool active;
 	enum Favourite
 	{
@@ -79,7 +82,7 @@ public:
 	std::string GetName(void);
 private:
 	int dir;
-	Vector3D Position;
+	
 	int Gender;
 	bool happy;
 	float HappinessLevels;

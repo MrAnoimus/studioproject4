@@ -17,5 +17,7 @@ Vector3D  Human::GetPosition(void)
 
 void Human::SetPosition(Vector3D thisPosition)
 {
-	Position = thisPosition;
+	this->Position.x = thisPosition.x;
+	this->Position.y = thisPosition.y;
+	this->Position.z = thisPosition.z;
 }

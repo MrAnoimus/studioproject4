@@ -209,7 +209,7 @@ void Astar::ShowPath(CNode *walker,int (&grid)[ROWS2][COLS2])
 	//walker=walker->parent;				// Get Node On Best Path Linked To Goal 
 	while(walker->parent != NULL)		// If Start Point IS Not NULL
 	{
-		//grid[walker->y][walker->x]= 10;	// Grid Map Node Is Marked As Best Path Node
+		grid[walker->y][walker->x]= 11;	// Grid Map Node Is Marked As Best Path Node
 		walker = walker->parent;		// Go To Next Link To The Path
 	}
 	//grid[start->y][start->x]='S';		// Mark "Start" Node On Grid Array

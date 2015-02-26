@@ -78,6 +78,7 @@
     <ClCompile Include="Obstacle.cpp">
       <Filter>Tiles\Building</Filter>
     </ClCompile>
+    <ClCompile Include="Destination.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IntroState.h">
@@ -171,6 +172,7 @@
     <ClInclude Include="Obstacle.h">
       <Filter>Tiles\Building</Filter>
     </ClInclude>
+    <ClInclude Include="Destination.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameState">
@@ -197,9 +199,6 @@
     <Filter Include="Tiles">
       <UniqueIdentifier>{d931d7e9-8ad9-42fb-add4-9075f80bd561}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ManPower">
-      <UniqueIdentifier>{e10b1a5b-ca25-4e3d-b6f5-e81a61ac027b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Events">
       <UniqueIdentifier>{c64d4929-53d0-4850-b444-fbcc7791f6a4}</UniqueIdentifier>
     </Filter>
@@ -208,6 +207,9 @@
     </Filter>
     <Filter Include="Tiles\Building">
       <UniqueIdentifier>{8d7948b9-575b-4b98-8304-046253e6095b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ManPower">
+      <UniqueIdentifier>{e10b1a5b-ca25-4e3d-b6f5-e81a61ac027b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
