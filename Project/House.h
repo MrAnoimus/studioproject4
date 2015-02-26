@@ -6,6 +6,7 @@ class House : public Building
 	private:
 		std::string	Owner;
 		float rotationSpeed;
+		bool deleted;
 	public:
 		
 		TextureImage HouseTexture;
@@ -19,8 +20,10 @@ class House : public Building
 		//get
 		std::string GetOwner();
 		float GetRSpeed();
+		bool GetDeleted();
 		//set
 		void SetOwner(std::string name);
 		void SetRspeed(float rs);
+		void SetDeleted(bool d);
 };
 

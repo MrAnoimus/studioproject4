@@ -4,6 +4,7 @@
 #include "House.h"
 #include "FoodCourt.h"
 #include "Generalstore.h"
+#include "Shelter.h"
 #include "Obstacle.h"
 
 class Tile
@@ -13,11 +14,12 @@ class Tile
 		HOUSE = 0,
 		FCOURT,
 		GSTORE,
+		SHELTER,
 		UNBUILDABLE,
 		LAST
 	}TileType;
 	private:
-		GaugeBar myGaugeBar;
+		
 		bool startbuild;
 		bool startdestory;
 		bool ModeOn;
@@ -36,11 +38,13 @@ class Tile
 		void DrawTileOutLine();
 		void DrawTile();
 	public:
+		
 		House myHouse;
 		FoodCourt myFCourt;
 		Generalstore myGstore;
+		Shelter myShelter;
 		Obstacle myObstacle;
-
+		GaugeBar myGaugeBar;
 		Tile(void);
 		~Tile(void);
 		TextureImage TileTexture;
