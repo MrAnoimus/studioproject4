@@ -107,9 +107,7 @@ void Tile::DrawTileOutLine()
 		glPushMatrix();
 			glLineWidth(2);
 			glTranslatef(this->Position.x,this->Position.y,this->Position.z);
-			glPushMatrix();
-			glutSolidSphere(20,20,20);
-			glPopMatrix();
+			
 			glColor4f(0, 0, 0, 1.0f);
 			glBegin(GL_LINE_LOOP);
 				glTexCoord2f(0,0);

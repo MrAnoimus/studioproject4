@@ -14,6 +14,7 @@ Citizen::Citizen(void)
 	,RenderMood(false)
 	,Name("JunHwee")
 	,index(0)
+	,Movedout(false)
 	
 {
 	glEnable(GL_TEXTURE_2D);
@@ -247,7 +248,7 @@ void Citizen::Draw()
 		glPopMatrix();
 	}
 	glPushMatrix();
-		//glTranslatef(GetPosition().x,GetPosition().y,-2);
+		glTranslatef(GetPosition().x,GetPosition().y,-2);
 		RenderCitizen();
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
