@@ -12,12 +12,11 @@ MiniGame::~MiniGame(void)
 
 bool MiniGame::Init(Camera* theCamera)
 {
-	cout << "initialising" << endl;
-	//mini game coins
-		
-	cout << "init" << endl;
+	cash = 0;
+
 	//for mini game
 	minigame = false;
+	addcash = false;
 	gravity.Set(0, -9.8f, 0);
 	fallspeed = 1;
 	CposX = Math::RandIntMinMax(320, 780);
@@ -25,7 +24,8 @@ bool MiniGame::Init(Camera* theCamera)
 	spawntime = 0;
 
 	//animation
-	mgctr = 0, mgctr2 = 0;
+	mgctr = mgctr2 = mgctr3 = 0;
+	spritectime = 0, spriteptime = 0, tctime = 0, tptime = 0, timer = 10;
 	inverted = true;
 
 	//Sound Engine init
@@ -35,23 +35,25 @@ bool MiniGame::Init(Camera* theCamera)
 		return false;
 	}
 	this->theCamera = theCamera;
+
+	//mini game coin init
 	for (int i = 0; i <MAX_COIN; ++i)
 	{
 		GameObject *mg = new GameObject(GameObject::GO_COIN);
 		//mg->active = true;
 		mg->vel.y = -200;
-		mg->pos.x = 800 - Math::RandIntMinMax(320, 780) + theCamera->GetPosition().x - 400;
+		/*mg->pos.x = 800 - Math::RandIntMinMax(320, 780) + theCamera->GetPosition().x - 400;*/
+		 mg->pos.x = Math::RandIntMinMax(150, 590);
 		mg->pos.y = 600 - Math::RandIntMinMax(110, 310) + theCamera->GetPosition().y - 300;
 		m_goList.push_back(mg);
 	}
 
-	//mini game catcher
+	//mini game catcher init
 	catcher = new GameObject(GameObject::GO_CATCHER);
 	catcher->active = true; 
 	catcher->pos.x = 400;
 	catcher->pos.y = 50;
 
-	spritectime = 0, spriteptime = 0, tctime = 0, tptime = 0, timer = 300;
 	return true;
 }
 
@@ -76,10 +78,11 @@ void MiniGame::Update()
 		if(timeInterval2 > 1000)
 		{
 			tptime = tctime;
-			timer--;
+				timer--;
 			if(timer <= 0)
 			{
 				timer = 0;
+				addcash = true;
 			}
 		}
 
@@ -90,19 +93,19 @@ void MiniGame::Update()
 	{
 		spriteptime = spritectime;
 		mgctr++;
+		mgctr3++;
 	}
 
-	if (mgctr == 7)
+	if(mgctr == 7){mgctr = 0;}
+	if(mgctr3 == 11){mgctr = 0;}
+
+	if(!m_goList.empty())
 	{
-		mgctr = 0;
-	}
-
 		for(std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
 		{
 			GameObject *mg = (GameObject *)*it;
 			if(mg->active)
 			{
-				cout << mg->counter << endl;
 				if(mg->type == GameObject::GO_COIN)
 				{//coin falling update
 					/*mg->vel +=  minigameobjects->gravity * dt;*/
@@ -115,11 +118,13 @@ void MiniGame::Update()
 					if(mg->pos.y <= catcher->pos.y)
 					{
 						mg->vel.y = -200;
-						mg->pos.x = 800 - Math::RandIntMinMax(320, 780) + theCamera->GetPosition().x - 400;
+						/*mg->pos.x = 800 - Math::RandIntMinMax(320, 780) + theCamera->GetPosition().x - 400;*/
+						mg->pos.x = Math::RandIntMinMax(150, 590);
 						mg->pos.y = 600 - Math::RandIntMinMax(110, 310) + theCamera->GetPosition().y - 300;
 					/*	mg->pos.x = 400;
 						mg->pos.y = 490;*/
 					}
+				
 
 					if(catcher->active)
 					{
@@ -129,7 +134,9 @@ void MiniGame::Update()
 							{
 								mg->counter--;
 								it = m_goList.erase(it);
-								resource->SetMoney(resource->GetMoney()+100);
+								
+								cash += 100;
+								//resource->SetMoney(resource->GetMoney()+100);
 
 								if(mgsfx == NULL)
 								{
@@ -156,7 +163,7 @@ void MiniGame::Update()
 					}
 				}
 			}
-			else if((spawntime <= 0) && (mg->counter < MAX_COIN) && timer > 0)
+			else if((spawntime <= 0) && (mg->counter < MAX_COIN))
 			{
 				spawntime = SPAWN_TIME;
 				GameObject *mg2 = new GameObject(GameObject::GO_COIN);
@@ -165,75 +172,95 @@ void MiniGame::Update()
 				if(mg2->vel.y <= -200)
 				{mg2->vel.y = -200;}
 				mg2->counter++;
-				mg2->pos.x = 800 - Math::RandIntMinMax(320, 780) + theCamera->GetPosition().x - 400;
+				/*mg2->pos.x = 800 - Math::RandIntMinMax(320, 780) + theCamera->GetPosition().x - 400;*/
+				mg2->pos.x = Math::RandIntMinMax(150, 590);
 				mg2->pos.y = 600 - Math::RandIntMinMax(110, 150) + theCamera->GetPosition().y - 300;
+
+			
+				for(std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
+				{
+					GameObject *mg3 = (GameObject *)*it;
+					if(mg3->active)
+					{
+						if(mg3->type == GameObject::GO_COIN)
+						{
+							if((mg2->pos - mg->pos).Length() <= 60)
+							{
+								mg2->pos.x = Math::RandIntMinMax(150, 590);
+							}
+						}
+					}
+				}
 				m_goList.push_back(mg2);
 
 				break;
 			}
 		}
+	}
+			if(timer <= 0)
+			{
+				if(!m_goList.empty())
+				m_goList.clear();
+			}
 		//END FOR ALL OF MINI GAME==================================================
 }
 
 void MiniGame::Draw()
 {
-	//for mini game
-	/*if(minigame)
-	{*/
-		//DRAW THIS STUFF IN THE MINIGAME CLASS PLEASE
-		glPushMatrix();
-		glTranslatef(150,50,-1);
-		glBindTexture (GL_TEXTURE_2D, MGBackgroundTexture.id);
-		DrawMGBG();
 
-		//rendering of coins
+	glPushMatrix();//3
+	glTranslatef(150,50,0);
+	glBindTexture (GL_TEXTURE_2D, MGTexture[0].id);
+	DrawMGBG();
+	
+	glPushMatrix();
+		glTranslatef(280,420,-5);
+		DrawHourGlass(MGTexture[3].id);
+	glPopMatrix();
+
+	glTranslatef(0,0,-5);
+	//rendering of coins
+	if(!m_goList.empty())
+	{
 		for (std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
 		{
 			GameObject *mg = (GameObject *)*it;
 			if (mg->active)
 			{
-				cout << "draw coin" << endl;
-				glPushMatrix();
-				glTranslatef(0,0,-5);
-				DrawObject(mg, CoinTexture.id);
-				glPopMatrix();
+				DrawObject(mg, MGTexture[1].id);
 			}
 		}
-		//rendering of catcher
-		GameObject *catcher2 = (GameObject *)catcher;
-		if (catcher2->active)
-		{
-			glPushMatrix();
-			glTranslatef(0,0,-5);
-			DrawObject(catcher2, CatcherTexture.id);
-			glPopMatrix();
-		}
+	}
+	//rendering of catcher
+	GameObject *catcher2 = (GameObject *)catcher;
+	if (catcher2->active)
+	{
+		DrawObject(catcher2, MGTexture[2].id);
+	}
 
-		glPopMatrix();
-	//}
+	glPopMatrix();//3
 }
 
 void MiniGame::DrawMGBG()
 {
 	glEnable(GL_TEXTURE_2D);
 	glPushMatrix();
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//glColor3f(0.5,0.5,0.5);
-	glPushMatrix();
-	glBegin(GL_QUADS);
-	glTexCoord2f(1,1);
-	glVertex2f(0,500);
-	glTexCoord2f(0,1);
-	glVertex2f(500,500);
-	glTexCoord2f(0,0);
-	glVertex2f(500,0);
-	glTexCoord2f(1,0);
-	glVertex2f(0,0);				
-	glEnd();
-	glPopMatrix();
-	glColor3f(1,1,1);
-	glDisable(GL_BLEND);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glPushMatrix();
+			glBegin(GL_QUADS);
+				glTexCoord2f(1,1);
+				glVertex2f(0,500);
+				glTexCoord2f(0,1);
+				glVertex2f(500,500);
+				glTexCoord2f(0,0);
+				glVertex2f(500,0);
+				glTexCoord2f(1,0);
+				glVertex2f(0,0);				
+			glEnd();
+		glPopMatrix();
+		glColor3f(1,1,1);
+		glDisable(GL_BLEND);
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 }
@@ -266,6 +293,16 @@ void MiniGame::DrawTextureBaseInvert()
 		glTexCoord2f(0.125 * mgctr2 , 0);glVertex2f(60, 0);
 		glTexCoord2f(0.125 * mgctr2 + 0.125, 0);glVertex2f(0, 0);
 		glTexCoord2f(0.125 * mgctr2 + 0.125, 1);glVertex2f(0, 60);
+	glEnd();
+}
+
+void MiniGame::DrawTextureBaseHG()
+{
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0909090909090909 * mgctr3 , 1);glVertex2f(50, 50);
+		glTexCoord2f(0.0909090909090909 * mgctr3 , 0);glVertex2f(50, 0);
+		glTexCoord2f(0.0909090909090909 * mgctr3 + 0.0909090909090909, 0);glVertex2f(0, 0);
+		glTexCoord2f(0.0909090909090909 * mgctr3 + 0.0909090909090909, 1);glVertex2f(0, 50);
 	glEnd();
 }
 
@@ -321,3 +358,37 @@ void MiniGame::DrawObject(GameObject *mg, const GLuint Texture)
 		break;
 	}
 }
+
+void MiniGame::DrawHourGlass(const GLuint Texture)
+{
+	glColor3f(1, 1, 1);
+	glEnable(GL_TEXTURE_2D);
+	glPushMatrix();
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBindTexture (GL_TEXTURE_2D, Texture);
+			glPushMatrix();
+				DrawTextureBaseHG();
+			glPopMatrix();
+		glDisable(GL_BLEND);
+	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);
+}
+
+void MiniGame::CoinPattern1(float posX, float posY, float width)
+{
+	/*for(int i = 0; i < glutGet(GLUT_SCREEN_WIDTH)/32; i+=32)
+	{
+		if(mg->type = GameObject::GO_COIN)
+		{
+			if(i%2 == 0)
+			{
+
+			}
+		}
+	
+	}*/
+
+}
+//glutGet(GLUT_SCREEN_WIDTH);
+//glutGet(GLUT_SCREEN_HEIGHT);
