@@ -10,6 +10,7 @@
 #include "Choices.h"
 #include <sstream>
 #include <fstream>
+#include "Node.h"
 //for mini game
 #include "GameObject.h"
 #include "MyMath.h"
@@ -49,7 +50,7 @@ class CPlayState : public CGameState
 		Choices *TheChoice;
 		//for movement of citizens to selected tile
 		Vector3D Target;
-		int index;
+		
 		bool moving;
 		bool movingX;
 		//render ui

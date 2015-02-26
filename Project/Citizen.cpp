@@ -13,6 +13,8 @@ Citizen::Citizen(void)
 	,AnimationInvert(false)
 	,RenderMood(false)
 	,Name("JunHwee")
+	,index(0)
+	
 {
 	glEnable(GL_TEXTURE_2D);
 	LoadTGA(&Okay, "Textures/Smiley.tga");
@@ -23,6 +25,8 @@ Citizen::Citizen(void)
 	LoadTGA(&MaleCitizen, "Textures/MaleCitizen.tga");
 	LoadTGA(&StatsBG, "Textures/MoodBackground.tga");
 	
+	CitizenDestination = new Destination();
+
 	srand(time(NULL));
 
 	int Random = rand() % 3 + 1;	
@@ -60,30 +64,30 @@ void Citizen::MoodUpdate()
 	int time = glutGet(GLUT_ELAPSED_TIME);
 	static int ctime = glutGet(GLUT_ELAPSED_TIME);
 	//std::cout <<"Citizen Position: " << GetPosition().x << std::endl;
-	if(dir==1)
-	{
-		AnimationInvert=false;
-		if(GetPosition().x+1<800)
-		{
-		//SetPosition(Vector3D(GetPosition().x+1,GetPosition().y,GetPosition().z));
-		}
-		else
-		{
-			dir=2;
-		}
-	}
-	else if(dir==2)
-	{
-		AnimationInvert=true;
-		if(GetPosition().x-1>0)
-		{
-		//SetPosition(Vector3D(GetPosition().x-1,GetPosition().y,GetPosition().z));
-		}
-		else
-		{
-			dir=1;
-		}
-	}
+	//if(dir==1)
+	//{
+	//	AnimationInvert=false;
+	//	if(GetPosition().x+1<800)
+	//	{
+	//	//SetPosition(Vector3D(GetPosition().x+1,GetPosition().y,GetPosition().z));
+	//	}
+	//	else
+	//	{
+	//		dir=2;
+	//	}
+	//}
+	//else if(dir==2)
+	//{
+	//	AnimationInvert=true;
+	//	if(GetPosition().x-1>0)
+	//	{
+	//	//SetPosition(Vector3D(GetPosition().x-1,GetPosition().y,GetPosition().z));
+	//	}
+	//	else
+	//	{
+	//		dir=1;
+	//	}
+	//}
 	if (time - ctime > 300) 
 	{
 		dir = rand() % 2 + 1;
@@ -243,7 +247,7 @@ void Citizen::Draw()
 		glPopMatrix();
 	}
 	glPushMatrix();
-		glTranslatef(GetPosition().x,GetPosition().y,-2);
+		//glTranslatef(GetPosition().x,GetPosition().y,-2);
 		RenderCitizen();
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);

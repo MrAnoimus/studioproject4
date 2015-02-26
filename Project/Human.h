@@ -9,8 +9,8 @@ public:
 
 	Vector3D GetPosition();
 	void SetPosition(Vector3D Position);
-
+Vector3D Position;
 private:
-	Vector3D Position;
+	
 };
 
