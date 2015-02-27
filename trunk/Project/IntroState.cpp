@@ -95,10 +95,11 @@ void CIntroState::MouseMove(int x , int y)
 	//}
 
 	if(hoverStart)
-	{	if(menuGUIstart == NULL)
+	{	
+		if(menuGUIstart == NULL)
 			{menuGUIstart = theSoundEngine->play2D ("SFX/misc_menu_2.wav", false, true);}		
-		else{menuGUIstart == NULL;
-			 menuGUIstart = theSoundEngine->play2D ("SFX/misc_menu_2.wav", false, true);}
+		/*else{menuGUIstart == NULL;
+			 menuGUIstart = theSoundEngine->play2D ("SFX/misc_menu_2.wav", false, true);}*/
 		if(menuGUIstart->getIsPaused() == true){menuGUIstart->setIsPaused(false);}
 		else if(menuGUIstart->isFinished() == true){menuGUIstart = NULL;}
 	}
@@ -107,8 +108,8 @@ void CIntroState::MouseMove(int x , int y)
 	{
 		if(menuGUIset == NULL)
 			{menuGUIset = theSoundEngine->play2D ("SFX/misc_menu_3.wav", false, true);}		
-		else{menuGUIset == NULL;
-			 menuGUIset = theSoundEngine->play2D ("SFX/misc_menu_3.wav", false, true);}
+		/*else{menuGUIset == NULL;
+			 menuGUIset = theSoundEngine->play2D ("SFX/misc_menu_3.wav", false, true);}*/
 		if(menuGUIset->getIsPaused() == true){menuGUIset->setIsPaused(false);}
 		else if(menuGUIset->isFinished() == true){menuGUIset = NULL;}
 	}
@@ -117,8 +118,8 @@ void CIntroState::MouseMove(int x , int y)
 	{
 		if(menuGUIexit == NULL)
 			{menuGUIexit = theSoundEngine->play2D ("SFX/misc_menu_4.wav", false, true);}		
-		else{menuGUIexit == NULL;
-			 menuGUIexit = theSoundEngine->play2D ("SFX/misc_menu_4.wav", false, true);}
+		/*else{menuGUIexit == NULL;
+			 menuGUIexit = theSoundEngine->play2D ("SFX/misc_menu_4.wav", false, true);}*/
 		if(menuGUIexit->getIsPaused() == true){menuGUIexit->setIsPaused(false);}
 		else if(menuGUIexit->isFinished() == true){menuGUIexit = NULL;}
 	}
@@ -217,6 +218,22 @@ bool CIntroState::Init()
 	theSoundEngine = createIrrKlangDevice();
 	if (!theSoundEngine){return false;}
 	theSoundEngine->setSoundVolume(volume);
+
+	if(introBGM == NULL)
+	{introBGM = theSoundEngine->play2D ("SFX/introbgm.mp3", false, true);}		
+	else
+	{introBGM == NULL;
+	 introBGM = theSoundEngine->play2D ("SFX/introbgm.mp3", false, true);}
+	if(introBGM->getIsPaused() == true)
+	{introBGM->setIsPaused(false);}
+	else if(introBGM->isFinished() == true)
+	{introBGM = NULL;}
+
+
+	menuGUIstart = NULL;
+	menuGUIset = NULL;
+	menuGUIexit = NULL;
+	introBGM = NULL;
 
 	hoverStart = false;
 	hoverSet = false;

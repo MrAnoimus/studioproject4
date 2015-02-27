@@ -35,6 +35,9 @@ bool MiniGame::Init(Camera* theCamera)
 	{
 		return false;
 	}
+	mgsfx = NULL;
+	chaching = NULL;
+
 	this->theCamera = theCamera;
 
 	//mini game coin init
@@ -93,6 +96,18 @@ void MiniGame::Update()
 			}
 		}
 
+		if(addcash)
+		{
+			if(chaching == NULL)
+			{chaching = theSoundEngine->play2D ("SFX/chaching.wav", false, true);}		
+			else
+			{chaching == NULL;
+			 chaching = theSoundEngine->play2D ("SFX/chaching.wav", false, true);}
+			if(chaching->getIsPaused() == true)
+			{chaching->setIsPaused(false);}
+			else if(chaching->isFinished() == true)
+			{chaching = NULL;}
+		}
 
 	spritectime = glutGet(GLUT_ELAPSED_TIME);
 	int timeInterval = spritectime - spriteptime;

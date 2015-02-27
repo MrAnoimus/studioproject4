@@ -149,6 +149,7 @@ class CPlayState : public CGameState
 		ISoundEngine* theSoundEngine;
 		//game sounds
 		ISound* mouseLC;
+		ISound* playBGM;
 		float volume;
 
 		Tile myTile[6][8];

@@ -81,6 +81,7 @@ public:
 	//The sound engine vroom vroom
 	ISoundEngine* theSoundEngine;
 	ISound* mgsfx;
+	ISound* chaching;
 
 	TextureImage MGTexture[10];
 

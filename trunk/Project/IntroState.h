@@ -113,6 +113,7 @@ class CIntroState : public CGameState
 		ISound* menuGUIstart;
 		ISound* menuGUIset;
 		ISound* menuGUIexit;
+		ISound* introBGM;
 
 		ButtonClass* startbutton;
 		ButtonClass* settingsbutton;

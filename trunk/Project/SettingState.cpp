@@ -76,18 +76,6 @@ void CSettingState::MouseMove(int x , int y)
 	mouseInfo.lastX = x;
 	mouseInfo.lastY = y;
 
-	////Checking mouse boundary. //	 800 is the window width. You may need to change this to suit your program.
-	//if  (mouseInfo.lastX > 800-20 || mouseInfo.lastX < 20)
-	//{
-	//	mouseInfo.lastX = (800 >> 1);
-	//	glutWarpPointer(mouseInfo.lastX, mouseInfo.lastY);
-	//}
-	////	 600 is the window height. You may need to change this to suit your program.
-	//if (mouseInfo.lastY > 600-20 || mouseInfo.lastY < 20)
-	//{
-	//	mouseInfo.lastY = (600 >> 1);
-	//	glutWarpPointer(mouseInfo.lastX, mouseInfo.lastY);
-	//}
 }
 void CSettingState::MouseClick(int button , int state , int x , int y)
 {
