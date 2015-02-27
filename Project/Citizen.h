@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <stdlib.h>
 #include "LoadTGA.h"
 #include <time.h>
 #include "vector3D.h"
@@ -52,7 +53,7 @@ public:
 	void Draw(void);
 
 	void SetFavourite(Favourite MyFavourites);
-	void SetPlace(NearByBuilding MyBuilding);
+	void SetPlace(std::string tag, int number);
 	
 	std::string GetFavourites(void);
 	std::string GetPlace(void);
@@ -70,6 +71,7 @@ public:
 	void SetAnimationCounter(int AnimationCounter);
 	int GetAnimationCounter(void);
 	
+	
 
 	bool RenderMood;
 
@@ -82,8 +84,10 @@ public:
 	std::string GetName(void);
 
 	bool Movedout;
-	bool MovedBack;
+	bool MovedBack;std::string owner;
 private:
+	
+	
 	int dir;
 	
 	int Gender;
@@ -91,7 +95,7 @@ private:
 	float HappinessLevels;
 	Favourite TheFavourites;
 	Mood TheMoods;
-	NearByBuilding TheBuildings;
+	NearByBuilding TheBuildings[4];
 
 	std::string Name;
 };

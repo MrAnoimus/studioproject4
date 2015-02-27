@@ -22,6 +22,7 @@ void Tile::Init()
 	this->ClickedOn = false;
 	this->ModeOn = false;
 	this->startbuild = false;
+	this->Tag = "nothing";
 	//building stuff
 	this->Btype = 0;
 	this->startdestory = false;

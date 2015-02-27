@@ -9,6 +9,7 @@
 
 class Tile
 {
+
 	enum
 	{
 		HOUSE = 0,
@@ -38,7 +39,7 @@ class Tile
 		void DrawTileOutLine();
 		void DrawTile();
 	public:
-		
+		std::string Tag;
 		House myHouse;
 		FoodCourt myFCourt;
 		Generalstore myGstore;
