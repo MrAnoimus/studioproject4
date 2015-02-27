@@ -405,6 +405,7 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 		if(myKeys['m'] == true)
 		{
 			minigameobjects->minigame = true;
+			minigameobjects->playing = true;
 			//theCamera->canPan = !theCamera->canPan;
 		}
 		if(myKeys['s'] == true)
@@ -542,10 +543,21 @@ bool CPlayState::Init()
 
 	//Sound Engine init
 	theSoundEngine = createIrrKlangDevice();
-	if (!theSoundEngine)
-	{
-		return false;
-	}
+	if (!theSoundEngine){return false;}
+
+	mouseLC = NULL;
+	playBGM = NULL;
+
+	if(playBGM == NULL)
+	{playBGM = theSoundEngine->play2D ("SFX/playbgm.mp3", false, true);}		
+	else
+	{playBGM == NULL;
+	 playBGM = theSoundEngine->play2D ("SFX/playbgm.mp3", false, true);}
+	if(playBGM->getIsPaused() == true)
+	{playBGM->setIsPaused(false);}
+	else if(playBGM->isFinished() == true)
+	{playBGM = NULL;}
+
 	theSoundEngine->setSoundVolume(volume);
 	//Choice stuff
 	TheChoice = new Choices;
@@ -1018,7 +1030,7 @@ void CPlayState::RenderUI(void)
 		glPushMatrix();
 			glScalef(0.2,0.2,0.2);
 			glColor3f(0,0,0);
-			print(minigameobjects->mgfont,width*0.40,height*0.75,"Cash: %f\n", minigameobjects->cash);
+			print(minigameobjects->mgfont,width*0.40,height*0.75,"Cash: %d\n", minigameobjects->cash);
 			glColor3f(1,1,1);
 		glPopMatrix();
 	}
