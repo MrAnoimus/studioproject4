@@ -26,41 +26,44 @@ void GameUI::Update()
 }
 void GameUI::DrawSelect(int x , int y ,bool mode , int type)
 {
-	glEnable(GL_BLEND);
-	glEnable(GL_TEXTURE_2D);
-	glPushMatrix();
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glTranslatef(x,y,0);
-		switch(type)
-		{
-			case 1 :
-			{
-				glBindTexture(GL_TEXTURE_2D, SelectionTexture[0].id);
-			}break;
-			case 2 :
-			{
-				glBindTexture(GL_TEXTURE_2D, SelectionTexture[1].id);
-			}break;
-			case 3 :
-			{
-				glBindTexture(GL_TEXTURE_2D, SelectionTexture[2].id);
-			}break;
-		}
+	if(mode)
+	{
+		glEnable(GL_BLEND);
+		glEnable(GL_TEXTURE_2D);
 		glPushMatrix();
-			glBegin(GL_QUADS);
-				glTexCoord2f(0,0);
-				glVertex2f(-50,50);
-				glTexCoord2f(1,0);
-				glVertex2f(50,50);
-				glTexCoord2f(1,1);
-				glVertex2f(50,-50);
-				glTexCoord2f(0,1);
-				glVertex2f(-50,-50);				
-			glEnd();
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glTranslatef(x,y,0);
+			switch(type)
+			{
+				case 1 :
+				{
+					glBindTexture(GL_TEXTURE_2D, SelectionTexture[0].id);
+				}break;
+				case 2 :
+				{
+					glBindTexture(GL_TEXTURE_2D, SelectionTexture[1].id);
+				}break;
+				case 3 :
+				{
+					glBindTexture(GL_TEXTURE_2D, SelectionTexture[2].id);
+				}break;
+			}
+			glPushMatrix();
+				glBegin(GL_QUADS);
+					glTexCoord2f(0,0);
+					glVertex2f(-50,50);
+					glTexCoord2f(1,0);
+					glVertex2f(50,50);
+					glTexCoord2f(1,1);
+					glVertex2f(50,-50);
+					glTexCoord2f(0,1);
+					glVertex2f(-50,-50);				
+				glEnd();
+			glPopMatrix();
 		glPopMatrix();
-	glPopMatrix();
-	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_BLEND);
+		glDisable(GL_TEXTURE_2D);
+		glDisable(GL_BLEND);
+	}
 }
 void GameUI::Draw(float x , float y)
 {

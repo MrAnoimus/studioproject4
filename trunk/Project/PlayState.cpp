@@ -691,10 +691,12 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		//
 		myGameUI.Update();
 		//tile selection check
+		
 		if(myTile[SelectorY][SelectorX].GetModeOn())
 		{
 			int offsetX;
 			int offsetY;
+
 			offsetX =(width/8);
 			offsetY = (height/6);
 			if(mouseInfo.lastX > (width/2))
@@ -711,36 +713,54 @@ void CPlayState::Update(CGameStateManager* theGSM)
 			{
 				SelectorY = ((-mouseInfo.lastY + height+(offsetY/4))/ offsetY);
 			}
+
+			if(SelectorY >= 6)
+			{
+				SelectorY =5;
+			}
+			if(SelectorY<1)
+			{
+				SelectorY =0;
+			}
+
+			if(SelectorX >7)
+			{
+				SelectorY = 7;
+			}
+			if(SelectorX<1)
+			{
+				SelectorX =0;
+			}
 			//////
 		}
 		for(int y = 0; y < ROWS; y += 1)
+		{
+			for(int x = 0; x < COLS; x += 1)
 			{
-				for(int x = 0; x < COLS; x += 1)
+				if(SelectorX != x && SelectorY != y)
 				{
-					if(SelectorX != x && SelectorY != y)
+					myTile[y][x].SetIsSelected(false);
+				}else
+				{
+					if(myTile[y][x].IsSelected())
 					{
 						myTile[y][x].SetIsSelected(false);
-					}else
-					{
-						if(myTile[y][x].IsSelected())
-						{
-							myTile[y][x].SetIsSelected(false);
-						}
-						myTile[SelectorY][SelectorX].SetIsSelected(true);
-					}//!clean up sometime later watch out list
-					if(	myTile[y][x].GetModeOn() == true)
-					{
-						myTile[y][x].Update();
-					}else
-					{	
-						if(myTile[y][x].IsClickedOn() == false)
-						{
-							myTile[y][x].SetBtype(0);
-						}
-						myTile[y][x].Update();
 					}
+					myTile[SelectorY][SelectorX].SetIsSelected(true);
+				}//!clean up sometime later watch out list
+				if(	myTile[y][x].GetModeOn() == true)
+				{
+					myTile[y][x].Update();
+				}else
+				{	
+					if(myTile[y][x].IsClickedOn() == false)
+					{
+						myTile[y][x].SetBtype(0);
+					}
+					myTile[y][x].Update();
 				}
 			}
+		}
 		for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 		{
 			Citizen *Citizens = *it;
@@ -922,9 +942,10 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	
 	myGameUI.Draw(0,height - 50);
 	myGameUI.DrawSelect(750,50,myTile[SelectorY][SelectorX].GetModeOn(),myTile[SelectorY][SelectorX].GetBtype());
-	print(our_font,0,height-300,"OwnerName: %s",myTile[SelectorY][SelectorX].myHouse.GetOwner().c_str());
+	//print(our_font,0,height-300,"OwnerName: %s",myTile[SelectorY][SelectorX].myHouse.GetOwner().c_str());
 	/*print(our_font,0,height-300,"Day: %d\n", day);
 	print(our_font,0,height-400,"Timer: %d\n", Dtimer);*/
+	print(our_font,0,height-300,"pickx: %d picky%d",SelectorX,SelectorY);
 	print(our_font,0,height-500,"Cash: %f\n", resource.GetMoney());
 	print(our_font,0,height-400,"w: %f h: %f", width,height);
 	RenderUI();
