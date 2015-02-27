@@ -9,10 +9,10 @@ class GameUI
 		//fonts
 		freetype::font_data Time_Font;
 		
+		
 		int size;
 	public:
-		CGameTime myGameTime;	
-		TextureImage SelectionTexture[6];
+		CGameTime myGameTime;
 		GameUI(void);
 		~GameUI(void);
 		void Init();
