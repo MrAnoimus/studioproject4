@@ -59,35 +59,16 @@ void CResultState::MouseMove(int x , int y)
 
 	mouseInfo.lastX = x;
 	mouseInfo.lastY = y;
-
-	//Checking mouse boundary. //	 800 is the window width. You may need to change this to suit your program.
-	if  (mouseInfo.lastX > 800-20 || mouseInfo.lastX < 20)
-	{
-		mouseInfo.lastX = (800 >> 1);
-		glutWarpPointer(mouseInfo.lastX, mouseInfo.lastY);
-	}
-	//	 600 is the window height. You may need to change this to suit your program.
-	if (mouseInfo.lastY > 600-20 || mouseInfo.lastY < 20)
-	{
-		mouseInfo.lastY = (600 >> 1);
-		glutWarpPointer(mouseInfo.lastX, mouseInfo.lastY);
-	}
 }
 void CResultState::MouseClick(int button , int state , int x , int y)
 {
 	switch (button)
 	{
 		case GLUT_LEFT_BUTTON:
-		{
-			
+		{	
 			mouseInfo.mLButtonUp = state;
 			mouseInfo.lastX = x;
 			mouseInfo.lastY = y;
-			cout<<mouseInfo.lastX<<","<<mouseInfo.lastY<<endl;
-			if (mouseInfo.lastX >=350 && mouseInfo.lastX <= 465 && mouseInfo.lastY >= 520 && mouseInfo.lastY <=560)
-			{
-				exit(0);
-			}
 		}break;
 		case GLUT_RIGHT_BUTTON:
 		{
@@ -130,8 +111,7 @@ bool CResultState::Init()
 
 	mouseInfo.lastX = 800 >> 1;
 	mouseInfo.lastY = 600 >> 1;
-	//mouseInfo.lastX = glutGet(GLUT_WINDOW_WIDTH) >> 1;
-	//mouseInfo.lastY = glutGet(GLUT_WINDOW_HEIGHT) >> 1;
+
 	return true;
 }
 void CResultState::Cleanup()
@@ -154,15 +134,7 @@ void CResultState::HandleEvents(CGameStateManager* theGSM)
 	if (mouseInfo.mLButtonUp) 
 
 	{
-		if (mouseInfo.lastX >=240 && mouseInfo.lastX <= 563 && mouseInfo.lastY >= 410 && mouseInfo.lastY <=450)
-		{
-			theGSM->ChangeState( CSettingState::Instance() );
-		}
-
-		if (mouseInfo.lastX >=300 && mouseInfo.lastX <= 500 && mouseInfo.lastY >= 460 && mouseInfo.lastY <=500)
-		{
-			theGSM->ChangeState( CSettingState::Instance() );
-		}
+	
 
 	}
 	if(myKeys[27]==true)

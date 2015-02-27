@@ -55,6 +55,8 @@ void CRandomEvent::CreateEventz(int typez)
 		break;
 
 	default:
+		resource.SetMoney(resource.GetMoney() -10);
+			cout <<"The Amount of money is "<<resource.GetMoney()<<"\n";
 		break;
 	}
 }

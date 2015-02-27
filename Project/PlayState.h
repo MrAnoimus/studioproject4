@@ -133,6 +133,8 @@ class CPlayState : public CGameState
 		//texture
 		TextureImage BackgroundTexture;
 		TextureImage MenuTexture[2];
+		TextureImage ResultTexture[2];
+		
 		
 		
 		//keyboard and mouse

@@ -83,5 +83,5 @@ void GameUI::DrawSelect(int x , int y ,bool mode , int type)
 void GameUI::Draw(float x , float y)
 {
 	print(Time_Font,x,y,"Day : %d", myGameTime.GetDay());
-	print(Time_Font,x,y-100,"%d : %d %s", myGameTime.GetHour(),myGameTime.GetMinute(),myGameTime.GetTimeFrame().c_str());
+	print(Time_Font,x,y-100,"%d : %d", myGameTime.GetHour(),myGameTime.GetMinute());//,myGameTime.GetTimeFrame().c_str());
 }
