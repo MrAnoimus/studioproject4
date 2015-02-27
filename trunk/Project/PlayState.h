@@ -10,6 +10,8 @@
 #include "Choices.h"
 #include <sstream>
 #include <fstream>
+#include <stdlib.h>
+#include <time.h>
 #include "Node.h"
 //for mini game
 #include "GameObject.h"
@@ -45,6 +47,8 @@ class CPlayState : public CGameState
 	}theMouseInfo;
 	public:
 		
+		int Random;
+		int Random2;
 		int Map[ROWS][COLS];
 		//for choices
 		Choices *TheChoice;
@@ -113,7 +117,8 @@ class CPlayState : public CGameState
 			}
 		}
 		bool sizechanged;
-		
+		float deltaTime;
+		int frameCount;
 	private:
 
 		

@@ -6,7 +6,6 @@ Citizen::Citizen(void)
 
 	:TheMoods(Citizen::SAD)
 	,TheFavourites(Citizen::SLACK)
-	,TheBuildings(Citizen::NOTHING)
 	,happy(false)
 	,HappinessLevels(0)
 	,active(false)
@@ -17,7 +16,8 @@ Citizen::Citizen(void)
 	,index(0)
 	,Movedout(false)
 	,MovedBack(false)
-	
+	,owner("string")
+
 {
 	glEnable(GL_TEXTURE_2D);
 	LoadTGA(&Okay, "Textures/Smiley.tga");
@@ -27,7 +27,7 @@ Citizen::Citizen(void)
 	LoadTGA(&FemaleCitizen, "Textures/FemaleCitizen.tga");
 	LoadTGA(&MaleCitizen, "Textures/MaleCitizen.tga");
 	LoadTGA(&StatsBG, "Textures/MoodBackground.tga");
-	
+
 	CitizenDestination = new Destination();
 
 	srand(time(NULL));
@@ -56,6 +56,11 @@ Citizen::Citizen(void)
 	{
 		Gender=2;
 	}
+	for(int i = 0; i<3; i++)
+	{
+		TheBuildings[i] = Citizen::WORKPLACE;
+	}
+	
 }
 
 Citizen::~Citizen(void)
@@ -101,44 +106,34 @@ void Citizen::MoodUpdate()
 		}
 		ctime = time;
 	}
-	
-	switch(TheFavourites)
+	for(int i=0; i <3; i++)
 	{
-	case Citizen::FOOD:
-		if(TheBuildings== Citizen::EATINGPLACE)
+		if(TheFavourites == Citizen::FOOD)
 		{
-			this->happy=true;
+			if(TheBuildings[i]==Citizen::EATINGPLACE)
+			{
+				this->happy=true;
+			}
+		}
+		else if(TheFavourites == Citizen::WORK)
+		{
+			if(TheBuildings[i]==Citizen::WORKPLACE)
+			{
+				this->happy=true;
+			}
+		}
+		else if(TheFavourites == Citizen::NOTHING)
+		{
+			if(TheBuildings[i]==Citizen::NOTHING)
+			{
+				this->happy=true;
+			}
 		}
 		else
 		{
 			this->happy=false;
 		}
-		break;
-	case Citizen::WORK:
-		if(TheBuildings==Citizen::WORKPLACE)
-		{
-			this->happy=true;
-		}
-		else
-		{
-			this->happy=false;
-		}
-		break;
-	case Citizen::SLACK:
-		if(TheBuildings==Citizen::NOTHING)
-		{
-			this->happy=true;
-		}
-		else
-		{
-			this->happy=false;
-		}
-		break;
-	default:
-		std::cout << "Default" << std::endl;
-		break;
 	}
-
 	if(this->happy==true)
 	{
 		if(this->HappinessLevels<=99)
@@ -157,7 +152,7 @@ void Citizen::MoodUpdate()
 	if(this->HappinessLevels>0)
 	{
 		this->TheMoods=Citizen::ENRAGE;
-		
+
 	}
 	if(this->HappinessLevels>25)
 	{
@@ -188,7 +183,7 @@ std::string Citizen::GetFavourites(void)
 		break;
 	case WORK:
 		return "WORK";
-		 break;
+		break;
 	case SLACK:
 		return "SLACK";
 		break;
@@ -207,7 +202,7 @@ std::string Citizen::GetMood(void)
 		break;
 	case SAD:
 		return "SAD";
-		 break;
+		break;
 	case ENRAGE:
 		return "ENRAGE";
 		break;
@@ -222,20 +217,24 @@ std::string Citizen::GetMood(void)
 
 std::string Citizen::GetPlace(void)
 {
-	switch(TheBuildings)
+	for(int i =0; i <3 ; i++)
+	{
+	
+	switch(TheBuildings[i])
 	{
 	case EATINGPLACE:
 		return "EATINGPLACE";
 		break;
 	case WORKPLACE:
 		return "WORKPLACE";
-		 break;
+		break;
 	case NOTHING:
 		return "NOTHING";
 		break;
 	default:
 		return "DEFAULT";
 		break;
+	}
 	}
 }
 
@@ -245,13 +244,17 @@ void Citizen::Draw()
 	if(this->RenderMood==true)
 	{
 		glPushMatrix();
-			glTranslatef(this->GetPosition().x-220,this->GetPosition().y,-3);
-			this->StatsBoard();
+		glTranslatef(this->GetPosition().x-220,this->GetPosition().y,-5);
+		this->StatsBoard();
 		glPopMatrix();
 	}
+	else
+	{
+
+	}
 	glPushMatrix();
-		glTranslatef(this->GetPosition().x,this->GetPosition().y,-2);
-		RenderCitizen();
+	glTranslatef(this->GetPosition().x,this->GetPosition().y,-2);
+	RenderCitizen();
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 }
@@ -261,9 +264,22 @@ void Citizen::SetFavourite(Favourite MyFavourite)
 	this->TheFavourites = MyFavourite;
 }
 
-void Citizen::SetPlace(NearByBuilding myBuilding)
+void Citizen::SetPlace(std::string tag, int i)
 {
-	this->TheBuildings = myBuilding;
+	NearByBuilding myBuilding=Citizen::NOTHING;
+	if(tag == "workplace")
+	{
+		myBuilding = Citizen::WORKPLACE;
+	}
+	if(tag == "eatingplace")
+	{
+		myBuilding = Citizen::EATINGPLACE;
+	}
+	if(tag =="nothing")
+	{
+		myBuilding = Citizen::NOTHING;
+	}
+	this->TheBuildings[i] = myBuilding;
 }
 
 void Citizen::RenderCitizen(void)
@@ -312,14 +328,14 @@ void Citizen::RenderCitizen(void)
 void Citizen::DrawSquare(float xSize, float ySize)
 {
 	glBegin(GL_QUADS);
-		glTexCoord2f(1,0);
-			glVertex2f(xSize,-ySize);
-		glTexCoord2f(1,1);
-			glVertex2f(xSize,ySize);
-		glTexCoord2f(0,1);
-			glVertex2f(-xSize,ySize);
-		glTexCoord2f(0,0);
-			glVertex2f(-xSize,-ySize);
+	glTexCoord2f(1,0);
+	glVertex2f(xSize,-ySize);
+	glTexCoord2f(1,1);
+	glVertex2f(xSize,ySize);
+	glTexCoord2f(0,1);
+	glVertex2f(-xSize,ySize);
+	glTexCoord2f(0,0);
+	glVertex2f(-xSize,-ySize);
 	glEnd();
 }
 
@@ -335,90 +351,99 @@ int Citizen::GetAnimationCounter(void)
 
 void Citizen::StatsBoard(void)
 {
+	int TranslateZ=-1;
 	glPushMatrix();
-		glTranslatef(85,50,0);
-		DrawInGameText("Current Mood:");
+	glTranslatef(85,50,TranslateZ);
+	DrawInGameText("Current Mood:");
 	glPopMatrix();
 
 	glColor3f(1,1,1);
 
-		glPushMatrix();
-			glEnable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, StatsBG.id);
-			DrawSquare(180,100);
-		glPopMatrix();
-	
-
-		glPushMatrix();
-		glTranslatef(-70,50,-1);
-
-		if(this->GetMood()=="HAPPY")
-		{
-			glBindTexture(GL_TEXTURE_2D,Happy.id);
-		}
-		else if(this->GetMood()=="ENRAGED")
-		{
-			glBindTexture(GL_TEXTURE_2D, Enraged.id);
-		}
-		else if(this->GetMood()=="SAD")
-		{
-			glBindTexture(GL_TEXTURE_2D, Sad.id);
-		}
-		else if(this->GetMood()=="OKAY")
-		{
-			glBindTexture(GL_TEXTURE_2D, Okay.id);
-		}
-		DrawSquare(20,20);
-		glPushMatrix();
-		glTranslatef(6,-40,-1);
-		//DrawInGameText(GetMood());
-		glPopMatrix();
-	
+	glPushMatrix();
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, StatsBG.id);
+	DrawSquare(180,100);
 	glPopMatrix();
-	
+
 
 	glPushMatrix();
-	glTranslatef(0,-5,-1);
+	glTranslatef(-70,50,-1);
+
+	if(this->GetMood()=="HAPPY")
+	{
+		glBindTexture(GL_TEXTURE_2D,Happy.id);
+	}
+	else if(this->GetMood()=="ENRAGED")
+	{
+		glBindTexture(GL_TEXTURE_2D, Enraged.id);
+	}
+	else if(this->GetMood()=="SAD")
+	{
+		glBindTexture(GL_TEXTURE_2D, Sad.id);
+	}
+	else if(this->GetMood()=="OKAY")
+	{
+		glBindTexture(GL_TEXTURE_2D, Okay.id);
+	}
+	DrawSquare(20,20);
 	glPushMatrix();
-	glTranslatef(90,0,0);
+	glTranslatef(6,-40,-1);
+	//DrawInGameText(GetMood());
+	glPopMatrix();
+
+	glPopMatrix();
+
+
+	glPushMatrix();
+	glTranslatef(0,-5,TranslateZ);
+	glPushMatrix();
+	glTranslatef(90,80,0);
+	DrawInGameText("Name/Owner:");
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(-30,80,TranslateZ);
+	DrawInGameText(owner);
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(90,0,TranslateZ);
 	DrawInGameText("Favourite:");
 	glPopMatrix();
 	glPushMatrix();
-	glTranslatef(-30,0,0);
+	glTranslatef(-30,0,TranslateZ);
 	DrawInGameText(GetFavourites());
 	glPopMatrix();
-	glPopMatrix();
 
-
-	glPushMatrix();
-	glTranslatef(0,-55,-1);
+	glTranslatef(0,-55,TranslateZ);
 	glPushMatrix();
 	glTranslatef(90,0,0);
-	DrawInGameText("Current Place:");
+	DrawInGameText("NearbyPlace:");
 	glPopMatrix();
 	glPushMatrix();
-	glTranslatef(-70,0,0);
+	glTranslatef(-30,0,TranslateZ);
 	DrawInGameText(GetPlace());
 	glPopMatrix();
 	glPopMatrix();
+
+
+
 }
 
 void Citizen::DrawInGameText(std::string Text)
 {
 	glPushMatrix();
-    glColor3f(0.0f, 0.0f, 0.0f);//needs to be called before RasterPos
-    glRasterPos2i(0, 00);
-    std::string s = Text;
-    void * font = GLUT_BITMAP_9_BY_15;
-    for (std::string::iterator i = s.begin(); i != s.end(); ++i)
-    {
-        char c = *i;
-        //this does nothing, color is fixed for Bitmaps when calling glRasterPos
-        //glColor3f(1.0, 0.0, 1.0); 
-        glutBitmapCharacter(font, c);
-    }
-    
-    glPopMatrix();
+	glColor3f(0.0f, 0.0f, 0.0f);//needs to be called before RasterPos
+	glRasterPos2i(0, 00);
+	std::string s = Text;
+	void * font = GLUT_BITMAP_9_BY_15;
+	for (std::string::iterator i = s.begin(); i != s.end(); ++i)
+	{
+		char c = *i;
+		//this does nothing, color is fixed for Bitmaps when calling glRasterPos
+		//glColor3f(1.0, 0.0, 1.0); 
+		glutBitmapCharacter(font, c);
+	}
+
+	glPopMatrix();
 }
 
 void Citizen::SetName(std::string InputName)
