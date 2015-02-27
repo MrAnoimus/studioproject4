@@ -17,7 +17,7 @@ class CGameTime
 	public:
 		CGameTime();
 		~CGameTime();
-
+		bool daycheck;
 		void Init();
 		void Update();
 		//set

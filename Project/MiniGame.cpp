@@ -17,6 +17,7 @@ bool MiniGame::Init(Camera* theCamera)
 	//for mini game
 	minigame = false;
 	addcash = false;
+	playing = false;
 	gravity.Set(0, -9.8f, 0);
 	fallspeed = 1;
 	CposX = Math::RandIntMinMax(320, 780);
@@ -79,9 +80,15 @@ void MiniGame::Update()
 		{
 			tptime = tctime;
 				timer--;
-			if(timer <= 0)
+
+			if(timer <= 0 )
 			{
 				timer = 0;
+			}
+
+			if(timer <= 0 && playing == true )
+			{
+				playing = false;
 				addcash = true;
 			}
 		}
@@ -98,6 +105,11 @@ void MiniGame::Update()
 
 	if(mgctr == 7){mgctr = 0;}
 	if(mgctr3 == 11){mgctr = 0;}
+
+	/*if(timer <= 0)
+	{
+		playing = false;
+	}*/
 
 	if(!m_goList.empty())
 	{
@@ -135,7 +147,7 @@ void MiniGame::Update()
 								mg->counter--;
 								it = m_goList.erase(it);
 								
-								cash += 100;
+								cash += 10;
 								//resource->SetMoney(resource->GetMoney()+100);
 
 								if(mgsfx == NULL)

@@ -12,7 +12,7 @@ CResource::~CResource(void)
 }
 
 int CResource::NumOfFood = 100;
-float CResource::NumOfMoney = 100.0f;
+int CResource::NumOfMoney = 100.0f;
 int	CResource::NumOfManPower = 100;
 int	CResource::NumOfCitizen = 100;
 
@@ -26,7 +26,7 @@ int CResource::GetManPower()
 	return NumOfManPower;
 }
 
-float CResource::GetMoney()
+int CResource::GetMoney()
 {
 	return NumOfMoney;
 }
@@ -51,7 +51,7 @@ void CResource::SetManpower(int NewManPower)
 	NumOfManPower = NewManPower;
 }
 
-void CResource::SetMoney(float NewMoney)
+void CResource::SetMoney(int NewMoney)
 {
 	NumOfMoney = NewMoney;
 }

@@ -55,6 +55,7 @@ public:
 
 	//minigame stuffs
 	bool minigame;
+	bool playing;
 	float speed;
 	int CposX;
 	int CposY;
@@ -68,8 +69,8 @@ public:
 	GameObject* mg;
 	GameObject* catcher;
 
-	float cash;
-	bool addcash;
+	int cash;
+	bool addcash, gamefinish;
 	//indexes
 	//	coin   catcher hourglass
 	int mgctr, mgctr2, mgctr3;

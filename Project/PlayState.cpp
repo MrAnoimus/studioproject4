@@ -397,7 +397,9 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 		}
 		if(myKeys['w']==true)
 		{
+			
 			TheChoice->SetPopup(true);
+
 		}
 
 		if(myKeys['m'] == true)
@@ -485,26 +487,26 @@ bool CPlayState::Init()
 	volume =  VOLUME;
 
 	//sets the player resources;
-	lua_getglobal(L2,"FOOD");
-	int food = lua_tointeger(L2,2);
-	resource.SetFood(food);
+	//lua_getglobal(L2,"FOOD");
+	//int food = lua_tointeger(L2,2);
+	//resource.SetFood(food);
 
-	lua_getglobal(L2,"MONEY");
-	float money= (float)lua_tonumber(L2,3);
-	resource.SetMoney(money);
+	//lua_getglobal(L2,"MONEY");
+	//float money= (float)lua_tonumber(L2,3);
+	//resource.SetMoney(money);
 
-	lua_getglobal(L2, "MANPOWER");
-	int manpower = lua_tointeger(L2,4);
-	resource.SetManpower(manpower);
+	//lua_getglobal(L2, "MANPOWER");
+	//int manpower = lua_tointeger(L2,4);
+	//resource.SetManpower(manpower);
 
-	lua_getglobal(L2,"CITIZEN");
-	int numOfCitizen= lua_tointeger(L2,5);
-	resource.SetCitizen(numOfCitizen);
+	//lua_getglobal(L2,"CITIZEN");
+	//int numOfCitizen= lua_tointeger(L2,5);
+	//resource.SetCitizen(numOfCitizen);
 
-	std::cout <<"FOOD: "<< resource.GetFood() << std::endl;
-	std::cout << "Money: "<<resource.GetMoney() << std::endl;
-	std::cout <<"ManPower: "<< resource.GetManPower() << std::endl;
-	std::cout << "Citizen: "<<resource.GetCitizen() << std::endl;
+	//std::cout <<"FOOD: "<< resource.GetFood() << std::endl;
+	//std::cout << "Money: "<<resource.GetMoney() << std::endl;
+	//std::cout <<"ManPower: "<< resource.GetManPower() << std::endl;
+	//std::cout << "Citizen: "<<resource.GetCitizen() << std::endl;
 
 	lua_close(L2);
 
@@ -520,11 +522,7 @@ bool CPlayState::Init()
 	LoadTGA(&BackgroundTexture,"Textures/Farmbg.tga");
 	LoadTGA(&MenuTexture[0],"Textures/redbg.tga");
 	LoadTGA(&MenuTexture[1],"Textures/greenbg.tga");
-	LoadTGA(&EventTexture[0],"Textures/bad1.tga");
-	LoadTGA(&EventTexture[1],"Textures/bad2.tga");
-	LoadTGA(&EventTexture[5],"Textures/good1.tga");
-	LoadTGA(&EventTexture[6],"Textures/good2.tga");
-	LoadTGA(&EventTexture[7],"Textures/good3.tga");
+	
 
 	//load ttf fonts
 	our_font.init("Fonts/FFF_Tusj.TTF", 42);
@@ -587,6 +585,18 @@ bool CPlayState::Init()
 	LoadTGA(&OKbutton->button[1],"Textures/okdown.tga");
 	OKbutton->Set(240,580,400,460);
 	ListofButtons.push_back(OKbutton);
+
+	Choice1 = new ButtonClass();
+	LoadTGA(&Choice1->button[0],"Textures/CheapTree.tga");
+	LoadTGA(&Choice1->button[1],"Textures/CheapTree.tga");
+	Choice1->Set(100,300,460,500);
+	ListofButtons.push_back(Choice1);
+
+	Choice2 = new ButtonClass();
+	LoadTGA(&Choice2->button[0],"Textures/ExpensiveTree.tga");
+	LoadTGA(&Choice2->button[1],"Textures/ExpensiveTree.tga");
+	Choice2->Set(500,700,460,500);
+	ListofButtons.push_back(Choice2);
 
 	//Day progress
 	day = 1;
@@ -659,6 +669,8 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		{
 			OKbutton->Set(240,580,400,460);
 			returnbutton->Set(360,460,230,260);
+			Choice1->Set(300,520,460,520);
+			Choice2->Set(350,450,520,580);
 			sizechanged = false;
 		}
 
@@ -668,6 +680,20 @@ void CPlayState::Update(CGameStateManager* theGSM)
 			REvent.IsDisplay = false;
 			mouseInfo.mLButtonUp = false;
 			OKbutton->buttonclicked = false;
+		}
+
+		if(Choice1->buttonclicked)
+		{ 
+			TheChoice->popup = false;
+			mouseInfo.mLButtonUp = false;
+			Choice1->buttonclicked = false;
+		}
+
+			if(Choice2->buttonclicked)
+		{
+			TheChoice->popup = false;
+			mouseInfo.mLButtonUp = false;
+			Choice2->buttonclicked = false;
 		}
 
 	if (REvent.IsDisplay ==false)
@@ -683,7 +709,6 @@ void CPlayState::Update(CGameStateManager* theGSM)
 				REvent.IsDisplay = true;
 				REvent.Random();
 				REvent.CreateEventz(REvent.type);
-				cout <<REvent.type<<endl;
 				theCamera->canPan = false;
 				Dtimer = 0;
 			}*/
@@ -945,8 +970,8 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	//print(our_font,0,height-300,"OwnerName: %s",myTile[SelectorY][SelectorX].myHouse.GetOwner().c_str());
 	/*print(our_font,0,height-300,"Day: %d\n", day);
 	print(our_font,0,height-400,"Timer: %d\n", Dtimer);*/
-	print(our_font,0,height-300,"pickx: %d picky%d",SelectorX,SelectorY);
-	print(our_font,0,height-500,"Cash: %f\n", resource.GetMoney());
+	
+	print(our_font,0,height-500,"Cash: %d\n", resource.GetMoney());
 	print(our_font,0,height-400,"w: %f h: %f", width,height);
 	RenderUI();
 	if(minigameobjects->minigame)
@@ -956,12 +981,20 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 			returnbutton->Render();
 		}
 	}
-	TheChoice->Draw();
+	
 	if(REvent.IsDisplay == true)
 	{
-		HandleREvents(REvent.type);
+		REvent.HandleREvents(REvent.type);
 		glPushMatrix();
 			OKbutton->Render();
+		glPopMatrix();
+	}
+	if(TheChoice->popup ==true)
+	{
+		glPushMatrix();
+		 TheChoice->Draw(1);
+		  Choice1->Render();
+		  Choice2->Render();
 		glPopMatrix();
 	}
 	theCamera->SetHUD( false );
@@ -1013,137 +1046,7 @@ Citizen* CPlayState::FetchObject()
 	return go;
 }
 
-void CPlayState::HandleREvents(int type)
-{
-	switch (type)
-	{
-		// - money
-	case 0:
-		glEnable(GL_TEXTURE_2D);
-		glPushMatrix();
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glBindTexture (GL_TEXTURE_2D, EventTexture[0].id);
-			glPushMatrix();
-				glTranslatef(100,50,0);
-				glScalef(0.75,0.75,0.75);
-				glBegin(GL_QUADS);
-				glTexCoord2f(1,1);
-				glVertex2f(0,600);
-				glTexCoord2f(0,1);
-				glVertex2f(800,600);
-				glTexCoord2f(0,0);
-				glVertex2f(800,0);
-				glTexCoord2f(1,0);
-				glVertex2f(0,0);				
-				glEnd();
-			glPopMatrix();
-			glDisable(GL_BLEND);
-		glPopMatrix();
-		glDisable(GL_TEXTURE_2D);
-		break;
-	case 1:
-		// - money
-		glEnable(GL_TEXTURE_2D);
-		glPushMatrix();
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glBindTexture (GL_TEXTURE_2D, EventTexture[1].id);
-			glPushMatrix();
-				glTranslatef(100,50,-1);
-				glScalef(0.75,0.75,0.75);
-				glBegin(GL_QUADS);
-				glTexCoord2f(1,1);
-				glVertex2f(0,600);
-				glTexCoord2f(0,1);
-				glVertex2f(800,600);
-				glTexCoord2f(0,0);
-				glVertex2f(800,0);
-				glTexCoord2f(1,0);
-				glVertex2f(0,0);				
-				glEnd();
-			glPopMatrix();
-			glDisable(GL_BLEND);
-		glPopMatrix();
-		glDisable(GL_TEXTURE_2D);
-		break;
-	case 2:
-		// + money
-		glEnable(GL_TEXTURE_2D);
-		glPushMatrix();
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glBindTexture (GL_TEXTURE_2D, EventTexture[5].id);
-			glPushMatrix();
-				glTranslatef(100,50,-1);
-				glScalef(0.75,0.75,0.75);
-				glBegin(GL_QUADS);
-				glTexCoord2f(1,1);
-				glVertex2f(0,600);
-				glTexCoord2f(0,1);
-				glVertex2f(800,600);
-				glTexCoord2f(0,0);
-				glVertex2f(800,0);
-				glTexCoord2f(1,0);
-				glVertex2f(0,0);				
-				glEnd();
-			glPopMatrix();
-			glDisable(GL_BLEND);
-		glPopMatrix();
-		glDisable(GL_TEXTURE_2D);
-		break;
-	case 3:	
-		// + Man power
-		glEnable(GL_TEXTURE_2D);
-		glPushMatrix();
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glBindTexture (GL_TEXTURE_2D, EventTexture[6].id);
-			glPushMatrix();
-				glTranslatef(100,50,-1);
-				glScalef(0.75,0.75,0.75);
-				glBegin(GL_QUADS);
-				glTexCoord2f(1,1);
-				glVertex2f(0,600);
-				glTexCoord2f(0,1);
-				glVertex2f(800,600);
-				glTexCoord2f(0,0);
-				glVertex2f(800,0);
-				glTexCoord2f(1,0);
-				glVertex2f(0,0);				
-				glEnd();
-			glPopMatrix();
-			glDisable(GL_BLEND);
-		glPopMatrix();
-		glDisable(GL_TEXTURE_2D);
-		break;
-	case 4:
-		glEnable(GL_TEXTURE_2D);
-		glPushMatrix();
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glBindTexture (GL_TEXTURE_2D, EventTexture[7].id);
-			glPushMatrix();
-				glTranslatef(100,50,-1);
-				glScalef(0.75,0.75,0.75);
-				glBegin(GL_QUADS);
-				glTexCoord2f(1,1);
-				glVertex2f(0,600);
-				glTexCoord2f(0,1);
-				glVertex2f(800,600);
-				glTexCoord2f(0,0);
-				glVertex2f(800,0);
-				glTexCoord2f(1,0);
-				glVertex2f(0,0);				
-				glEnd();
-			glPopMatrix();
-			glDisable(GL_BLEND);
-		glPopMatrix();
-		glDisable(GL_TEXTURE_2D);
-		break;
-	}
-	
-}
+
 
 void CPlayState::ClearTileMap(void)
 {

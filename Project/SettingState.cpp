@@ -23,9 +23,11 @@ void CSettingState::changeSize(int w, int h)
 	// Prevent a divide by zero, when window is too short
 	// (you cant make a window of zero width).
 	if(h == 0)
+	{
 		h = 1;
-
+	}
 	float ratio = (float) (1.0f* w / h);
+	sizechanged = true;
 
 	// Reset the coordinate system before modifying
 	glMatrixMode(GL_PROJECTION);
@@ -54,6 +56,12 @@ void CSettingState::MouseMove(int x , int y)
 	int diffX = x - mouseInfo.lastX;
 	int diffY = y - mouseInfo.lastY;
 
+		//check if mouse pointer is inside the button boundaries
+	for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
+	{
+		(*it)->UpdateMouseMove(x,y);
+	}
+
 	//Update on y axis
 	theCamera->Pitch( diffY * 3.142f / 180.0f );
 
@@ -68,18 +76,18 @@ void CSettingState::MouseMove(int x , int y)
 	mouseInfo.lastX = x;
 	mouseInfo.lastY = y;
 
-	//Checking mouse boundary. //	 800 is the window width. You may need to change this to suit your program.
-	if  (mouseInfo.lastX > 800-20 || mouseInfo.lastX < 20)
-	{
-		mouseInfo.lastX = (800 >> 1);
-		glutWarpPointer(mouseInfo.lastX, mouseInfo.lastY);
-	}
-	//	 600 is the window height. You may need to change this to suit your program.
-	if (mouseInfo.lastY > 600-20 || mouseInfo.lastY < 20)
-	{
-		mouseInfo.lastY = (600 >> 1);
-		glutWarpPointer(mouseInfo.lastX, mouseInfo.lastY);
-	}
+	////Checking mouse boundary. //	 800 is the window width. You may need to change this to suit your program.
+	//if  (mouseInfo.lastX > 800-20 || mouseInfo.lastX < 20)
+	//{
+	//	mouseInfo.lastX = (800 >> 1);
+	//	glutWarpPointer(mouseInfo.lastX, mouseInfo.lastY);
+	//}
+	////	 600 is the window height. You may need to change this to suit your program.
+	//if (mouseInfo.lastY > 600-20 || mouseInfo.lastY < 20)
+	//{
+	//	mouseInfo.lastY = (600 >> 1);
+	//	glutWarpPointer(mouseInfo.lastX, mouseInfo.lastY);
+	//}
 }
 void CSettingState::MouseClick(int button , int state , int x , int y)
 {
@@ -90,9 +98,27 @@ void CSettingState::MouseClick(int button , int state , int x , int y)
 			mouseInfo.mLButtonUp = state;
 			mouseInfo.lastX = x;
 			mouseInfo.lastY = y;
-			cout<<mouseInfo.lastX<<","<<mouseInfo.lastY<<endl;
+			//cout<<mouseInfo.lastX<<","<<mouseInfo.lastY<<endl;
 
-			if (mouseInfo.lastX >=290 && mouseInfo.lastX <= 350 && mouseInfo.lastY >= 150 && mouseInfo.lastY <=200)
+			if (!mouseInfo.mLButtonUp)
+			{
+				for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
+				{
+					if ((*it)->buttonhover)
+						(*it)->buttonclicked = true;
+				}
+			}
+
+			else
+			{
+				for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
+				{
+					if ((*it)->buttonhover)
+						(*it)->buttonclicked = false;
+				}
+			}
+
+			/*if (mouseInfo.lastX >=290 && mouseInfo.lastX <= 350 && mouseInfo.lastY >= 150 && mouseInfo.lastY <=200)
 			{
 				if (volume <= 0.8)
 				{
@@ -111,7 +137,7 @@ void CSettingState::MouseClick(int button , int state , int x , int y)
 					cout << volume << "\n";
 					mouseInfo.mLButtonUp = false;		
 				}
-			}
+			}*/
 
 		}break;
 		case GLUT_RIGHT_BUTTON:
@@ -145,7 +171,7 @@ bool CSettingState::Init()
 	theCamera->SetDirection( 0.0, 0.0, 1.0 );
 
 
-	LoadTGA(&BackgroundTexture,"Textures/menu.tga");
+	LoadTGA(&BackgroundTexture,"Textures/obg.tga");
 	LoadTGA(&Icons[0],"Textures/plus.tga");
 	LoadTGA(&Icons[1],"Textures/minus.tga");
 	LoadTGA(&Icons[2],"Textures/bar.tga");
@@ -174,6 +200,30 @@ bool CSettingState::Init()
 	mouseInfo.lastY = 600 >> 1;
 	//mouseInfo.lastX = glutGet(GLUT_WINDOW_WIDTH) >> 1;
 	//mouseInfo.lastY = glutGet(GLUT_WINDOW_HEIGHT) >> 1;
+
+	SaveButton = new ButtonClass();
+	LoadTGA(&SaveButton->button[0],"Textures/confirm.tga");
+	LoadTGA(&SaveButton->button[1],"Textures/confirm.tga");
+	SaveButton->Set(100,300,460,500);
+	ListofButtons.push_back(SaveButton);
+
+	ExitButton = new ButtonClass();
+	LoadTGA(&ExitButton->button[0],"Textures/cancel.tga");
+	LoadTGA(&ExitButton->button[1],"Textures/cancel.tga");
+	ExitButton->Set(500,700,460,500);
+	ListofButtons.push_back(ExitButton);
+
+	PlusButton = new ButtonClass();
+	LoadTGA(&PlusButton->button[0],"Textures/plus.tga");
+	LoadTGA(&PlusButton->button[1],"Textures/plus.tga");
+	PlusButton->Set(650,700,160,200);
+	ListofButtons.push_back(PlusButton);
+
+	MinusButton = new ButtonClass();
+	LoadTGA(&MinusButton->button[0],"Textures/minus.tga");
+	LoadTGA(&MinusButton->button[1],"Textures/minus.tga");
+	MinusButton->Set(300,350,170,190);
+	ListofButtons.push_back(MinusButton);
 	return true;
 }
 void CSettingState::Cleanup()
@@ -195,22 +245,6 @@ void CSettingState::HandleEvents(CGameStateManager* theGSM)
 {
 	if (mouseInfo.mLButtonUp) 
 	{		
-		if (mouseInfo.lastX >=250 && mouseInfo.lastX <= 390 && mouseInfo.lastY >= 500 && mouseInfo.lastY <=580)
-		{	
-			ofstream file;
-			file.open("LuaScript/test.lua");
-			file <<"VOLUME = ";
-			file << volume;
-			file.close();
-			theGSM->ChangeState( CIntroState::Instance() );
-			mouseInfo.mLButtonUp = false;
-		}
-
-		if (mouseInfo.lastX >=420 && mouseInfo.lastX <= 550 && mouseInfo.lastY >= 510 && mouseInfo.lastY <=580)
-		{
-			theGSM->ChangeState( CIntroState::Instance() );
-			mouseInfo.mLButtonUp = false;
-		}
 		mouseInfo.mLButtonUp = false;	
 	}
 	if(myKeys[27]==true)
@@ -228,6 +262,55 @@ void CSettingState::Update(CGameStateManager* theGSM)
 	//cout << "CSettingState::Update\n" << endl;
 	//MouseMove(mouseInfo.lastX,mouseInfo.lastY);
 	//std::cout<<mouseInfo.lastX<<","<<mouseInfo.lastY<<std::endl;
+	if (sizechanged)
+		{
+			SaveButton->Set(300,520,460,520);
+			ExitButton->Set(350,450,520,580);
+			PlusButton->Set(100,150,100,140);
+			MinusButton->Set(500,550,100,140);
+			sizechanged = false;
+		}
+
+		if(SaveButton->buttonclicked)
+		{
+		
+			ofstream file;
+			file.open("LuaScript/test.lua");
+			file <<"VOLUME = ";
+			file << volume;
+			file.close();
+			theGSM->ChangeState( CIntroState::Instance() );
+			mouseInfo.mLButtonUp = false;
+			SaveButton->buttonclicked = false;
+		}
+
+		if(PlusButton->buttonclicked)
+		{
+			if (volume <= 0.8)
+			{
+				volume += 0.20;
+				mouseInfo.mLButtonUp = false;
+				PlusButton->buttonclicked = false;
+			}
+		}
+
+		if(MinusButton->buttonclicked)
+		{
+			if  ( volume > 0.2)
+			{
+				volume -= 0.20;
+				mouseInfo.mLButtonUp = false;
+				MinusButton->buttonclicked = false;
+			}
+		}
+
+		if(ExitButton->buttonclicked)
+		{
+			theGSM->ChangeState( CIntroState::Instance() );
+			mouseInfo.mLButtonUp = false;
+			ExitButton->buttonclicked = false;
+		}
+
 	
 }
 
@@ -255,7 +338,7 @@ void CSettingState::Draw(CGameStateManager* theGSM)
 		//glScalef(0.1,0.1,0.1);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glBindTexture (GL_TEXTURE_2D, BackgroundTexture.texID);
+		glBindTexture (GL_TEXTURE_2D, BackgroundTexture.id);
 		glPushMatrix();
 			glBegin(GL_QUADS);
 				glTexCoord2f(0,0);
@@ -273,75 +356,14 @@ void CSettingState::Draw(CGameStateManager* theGSM)
 
 	drawvolumebars();
 
-	//plus
 	glPushMatrix();
-		glBindTexture (GL_TEXTURE_2D, Icons[0].texID);
-		glTranslatef(320,175,0);
-		glScalef(0.5,0.5,0);
-		draw();
+		SaveButton->Render();
+		ExitButton->Render();
+		PlusButton->Render();
+		MinusButton->Render();
 	glPopMatrix();
 
-	//minus
-	glPushMatrix();
-		glBindTexture (GL_TEXTURE_2D, Icons[1].texID);
-		glTranslatef(700,175,0);
-		glScalef(0.65,0.20,0);
-		draw();
-	glPopMatrix();
 
-	//plus
-	glPushMatrix();
-		glBindTexture (GL_TEXTURE_2D, Icons[0].texID);
-		glTranslatef(320,260,0);
-		glScalef(0.5,0.5,0);
-		draw();
-	glPopMatrix();
-
-	//minus
-	glPushMatrix();
-		glBindTexture (GL_TEXTURE_2D, Icons[1].texID);
-		glTranslatef(700,260,0);
-		glScalef(0.65,0.20,0);
-		draw();
-	glPopMatrix();
-
-	
-	//2nd bar
-	glPushMatrix();
-	glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
-	glTranslatef(400,260,0);
-	glScalef(0.5,0.65,0);
-	draw();
-	glPopMatrix();
-
-	glPushMatrix();
-	glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
-	glTranslatef(450,260,0);
-	glScalef(0.5,0.65,0);
-	draw();
-	glPopMatrix();
-
-	glPushMatrix();
-	glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
-	glTranslatef(500,260,0);
-	glScalef(0.5,0.65,0);
-	draw();
-	glPopMatrix();
-
-	glPushMatrix();
-	glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
-	glTranslatef(550,260,0);
-	glScalef(0.5,0.65,0);
-	draw();
-	glPopMatrix();
-
-	glPushMatrix();
-	glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
-	glTranslatef(600,260,0);
-	glScalef(0.5,0.65,0);
-	draw();
-	glPopMatrix();
-	
 
 	glDisable(GL_TEXTURE_2D);
 	drawFPS();
@@ -464,9 +486,9 @@ bool CSettingState::LoadTGA(TextureImage *texture, char *filename)			// Loads A 
 	fclose (file);											// Close The File
 
 	// Build A Texture From The Data
-	glGenTextures(1, &texture[0].texID);					// Generate OpenGL texture IDs
+	glGenTextures(1, &texture[0].id);					// Generate OpenGL texture IDs
 
-	glBindTexture(GL_TEXTURE_2D, texture[0].texID);			// Bind Our Texture
+	glBindTexture(GL_TEXTURE_2D, texture[0].id);			// Bind Our Texture
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);	// Linear Filtered
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);	// Linear Filtered
 	
@@ -505,35 +527,35 @@ void CSettingState::drawvolumebars()
 	if ( volume <= 1 && volume > 0.8f  )
 	{
 		glPushMatrix();
-			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glBindTexture (GL_TEXTURE_2D, Icons[2].id);
 			glTranslatef(400,175,0);
 			glScalef(0.5,0.65,0);
 			draw();
 		glPopMatrix();
 
 		glPushMatrix();
-			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glBindTexture (GL_TEXTURE_2D, Icons[2].id);
 			glTranslatef(450,175,0);
 			glScalef(0.5,0.65,0);
 			draw();
 		glPopMatrix();
 
 		glPushMatrix();
-			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glBindTexture (GL_TEXTURE_2D, Icons[2].id);
 			glTranslatef(500,175,0);
 			glScalef(0.5,0.65,0);
 			draw();
 		glPopMatrix();
 
 		glPushMatrix();
-			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glBindTexture (GL_TEXTURE_2D, Icons[2].id);
 			glTranslatef(550,175,0);
 			glScalef(0.5,0.65,0);
 			draw();
 		glPopMatrix();
 
 		glPushMatrix();
-			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glBindTexture (GL_TEXTURE_2D, Icons[2].id);
 			glTranslatef(600,175,0);
 			glScalef(0.5,0.65,0);
 			draw();
@@ -543,28 +565,28 @@ void CSettingState::drawvolumebars()
 	else if  ( volume <= 0.8f && volume >0.6f)
 	{
 		glPushMatrix();
-			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glBindTexture (GL_TEXTURE_2D, Icons[2].id);
 			glTranslatef(400,175,0);
 			glScalef(0.5,0.65,0);
 			draw();
 		glPopMatrix();
 
 		glPushMatrix();
-			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glBindTexture (GL_TEXTURE_2D, Icons[2].id);
 			glTranslatef(450,175,0);
 			glScalef(0.5,0.65,0);
 			draw();
 		glPopMatrix();
 
 		glPushMatrix();
-			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glBindTexture (GL_TEXTURE_2D, Icons[2].id);
 			glTranslatef(500,175,0);
 			glScalef(0.5,0.65,0);
 			draw();
 		glPopMatrix();
 
 		glPushMatrix();
-			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glBindTexture (GL_TEXTURE_2D, Icons[2].id);
 			glTranslatef(550,175,0);
 			glScalef(0.5,0.65,0);
 			draw();
@@ -574,21 +596,21 @@ void CSettingState::drawvolumebars()
 	else if (volume <= 0.6f && volume >0.4f)
 	{
 		glPushMatrix();
-			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glBindTexture (GL_TEXTURE_2D, Icons[2].id);
 			glTranslatef(400,175,0);
 			glScalef(0.5,0.65,0);
 			draw();
 		glPopMatrix();
 
 		glPushMatrix();
-			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glBindTexture (GL_TEXTURE_2D, Icons[2].id);
 			glTranslatef(450,175,0);
 			glScalef(0.5,0.65,0);
 			draw();
 		glPopMatrix();
 
 		glPushMatrix();
-			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glBindTexture (GL_TEXTURE_2D, Icons[2].id);
 			glTranslatef(500,175,0);
 			glScalef(0.5,0.65,0);
 			draw();
@@ -598,14 +620,14 @@ void CSettingState::drawvolumebars()
 	else if ( volume <= 0.4f && volume >0.2f)
 	{
 		glPushMatrix();
-			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glBindTexture (GL_TEXTURE_2D, Icons[2].id);
 			glTranslatef(400,175,0);
 			glScalef(0.5,0.65,0);
 			draw();
 		glPopMatrix();
 
 		glPushMatrix();
-			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glBindTexture (GL_TEXTURE_2D, Icons[2].id);
 			glTranslatef(450,175,0);
 			glScalef(0.5,0.65,0);
 			draw();
@@ -616,7 +638,7 @@ void CSettingState::drawvolumebars()
 	else if ( volume <= 0.2f && volume > 0)
 	{
 		glPushMatrix();
-			glBindTexture (GL_TEXTURE_2D, Icons[2].texID);
+			glBindTexture (GL_TEXTURE_2D, Icons[2].id);
 			glTranslatef(400,175,0);
 			glScalef(0.5,0.65,0);
 			draw();
