@@ -1,12 +1,13 @@
 #include "ResultState.h"
 #include "GameStateManager.h"
 //#include "gamestate.h"
-#include "PlayState.h"
+
 #include "introstate.h"
 #include <mmsystem.h>
 #include "SettingState.h"
+#include <iostream>
 
-
+using namespace std;
 CResultState CResultState::theResultState;
 
 void CResultState::changeSize(int w, int h)
@@ -88,7 +89,9 @@ bool CResultState::Init()
 	theCamera->SetPosition( 0.0, 2.0, -5.0 );
 	theCamera->SetDirection( 0.0, 0.0, 1.0 );
 
-	LoadTGA(&BackgroundTexture,"Textures/bg.tga");
+	LoadTGA(&BackgroundTexture[0],"Textures/WinScreen.tga");
+	LoadTGA(&BackgroundTexture[1],"Textures/LosingScreen.tga");
+
 	our_font.init("Fonts/FFF_Tusj.TTF", 42);
 
 	//  The number of frames
@@ -172,34 +175,53 @@ void CResultState::Draw(CGameStateManager* theGSM)
 
 	
 	glEnable(GL_TEXTURE_2D);
-
-	// Draw Background image
-	glPushMatrix();
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glBindTexture (GL_TEXTURE_2D, BackgroundTexture.texID);
+	if (resource.GetWin() == 0)
+	{
+		// Draw Background image
 		glPushMatrix();
-			glBegin(GL_QUADS);
-				glTexCoord2f(0,0);
-				glVertex2f(0,600);
-				glTexCoord2f(1,0);
-				glVertex2f(800,600);
-				glTexCoord2f(1,1);
-				glVertex2f(800,0);
-				glTexCoord2f(0,1);
-				glVertex2f(0,0);				
-			glEnd();
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture (GL_TEXTURE_2D, BackgroundTexture[0].texID);
+			glPushMatrix();
+				glBegin(GL_QUADS);
+					glTexCoord2f(0,0);
+					glVertex2f(0,600);
+					glTexCoord2f(1,0);
+					glVertex2f(800,600);
+					glTexCoord2f(1,1);
+					glVertex2f(800,0);
+					glTexCoord2f(0,1);
+					glVertex2f(0,0);				
+				glEnd();
+			glPopMatrix();
+			//glDisable(GL_BLEND);
 		glPopMatrix();
-		//glDisable(GL_BLEND);
-	glPopMatrix();
+	}
 
-	//able to use push pop to move rotate change color if you want
-	/*print(our_font, 250, 150, "Start Game", cnt1);
-	print(our_font, 300, 100, "Setting", cnt1);
-	print(our_font, 350, 40, "Exit", cnt1);*/
+	if (resource.GetWin() == 1)
+	{
+		glPushMatrix();
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture (GL_TEXTURE_2D, BackgroundTexture[1].texID);
+			glPushMatrix();
+				glBegin(GL_QUADS);
+					glTexCoord2f(0,0);
+					glVertex2f(0,600);
+					glTexCoord2f(1,0);
+					glVertex2f(800,600);
+					glTexCoord2f(1,1);
+					glVertex2f(800,0);
+					glTexCoord2f(0,1);
+					glVertex2f(0,0);				
+				glEnd();
+			glPopMatrix();
+			//glDisable(GL_BLEND);
+		glPopMatrix();
+	}
 
 	glDisable(GL_TEXTURE_2D);
-	drawFPS();
+	//drawFPS();
 	theCamera->SetHUD( false );
 	// Flush off any entity which is not drawn yet, so that we maintain the frame rate.
 	glFlush();
