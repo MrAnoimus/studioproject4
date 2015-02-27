@@ -3,6 +3,7 @@
 #include "PlayState.h"
 #include <iostream>
 #include <time.h>
+#include "ResultState.h"
 extern "C" 
 {
 	#include "lua.h"
@@ -408,8 +409,9 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 		{
 			theCamera->canPan = !theCamera->canPan;
 		}
-		if(myKeys['n'] == true)
+		if(myKeys['r'] == true)
 		{
+			//theGSM->ChangeState( CPlayState::Instance() );
 		}
 		if(myKeys['p'] == true)
 		{
@@ -511,6 +513,8 @@ bool CPlayState::Init()
 	LoadTGA(&BackgroundTexture,"Textures/Farmbg.tga");
 	LoadTGA(&MenuTexture[0],"Textures/redbg.tga");
 	LoadTGA(&MenuTexture[1],"Textures/greenbg.tga");
+	LoadTGA(&ResultTexture[0],"Textures/WinScreen.tga");
+	LoadTGA(&ResultTexture[1],"Textures/LosingScreen.tga");
 	
 
 	//load ttf fonts
@@ -590,7 +594,7 @@ bool CPlayState::Init()
 	OKbutton = new ButtonClass();
 	LoadTGA(&OKbutton->button[0],"Textures/okup.tga");
 	LoadTGA(&OKbutton->button[1],"Textures/okdown.tga");
-	OKbutton->Set(240,580,400,460);
+	OKbutton->Set(350,450,400,460);
 	ListofButtons.push_back(OKbutton);
 
 	Choice1 = new ButtonClass();
@@ -647,6 +651,15 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 }
 void CPlayState::Update(CGameStateManager* theGSM) 
 {
+	if (myGameUI.myGameTime.daycheck == true)
+	{
+
+		REvent.IsDisplay = true;
+		REvent.Random();
+		REvent.CreateEventz(REvent.type);
+		theCamera->canPan = false;
+		myGameUI.myGameTime.daycheck = false;
+	}
 	if(minigameobjects->minigame)
 	{
 		theCamera->canPan = false;
@@ -960,6 +973,27 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 		  Choice2->Render();
 		glPopMatrix();
 	}
+	/*if(resource.GetMoney() <=0)
+	{
+		glEnable(GL_TEXTURE_2D);
+		glPushMatrix();
+		glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture (GL_TEXTURE_2D, ResultTexture[1].id);
+			glPushMatrix();
+				glBegin(GL_QUADS);
+				glTexCoord2f(1,1);
+				glVertex2f(0,600);
+				glTexCoord2f(0,1);
+				glVertex2f(800,600);
+				glTexCoord2f(0,0);
+				glVertex2f(800,0);
+				glTexCoord2f(1,0);
+				glVertex2f(0,0);				
+			glEnd();
+			glPopMatrix();
+		glDisable(GL_TEXTURE_2D);
+	}*/
 	theCamera->SetHUD( false );
 	// Flush off any entity which is not drawn yet, so that we maintain the frame rate.
 	glFlush();
@@ -1007,6 +1041,7 @@ Citizen* CPlayState::FetchObject()
 	go->SetName(str);
 	CitizenList.push_back(go);
 	return go;
+}
 
 void CPlayState::ClearTileMap(void)
 {
