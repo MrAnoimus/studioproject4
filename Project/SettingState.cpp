@@ -354,7 +354,7 @@ void CSettingState::Draw(CGameStateManager* theGSM)
 
 
 	glDisable(GL_TEXTURE_2D);
-	drawFPS();
+	//drawFPS();
 	theCamera->SetHUD( false );
 	// Flush off any entity which is not drawn yet, so that we maintain the frame rate.
 	glFlush();

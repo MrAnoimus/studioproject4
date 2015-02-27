@@ -409,10 +409,7 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 		{
 			theCamera->canPan = !theCamera->canPan;
 		}
-		if(myKeys['r'] == true)
-		{
-			//theGSM->ChangeState( CPlayState::Instance() );
-		}
+		
 		if(myKeys['p'] == true)
 		{
 			for(int y = 0; y < ROWS; y += 1)
@@ -651,6 +648,17 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 }
 void CPlayState::Update(CGameStateManager* theGSM) 
 {
+	if(myKeys['r'] == true)
+	{
+		resource.SetWin(0);
+		theGSM->ChangeState( CResultState::Instance() );
+	}
+
+	if(myKeys['t'] == true)
+	{
+		resource.SetWin(1);
+		theGSM->ChangeState( CResultState::Instance() );
+	}
 	if (myGameUI.myGameTime.daycheck == true)
 	{
 

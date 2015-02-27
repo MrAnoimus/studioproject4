@@ -15,10 +15,16 @@ int CResource::NumOfFood = 100;
 int CResource::NumOfMoney = 100.0f;
 int	CResource::NumOfManPower = 100;
 int	CResource::NumOfCitizen = 100;
+int	CResource::Win = 0;
 
 int CResource::GetFood(void)
 {
 	return  NumOfFood;
+}
+
+int CResource::GetWin(void)
+{
+	return  Win;
 }
 
 int CResource::GetManPower()
@@ -39,6 +45,11 @@ int CResource::GetCitizen()
 void CResource::SetCitizen(int NewCitizen)
 {
 	NumOfCitizen = NewCitizen;
+}
+
+void CResource::SetWin(int NewWin)
+{
+	Win = NewWin;
 }
 
 void CResource::SetFood(int NewFood)
