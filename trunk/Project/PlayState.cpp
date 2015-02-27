@@ -689,56 +689,58 @@ void CPlayState::Update(CGameStateManager* theGSM)
 			}*/
 		}
 		//
-		//myGameUI.Update();
+		myGameUI.Update();
 		//tile selection check
-		int offsetX;
-		int offsetY;
-		offsetX =(width/8);
-		offsetY = (height/6);
-		if(mouseInfo.lastX > (width/2))
+		if(myTile[SelectorY][SelectorX].GetModeOn())
 		{
-			SelectorX = ((-mouseInfo.lastX + width-(offsetX/4))/ offsetX);
-			SelectorX = ((-mouseInfo.lastX + width-(offsetX/4))/ offsetX);
-		}else
-		{
-			SelectorX = ((-mouseInfo.lastX + width+(offsetX/4))/ offsetX);
-		}
-		if(mouseInfo.lastY > (height/2))
-		{
-			SelectorY =((-mouseInfo.lastY + height-(offsetY/4))/ offsetY);
-		}else
-		{
-			SelectorY = ((-mouseInfo.lastY + height+(offsetY/4))/ offsetY);
-		}
-		//////
-		for(int y = 0; y < ROWS; y += 1)
-		{
-			for(int x = 0; x < COLS; x += 1)
+			int offsetX;
+			int offsetY;
+			offsetX =(width/8);
+			offsetY = (height/6);
+			if(mouseInfo.lastX > (width/2))
 			{
-				if(SelectorX != x && SelectorY != y)
+				SelectorX = ((-mouseInfo.lastX + width-(offsetX/4))/ offsetX);
+			}else
+			{
+				SelectorX = ((-mouseInfo.lastX + width+(offsetX/4))/ offsetX);
+			}
+			if(mouseInfo.lastY > (height/2))
+			{
+				SelectorY =((-mouseInfo.lastY + height-(offsetY/4))/ offsetY);
+			}else
+			{
+				SelectorY = ((-mouseInfo.lastY + height+(offsetY/4))/ offsetY);
+			}
+			//////
+		}
+		for(int y = 0; y < ROWS; y += 1)
+			{
+				for(int x = 0; x < COLS; x += 1)
 				{
-					myTile[y][x].SetIsSelected(false);
-				}else
-				{
-					if(myTile[y][x].IsSelected())
+					if(SelectorX != x && SelectorY != y)
 					{
 						myTile[y][x].SetIsSelected(false);
-					}
-					myTile[SelectorY][SelectorX].SetIsSelected(true);
-				}//!clean up sometime later watch out list
-				if(	myTile[y][x].GetModeOn() == true)
-				{
-					myTile[y][x].Update();
-				}else
-				{	
-					if(myTile[y][x].IsClickedOn() == false)
+					}else
 					{
-						myTile[y][x].SetBtype(0);
+						if(myTile[y][x].IsSelected())
+						{
+							myTile[y][x].SetIsSelected(false);
+						}
+						myTile[SelectorY][SelectorX].SetIsSelected(true);
+					}//!clean up sometime later watch out list
+					if(	myTile[y][x].GetModeOn() == true)
+					{
+						myTile[y][x].Update();
+					}else
+					{	
+						if(myTile[y][x].IsClickedOn() == false)
+						{
+							myTile[y][x].SetBtype(0);
+						}
+						myTile[y][x].Update();
 					}
-					myTile[y][x].Update();
 				}
 			}
-		}
 		for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 		{
 			Citizen *Citizens = *it;
@@ -914,23 +916,17 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 			Citizens->Draw();
 		}
 	}
+	
 	//Enable 2D text display and HUD
 	theCamera->SetHUD( true);
+	
 	myGameUI.Draw(0,height - 50);
-	print(our_font,0,height-100,"type: %d",myTile[SelectorY][SelectorX].GetBtype());
+	myGameUI.DrawSelect(750,50,myTile[SelectorY][SelectorX].GetModeOn(),myTile[SelectorY][SelectorX].GetBtype());
 	print(our_font,0,height-300,"OwnerName: %s",myTile[SelectorY][SelectorX].myHouse.GetOwner().c_str());
 	/*print(our_font,0,height-300,"Day: %d\n", day);
 	print(our_font,0,height-400,"Timer: %d\n", Dtimer);*/
 	print(our_font,0,height-500,"Cash: %f\n", resource.GetMoney());
-	//for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
-	//{	
-	//	Citizen *Citizens = *it;
-	//	if (Citizens->active == true)
-	//	{
-	//		//Citizens->MoodUpdate(Citizen::EATINGPLACE, Citizen::FOOD);
-	//		//print(our_font,0,height-500,"MouseX: %s",Citizens->GetName().c_str());
-	//	}
-	//}
+	print(our_font,0,height-400,"w: %f h: %f", width,height);
 	RenderUI();
 	if(minigameobjects->minigame)
 	{

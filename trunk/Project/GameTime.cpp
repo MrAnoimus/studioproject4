@@ -14,7 +14,7 @@ void CGameTime::Init()
 	Hour = 11;
 	Minute = 0;
 	Second = 0.0f;
-	Fincrement = 0.1f;
+	Fincrement = 1.0f;
 	TimeFrame = "AM";
 	Iincrement = 1;
 }
