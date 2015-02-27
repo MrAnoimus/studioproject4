@@ -9,7 +9,6 @@ extern "C"
 	#include "lualib.h"
 	#include "lauxlib.h"
 }
-
 CPlayState CPlayState::thePlayState;
 using namespace std;
 
@@ -50,7 +49,6 @@ void CPlayState::MouseMove(int x , int y)
 	{
 		(*it)->UpdateMouseMove(x,y);
 	}
-
 	//to check where camera pan
 	if(theCamera->canPan == true)
 	{
@@ -112,7 +110,9 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
 				{
 					if ((*it)->buttonhover)
+					{
 						(*it)->buttonclicked = true;
+					}
 				}
 			}
 			else
@@ -120,10 +120,11 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
 				{
 					if ((*it)->buttonhover)
+					{
 						(*it)->buttonclicked = false;
+					}
 				}
 			}
-
 			if (REvent.IsDisplay == false)
 			{
 				if (state == GLUT_DOWN)
@@ -132,62 +133,51 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 					mouseInfo.mLButtonUp = state;
 					mouseInfo.lastX = x;
 					mouseInfo.lastY = y;
-				
-					
 					if(myTile[SelectorY][SelectorX].GetBtype()==1)
 					{
-						
-				
-					Astar as(px,py,SelectorX,SelectorY);
-				
-					bool result = as.Search(Map);
-		
-					CNode* Node = new CNode;
-					Node->x = SelectorX;
-					Node->y = SelectorY;
-					as.AddCloseList(Node);
-
-				
-					if(result)
-					{
-						moving = true;
-
-						for(int i=0;i<(int)as.closeList.size();i++)
+						//
+						Astar as(px,py,SelectorX,SelectorY);
+						//
+						bool result = as.Search(Map);
+						//
+						CNode* Node = new CNode;
+						Node->x = SelectorX;
+						Node->y = SelectorY;
+						//
+						as.AddCloseList(Node);
+						if(result)
 						{
-							//Citizen stuff
-							CNode* TheNode = new CNode();
-							TheNode->x = as.closeList[i]->x*100;
-							TheNode->y = as.closeList[i]->y*100;
-							cout <<"Size: " <<(int)as.closeList.size() <<std::endl;
-							for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+							moving = true;
+							for(int i=0;i<(int)as.closeList.size();i++)
 							{
-								int j= (int)as.closeList.size();
-								Citizen *Citizens = *it;
-								if (Citizens->active == true&&Citizens->Movedout==false)
+								//Citizen stuff
+								CNode* TheNode = new CNode();
+								TheNode->x = as.closeList[i]->x*100;
+								TheNode->y = as.closeList[i]->y*100;
+								cout <<"Size: " <<(int)as.closeList.size() <<std::endl;
+								for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 								{
-									if(i+1>=j)
+									int j= (int)as.closeList.size();
+									Citizen *Citizens = *it;
+									if (Citizens->active == true&&Citizens->Movedout==false)
 									{
-										Citizens->CitizenDestination->DestinationList.push_back(TheNode);
-										myTile[SelectorY][SelectorX].myHouse.SetOwner(Citizens->GetName());
-										Citizens->Movedout=true;
+										if(i+1>=j)
+										{
+											Citizens->CitizenDestination->DestinationList.push_back(TheNode);
+											myTile[SelectorY][SelectorX].myHouse.SetOwner(Citizens->GetName());
+											Citizens->Movedout=true;
+											break;
+										}
+										if(i>=1)
+										{				
+											Citizens->CitizenDestination->DestinationList.push_back(TheNode);
 										break;
+										}
 									}
-									if(i>=1)
-									{				
-										Citizens->CitizenDestination->DestinationList.push_back(TheNode);
-										break;
-									}
-									
-									/*if((Citizens->GetPosition().x != as.closeList[i]->x*100)&&(Citizens->GetPosition().y != as.closeList[i]->y*100))
-									{
-										myTile[SelectorY][SelectorX].myHouse.SetOwner(Citizens->GetName());
-									}*/
-									
 								}
 							}
-							}
 						}
-				}
+					}
 					//check mode
 					if(myTile[SelectorY][SelectorX].GetModeOn() == true)
 					{
@@ -261,7 +251,6 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 					{
 						mouseLC = NULL;
 					}
-
 				}else
 				{
 					//cout << "LMB is up" << endl;
@@ -367,41 +356,48 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 	{
 		if(myKeys['1']==true)
 		{
-			if(myTile[SelectorY][SelectorX].GetBtype()==0)
+			if(myTile[SelectorY][SelectorX].GetModeOn())
 			{
-				myTile[SelectorY][SelectorX].SetBtype(1);
-			}else
-			{
-				myTile[SelectorY][SelectorX].SetBtype(0);
+				if(myTile[SelectorY][SelectorX].GetBtype()==0)
+				{
+					myTile[SelectorY][SelectorX].SetBtype(1);
+				}else
+				{
+					myTile[SelectorY][SelectorX].SetBtype(0);
+				}
 			}
+			
 		}
 		if(myKeys['2']==true)
 		{
-			if(myTile[SelectorY][SelectorX].GetBtype()==0)
+			if(myTile[SelectorY][SelectorX].GetModeOn())
 			{
-				myTile[SelectorY][SelectorX].SetBtype(2);
-			}else
-			{
-				myTile[SelectorY][SelectorX].SetBtype(0);
+				if(myTile[SelectorY][SelectorX].GetBtype()==0)
+				{
+					myTile[SelectorY][SelectorX].SetBtype(2);
+				}else
+				{
+					myTile[SelectorY][SelectorX].SetBtype(0);
+				}
 			}
 		}
 		if(myKeys['3']==true)
 		{
-			if(myTile[SelectorY][SelectorX].GetBtype()==0)
+			if(myTile[SelectorY][SelectorX].GetModeOn())
 			{
-				myTile[SelectorY][SelectorX].SetBtype(3);
-			}else
-			{
-				myTile[SelectorY][SelectorX].SetBtype(0);
+				if(myTile[SelectorY][SelectorX].GetBtype()==0)
+				{
+					myTile[SelectorY][SelectorX].SetBtype(3);
+				}else
+				{
+					myTile[SelectorY][SelectorX].SetBtype(0);
+				}
 			}
 		}
 		if(myKeys['w']==true)
 		{
-			
 			TheChoice->SetPopup(true);
-
 		}
-
 		if(myKeys['m'] == true)
 		{
 			minigameobjects->minigame = true;
@@ -415,7 +411,6 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 		if(myKeys['n'] == true)
 		{
 		}
-
 		if(myKeys['p'] == true)
 		{
 			for(int y = 0; y < ROWS; y += 1)
@@ -446,7 +441,6 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 			}
 			fout.close();
 		}
-
 		if(myKeys['l'] == true)
 		{
 			cout <<endl;
@@ -471,7 +465,6 @@ bool CPlayState::Init()
 	//getting the initial array
 	width = glutGet(GLUT_SCREEN_WIDTH);
 	height = glutGet(GLUT_SCREEN_HEIGHT);
-	typeS = 0;
 	moving = false;
 	movingX = false;
 	myGameUI.Init();
@@ -503,11 +496,6 @@ bool CPlayState::Init()
 	//lua_getglobal(L2,"CITIZEN");
 	//int numOfCitizen= lua_tointeger(L2,5);
 	//resource.SetCitizen(numOfCitizen);
-
-	//std::cout <<"FOOD: "<< resource.GetFood() << std::endl;
-	//std::cout << "Money: "<<resource.GetMoney() << std::endl;
-	//std::cout <<"ManPower: "<< resource.GetManPower() << std::endl;
-	//std::cout << "Citizen: "<<resource.GetCitizen() << std::endl;
 
 	lua_close(L2);
 
@@ -549,14 +537,21 @@ bool CPlayState::Init()
 	playBGM = NULL;
 
 	if(playBGM == NULL)
-	{playBGM = theSoundEngine->play2D ("SFX/playbgm.mp3", false, true);}		
-	else
-	{playBGM == NULL;
-	 playBGM = theSoundEngine->play2D ("SFX/playbgm.mp3", false, true);}
+	{
+		playBGM = theSoundEngine->play2D ("SFX/playbgm.mp3", false, true);
+	}else
+	{
+		playBGM == NULL;
+		playBGM = theSoundEngine->play2D ("SFX/playbgm.mp3", false, true);
+	}
 	if(playBGM->getIsPaused() == true)
-	{playBGM->setIsPaused(false);}
+	{
+		playBGM->setIsPaused(false);
+	}
 	else if(playBGM->isFinished() == true)
-	{playBGM = NULL;}
+	{
+		playBGM = NULL;
+	}
 
 	theSoundEngine->setSoundVolume(volume);
 	//Choice stuff
@@ -609,10 +604,6 @@ bool CPlayState::Init()
 	LoadTGA(&Choice2->button[1],"Textures/ExpensiveTree.tga");
 	Choice2->Set(500,700,460,500);
 	ListofButtons.push_back(Choice2);
-
-	//Day progress
-	day = 1;
-	Dtimer = 0;
 	return true;
 }
 
@@ -656,15 +647,12 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 }
 void CPlayState::Update(CGameStateManager* theGSM) 
 {
-	//cout << width << ", " << height << endl;
-
 	if(minigameobjects->minigame)
 	{
 		theCamera->canPan = false;
 		theCamera->isZoomIn = false;
 		theCamera->isZoomOut = false;
 	}
-
 	if(minigameobjects->addcash)
 	{
 		resource.SetMoney(resource.GetMoney() + minigameobjects->cash);
@@ -678,54 +666,35 @@ void CPlayState::Update(CGameStateManager* theGSM)
 	}
 
 	if (sizechanged)
-		{
-			OKbutton->Set(240,580,400,460);
-			returnbutton->Set(360,460,230,260);
-			Choice1->Set(300,520,460,520);
-			Choice2->Set(350,450,520,580);
-			sizechanged = false;
-		}
-
-		if(OKbutton->buttonclicked)
-		{
-			theCamera->canPan = true;
-			REvent.IsDisplay = false;
-			mouseInfo.mLButtonUp = false;
-			OKbutton->buttonclicked = false;
-		}
-
-		if(Choice1->buttonclicked)
-		{ 
-			TheChoice->popup = false;
-			mouseInfo.mLButtonUp = false;
-			Choice1->buttonclicked = false;
-		}
-
-			if(Choice2->buttonclicked)
-		{
-			TheChoice->popup = false;
-			mouseInfo.mLButtonUp = false;
-			Choice2->buttonclicked = false;
-		}
+	{
+		OKbutton->Set(240,580,400,460);
+		returnbutton->Set(360,460,230,260);
+		Choice1->Set(300,520,460,520);
+		Choice2->Set(350,450,520,580);
+		sizechanged = false;
+	}
+	if(OKbutton->buttonclicked)
+	{
+		theCamera->canPan = true;
+		REvent.IsDisplay = false;
+		mouseInfo.mLButtonUp = false;
+		OKbutton->buttonclicked = false;
+	}
+	if(Choice1->buttonclicked)
+	{ 
+		TheChoice->popup = false;
+		mouseInfo.mLButtonUp = false;
+		Choice1->buttonclicked = false;
+	}
+	if(Choice2->buttonclicked)
+	{
+		TheChoice->popup = false;
+		mouseInfo.mLButtonUp = false;
+		Choice2->buttonclicked = false;
+	}
 
 	if (REvent.IsDisplay ==false)
 	{
-		//Time progression
-		if(Dtimer < 302)
-		{
-			//Dtimer++;
-			
-			/*if (Dtimer >= 300)
-			{
-				day +=1;
-				REvent.IsDisplay = true;
-				REvent.Random();
-				REvent.CreateEventz(REvent.type);
-				theCamera->canPan = false;
-				Dtimer = 0;
-			}*/
-		}
-		//
 		myGameUI.Update();
 		//tile selection check
 		
@@ -832,8 +801,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 									Citizens->index++;
 									}
 								}
-							}
-							else
+							}else
 							{
 								if ((position -Citizens->GetPosition()).LengthSquared() > (0))
 								{
@@ -845,16 +813,14 @@ void CPlayState::Update(CGameStateManager* theGSM)
 								{
 									if(Citizens->index > 0)
 									{
-									Citizens->index--;
-									}
-									else
+										Citizens->index--;
+									}else
 									{
 										Citizens->MovedBack=false;
 										Citizens->Movedout=false;
 									}
 								}
 							}
-							
 						}
 					}
 				}
@@ -883,7 +849,6 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		{
 			minigameobjects->Update();
 		}
-
 	}
 }
 
@@ -893,7 +858,6 @@ void CPlayState::DrawTileContent()
 	{
 		for(int x = 0; x < COLS; x += 1)
 		{
-			//myTile[y][x].SetIsClickedOn(true);
 			if(Map[y][x] == 219)
 			{//3 = UNBUILDABLE
 				myTile[y][x].SetType(4);
@@ -903,7 +867,6 @@ void CPlayState::DrawTileContent()
 			{//
 				myTile[y][x].SetBtype(1);
 			}
-
 			if(Map[y][x] == 2)
 			{
 				myTile[y][x].SetBtype(2);
@@ -956,14 +919,9 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 
 	if(minigameobjects->minigame)
 	{
-		//if(minigameobjects->timer <= 0)
-		//{
-				
-		//}
 		glTranslatef(0,0,-10);
 		minigameobjects->Draw();
 	}	
-
 	DrawTileContent();
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 	{	
@@ -973,18 +931,12 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 			Citizens->Draw();
 		}
 	}
-	
 	//Enable 2D text display and HUD
 	theCamera->SetHUD( true);
 	
 	myGameUI.Draw(0,height - 50);
 	myGameUI.DrawSelect(750,50,myTile[SelectorY][SelectorX].GetModeOn(),myTile[SelectorY][SelectorX].GetBtype());
-	//print(our_font,0,height-300,"OwnerName: %s",myTile[SelectorY][SelectorX].myHouse.GetOwner().c_str());
-	/*print(our_font,0,height-300,"Day: %d\n", day);
-	print(our_font,0,height-400,"Timer: %d\n", Dtimer);*/
-	
 	print(our_font,0,height-500,"Cash: %d\n", resource.GetMoney());
-	print(our_font,0,height-400,"w: %f h: %f", width,height);
 	RenderUI();
 	if(minigameobjects->minigame)
 	{
@@ -993,7 +945,6 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 			returnbutton->Render();
 		}
 	}
-	
 	if(REvent.IsDisplay == true)
 	{
 		REvent.HandleREvents(REvent.type);
@@ -1057,8 +1008,6 @@ Citizen* CPlayState::FetchObject()
 	CitizenList.push_back(go);
 	return go;
 }
-
-
 
 void CPlayState::ClearTileMap(void)
 {

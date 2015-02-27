@@ -116,10 +116,6 @@ class CPlayState : public CGameState
 		
 	private:
 		static CPlayState thePlayState;
-
-		//Day progressino
-		int day;
-		int Dtimer;
 		//button
 		ButtonClass* OKbutton;
 		ButtonClass* Choice1;
@@ -167,7 +163,6 @@ class CPlayState : public CGameState
 		//mg time (separate to other times)
 		/*int spritectime, spriteptime, tctime, tptime, timer;
 		ISound* mgsfx;*/
-		int typeS;
 		float width, height;
 
 		GameUI myGameUI;
