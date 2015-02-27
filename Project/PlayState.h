@@ -113,7 +113,7 @@ class CPlayState : public CGameState
 			}
 		}
 		bool sizechanged;
-
+		
 	private:
 		static CPlayState thePlayState;
 

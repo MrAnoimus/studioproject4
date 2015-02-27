@@ -758,21 +758,64 @@ void CPlayState::Update(CGameStateManager* theGSM)
 							position.x = Citizens->CitizenDestination->DestinationList[Citizens->index]->x;
 							position.y = Citizens->CitizenDestination->DestinationList[Citizens->index]->y;
 							position.z = Citizens->GetPosition().z;
-							if ((position -Citizens->GetPosition()).LengthSquared() > (0))
+							if(Citizens->MovedBack==false)
 							{
-								Vector3D direction(position - Citizens->GetPosition());
-								Citizens->Position.x += direction.Normalized().x;
-								Citizens->Position.y += direction.Normalized().y;
-							}
-							if(Citizens->GetPosition().x== position.x && Citizens->GetPosition().y == position.y)
-							{
-								if(Citizens->index < Citizens->CitizenDestination->DestinationList.size()-1)
+								if ((position -Citizens->GetPosition()).LengthSquared() > (0))
 								{
-								Citizens->index++;
+									Vector3D direction(position - Citizens->GetPosition());
+									Citizens->Position.x += direction.Normalized().x;
+									Citizens->Position.y += direction.Normalized().y;
+								}
+								if(Citizens->GetPosition().x== position.x && Citizens->GetPosition().y == position.y)
+								{
+									if(Citizens->index < Citizens->CitizenDestination->DestinationList.size()-1)
+									{
+									Citizens->index++;
+									}
+								}
+							}
+							else
+							{
+								if ((position -Citizens->GetPosition()).LengthSquared() > (0))
+								{
+									Vector3D direction(position - Citizens->GetPosition());
+									Citizens->Position.x += direction.Normalized().x;
+									Citizens->Position.y += direction.Normalized().y;
+								}
+								if(Citizens->GetPosition().x== position.x && Citizens->GetPosition().y == position.y)
+								{
+									if(Citizens->index > 0)
+									{
+									Citizens->index--;
+									}
+									else
+									{
+										Citizens->MovedBack=false;
+										Citizens->Movedout=false;
+									}
 								}
 							}
 							
 						}
+					}
+				}
+				for(int y = 0; y < ROWS; y += 1)
+				{
+					for(int x = 0; x < COLS; x += 1)
+					{
+						if(myTile[y][x].GetPosition().x+50>=Citizens->GetPosition().x
+							&&myTile[y][x].GetPosition().x-50<=Citizens->GetPosition().x
+							&&myTile[y][x].GetPosition().y+50>=Citizens->GetPosition().y
+							&&myTile[y][x].GetPosition().y-50<=Citizens->GetPosition().y)
+							{
+								if(myTile[y][x].GetEmpty()==true)
+								{
+									if(myTile[y][x].myHouse.GetOwner()==Citizens->GetName())
+									{
+										Citizens->MovedBack=true;
+									}
+								}
+							}
 					}
 				}
 			}	

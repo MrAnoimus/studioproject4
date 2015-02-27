@@ -82,6 +82,7 @@ public:
 	std::string GetName(void);
 
 	bool Movedout;
+	bool MovedBack;
 private:
 	int dir;
 	

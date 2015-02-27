@@ -3,18 +3,20 @@
 
 
 Citizen::Citizen(void)
+
 	:TheMoods(Citizen::SAD)
 	,TheFavourites(Citizen::SLACK)
 	,TheBuildings(Citizen::NOTHING)
 	,happy(false)
 	,HappinessLevels(0)
-	,active(true)
+	,active(false)
 	,AnimationCounter(0.0f)
 	,AnimationInvert(false)
 	,RenderMood(false)
 	,Name("JunHwee")
 	,index(0)
 	,Movedout(false)
+	,MovedBack(false)
 	
 {
 	glEnable(GL_TEXTURE_2D);
