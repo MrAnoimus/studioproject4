@@ -20,12 +20,80 @@ void GameUI::Init()
 	LoadTGA(&SelectionTexture[3],"Textures/UI/Btype3.tga");
 	LoadTGA(&SelectionTexture[4],"Textures/UI/Btype4.tga");
 	LoadTGA(&SelectionTexture[5],"Textures/UI/Btype5.tga");
+
+	LoadTGA(&MoneyTexture,"Textures/UI/money.tga");
+	LoadTGA(&ManTexture,"Textures/UI/money.tga");
+	LoadTGA(&citizenTexture,"Textures/UI/money.tga");
 	myGameTime.Init();
 	this->size = 50;
 }
 void GameUI::Update()
 {
 	myGameTime.Update();
+}
+void GameUI::DrawResourceData(int x , int y,int money , int manpower , int citizennum)
+{
+	print(Time_Font,x,y,"$$ :%d", money);
+}
+void GameUI::DrawResource(int x , int y)
+{
+	glEnable(GL_BLEND);
+	glEnable(GL_TEXTURE_2D);
+	glPushMatrix();
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glTranslatef(x,y,0);
+		glBindTexture(GL_TEXTURE_2D, MoneyTexture.id);
+		glPushMatrix();
+			glBegin(GL_QUADS);
+				glTexCoord2f(0,0);
+				glVertex2f(-25,25);
+				glTexCoord2f(1,0);
+				glVertex2f(25,25);
+				glTexCoord2f(1,1);
+				glVertex2f(25,-25);
+				glTexCoord2f(0,1);
+				glVertex2f(-25,-25);
+			glEnd();
+		glPopMatrix();
+	glPopMatrix();
+	//
+	glPushMatrix();
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glTranslatef(x,y,0);
+		glBindTexture(GL_TEXTURE_2D, ManTexture.id);
+		glPushMatrix();
+			glBegin(GL_QUADS);
+				glTexCoord2f(0,0);
+				glVertex2f(-25,25);
+				glTexCoord2f(1,0);
+				glVertex2f(25,25);
+				glTexCoord2f(1,1);
+				glVertex2f(25,-25);
+				glTexCoord2f(0,1);
+				glVertex2f(-25,-25);
+			glEnd();
+		glPopMatrix();
+	glPopMatrix();
+	//
+	glPushMatrix();
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glTranslatef(x,y,0);
+		glBindTexture(GL_TEXTURE_2D, citizenTexture.id);
+		glPushMatrix();
+			glBegin(GL_QUADS);
+				glTexCoord2f(0,0);
+				glVertex2f(-25,25);
+				glTexCoord2f(1,0);
+				glVertex2f(25,25);
+				glTexCoord2f(1,1);
+				glVertex2f(25,-25);
+				glTexCoord2f(0,1);
+				glVertex2f(-25,-25);
+			glEnd();
+		glPopMatrix();
+	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
 }
 void GameUI::DrawSelect(int x , int y ,bool mode , int type)
 {

@@ -231,7 +231,6 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 										//resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
 										Map[SelectorY][SelectorX]=10;
 									}
-									
 								}
 							}
 						}
@@ -403,7 +402,6 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 		{
 			minigameobjects->minigame = true;
 			minigameobjects->playing = true;
-			//theCamera->canPan = !theCamera->canPan;
 		}
 		if(myKeys['s'] == true)
 		{
@@ -419,6 +417,7 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 					myTile[y][x].SetModeOn(!myTile[y][x].GetModeOn());
 				}
 			}
+			theCamera->canPan = !theCamera->canPan;
 		}
 
 		if(myKeys['k'] == true)
@@ -739,26 +738,24 @@ void CPlayState::Update(CGameStateManager* theGSM)
 			}else
 			{
 				SelectorY = ((-mouseInfo.lastY + height+(offsetY/4))/ offsetY);
-			}
-
-			if(SelectorY >= 6)
-			{
-				SelectorY =5;
-			}
-			if(SelectorY<1)
-			{
-				SelectorY =0;
-			}
-
-			if(SelectorX >7)
-			{
-				SelectorY = 7;
-			}
-			if(SelectorX<1)
-			{
-				SelectorX =0;
-			}
+			}	
 			//////
+		}
+		if(SelectorX >7)
+		{
+			SelectorX = 7;
+		}
+		if(SelectorX <1)
+		{
+			SelectorX =0;
+		}
+		if(SelectorY > 5)
+		{
+			SelectorY =5;
+		}
+		if(SelectorY<0)
+		{
+			SelectorY =0;
 		}
 		for(int y = 0; y < ROWS; y += 1)
 		{
@@ -774,18 +771,8 @@ void CPlayState::Update(CGameStateManager* theGSM)
 						myTile[y][x].SetIsSelected(false);
 					}
 					myTile[SelectorY][SelectorX].SetIsSelected(true);
-				}//!clean up sometime later watch out list
-				if(	myTile[y][x].GetModeOn() == true)
-				{
-					myTile[y][x].Update();
-				}else
-				{	
-					if(myTile[y][x].IsClickedOn() == false)
-					{
-						myTile[y][x].SetBtype(0);
-					}
-					myTile[y][x].Update();
 				}
+				myTile[y][x].Update();
 			}
 		}
 		for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
@@ -957,7 +944,9 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	
 	myGameUI.Draw(0,height - 50);
 	myGameUI.DrawSelect(750,50,myTile[SelectorY][SelectorX].GetModeOn(),myTile[SelectorY][SelectorX].GetBtype());
-	print(our_font,0,height-500,"Cash: %d\n", resource.GetMoney());
+	myGameUI.DrawResource(725,130);
+	myGameUI.DrawResourceData(width-200,height-310,resource.GetMoney(),100,100);
+	print(our_font,0,250,"PickX :%d PickY:%d",SelectorX,SelectorY);
 	RenderUI();
 	if(minigameobjects->minigame)
 	{
