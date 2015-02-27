@@ -11,7 +11,7 @@ class GameUI
 		CGameTime myGameTime;
 		int size;
 	public:
-		TextureImage SelectionTexture[3];
+		TextureImage SelectionTexture[6];
 		GameUI(void);
 		~GameUI(void);
 		void Init();

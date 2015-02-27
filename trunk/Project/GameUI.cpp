@@ -14,9 +14,12 @@ GameUI::~GameUI(void)
 void GameUI::Init()
 {
 	Time_Font.init("Fonts/trsmillionrg.TTF", 42);
-	LoadTGA(&SelectionTexture[0],"Textures/UI/Btype1.tga");
-	LoadTGA(&SelectionTexture[1],"Textures/UI/Btype2.tga");
-	LoadTGA(&SelectionTexture[2],"Textures/UI/Btype3.tga");
+	LoadTGA(&SelectionTexture[0],"Textures/UI/Btype0.tga");
+	LoadTGA(&SelectionTexture[1],"Textures/UI/Btype1.tga");
+	LoadTGA(&SelectionTexture[2],"Textures/UI/Btype2.tga");
+	LoadTGA(&SelectionTexture[3],"Textures/UI/Btype3.tga");
+	LoadTGA(&SelectionTexture[4],"Textures/UI/Btype4.tga");
+	LoadTGA(&SelectionTexture[5],"Textures/UI/Btype5.tga");
 	myGameTime.Init();
 	this->size = 50;
 }
@@ -35,17 +38,29 @@ void GameUI::DrawSelect(int x , int y ,bool mode , int type)
 			glTranslatef(x,y,0);
 			switch(type)
 			{
-				case 1 :
+				case 0:
 				{
 					glBindTexture(GL_TEXTURE_2D, SelectionTexture[0].id);
 				}break;
-				case 2 :
+				case 1 :
 				{
 					glBindTexture(GL_TEXTURE_2D, SelectionTexture[1].id);
 				}break;
-				case 3 :
+				case 2 :
 				{
 					glBindTexture(GL_TEXTURE_2D, SelectionTexture[2].id);
+				}break;
+				case 3 :
+				{
+					glBindTexture(GL_TEXTURE_2D, SelectionTexture[3].id);
+				}break;
+				case 4:
+				{
+					glBindTexture(GL_TEXTURE_2D, SelectionTexture[4].id);
+				}break;
+				case 5:
+				{
+					glBindTexture(GL_TEXTURE_2D, SelectionTexture[5].id);
 				}break;
 			}
 			glPushMatrix();
