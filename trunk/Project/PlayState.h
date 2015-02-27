@@ -62,7 +62,7 @@ class CPlayState : public CGameState
 		void Pause();
 		void Resume();
 
-		void HandleREvents(int type);
+		//void HandleREvents(int type);
 		void HandleEvents(CGameStateManager* theGSM);
 		void Update(CGameStateManager* theGSM);
 		//draw function start here
@@ -122,6 +122,8 @@ class CPlayState : public CGameState
 		int Dtimer;
 		//button
 		ButtonClass* OKbutton;
+		ButtonClass* Choice1;
+		ButtonClass* Choice2;
 		//minigame buttons
 		ButtonClass* returnbutton;
 		std::vector<ButtonClass*> ListofButtons;
@@ -135,7 +137,7 @@ class CPlayState : public CGameState
 		//texture
 		TextureImage BackgroundTexture;
 		TextureImage MenuTexture[2];
-		TextureImage EventTexture[10];
+		
 		
 		//keyboard and mouse
 		bool myKeys[255];

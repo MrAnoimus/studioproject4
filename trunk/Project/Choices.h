@@ -9,18 +9,18 @@ public:
 	Choices(void);
 	~Choices(void);
 
-	void Draw();
+	void Draw(int type);
 	int GetNumOfChoice();
 	void SetNumOfChoice(int NumOfChoice);
 
 	//texture for choices
-	TextureImage ChoiceBG;
-	TextureImage CheapTree;
-	TextureImage ExpensiveTree;
+	TextureImage ChoiceBG[5];
+	TextureImage Choice1[5];
+	TextureImage Choice2[5];
 
 	void SetPopup(bool Up);
 	void DrawInGameText(std::string Text);
-
+	bool popup;
 	//fonts
 	freetype::font_data our_font;
 private:
@@ -29,7 +29,7 @@ private:
 	bool choice2;
 	bool selected;
 
-	bool popup;
+	
 
 };
 

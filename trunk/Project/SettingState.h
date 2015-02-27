@@ -5,6 +5,10 @@
 
 #include "GameState.h"
 #include "freeType.h"
+//button
+#include "ButtonClass.h"
+#include "freeType.h"
+#include "Definitions.h"
 
 class CSettingState : public CGameState
 
@@ -17,16 +21,6 @@ class CSettingState : public CGameState
 		bool middleButtonUp;
 		int  lastX, lastY;
 	}theMouseInfo;
-
-	//texture info
-	typedef struct												// Create A Structure
-	{
-		GLubyte	*imageData;										// Image Data (Up To 32 Bits)
-		GLuint	bpp;											// Image Color Depth In Bits Per Pixel.
-		GLuint	width;											// Image Width
-		GLuint	height;											// Image Height
-		GLuint	texID;											// Texture ID Used To Select A Texture
-	}TextureImage;
 
 public:
 
@@ -66,6 +60,7 @@ public:
 			}
 		}
 private:
+		bool sizechanged;
 		static CSettingState theSettingState;
 		bool LoadTGA(TextureImage *texture, char *filename);
 		// The camera
@@ -108,7 +103,12 @@ private:
 		freetype::font_data our_font;
 		GLfloat	cnt1;
 		
-
+		//button
+		ButtonClass* SaveButton;
+		ButtonClass* ExitButton;
+		ButtonClass* PlusButton;
+		ButtonClass* MinusButton;
+		std::vector<ButtonClass*> ListofButtons;
 };
 
 #endif
