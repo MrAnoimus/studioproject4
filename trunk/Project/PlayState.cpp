@@ -1007,7 +1007,6 @@ Citizen* CPlayState::FetchObject()
 	go->SetName(str);
 	CitizenList.push_back(go);
 	return go;
-}
 
 void CPlayState::ClearTileMap(void)
 {
