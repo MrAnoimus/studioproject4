@@ -51,7 +51,7 @@ public:
 	std::string GetMood();
 	Citizen(void);
 	~Citizen(void);
-	void Draw(void);
+	void Draw(float PositionX, float PositionY);
 
 	void SetFavourite(Favourite MyFavourites);
 	void SetPlace(std::string tag, int number);
@@ -72,8 +72,6 @@ public:
 	void SetAnimationCounter(int AnimationCounter);
 	int GetAnimationCounter(void);
 	
-	
-
 	bool RenderMood;
 
 	void StatsBoard(void);
