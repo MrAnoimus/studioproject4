@@ -422,6 +422,12 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 				}
 			}
 			theCamera->canPan = !theCamera->canPan;
+			for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+			{
+				Citizen *Citizens = *it;
+				Citizens->RenderMood=false;
+				
+			}
 		}
 
 		if(myKeys['k'] == true)
@@ -746,9 +752,10 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		mouseInfo.mLButtonUp = false;
 		Choice2->buttonclicked = false;
 	}
-
+	
 	if (REvent.IsDisplay ==false)
 	{
+		
 		myGameUI.Update();
 		//tile selection check
 		
@@ -775,6 +782,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 			}	
 			//////
 		}
+		
 		if(SelectorX >7)
 		{
 			SelectorX = 7;
@@ -895,34 +903,26 @@ void CPlayState::Update(CGameStateManager* theGSM)
 			minigameobjects->Update();
 		}
 	}
-	if(!myTile[SelectorY][SelectorX].GetModeOn()&&myTile[SelectorY][SelectorX].IsClickedOn())
-	{
+	
 		for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 		{
 			Citizen *Citizens = *it;
-			if (Citizens->active == true&&Citizens->Movedout==true)
+			if (Citizens->active == true)
 			{	
-				if(myTile[SelectorY][SelectorX].GetEmpty()==false)
+				if(myTile[SelectorY][SelectorX].myHouse.GetOwner()==Citizens->GetName())
 				{
 					Citizens->RenderMood=true;
+					
 				}
 				else
 				{
 					Citizens->RenderMood=false;
 				}
 			}
-			else
-			{
-				Citizens->RenderMood=false;
-			}
-
-			if(myTile[SelectorY][SelectorX].GetEmpty())
-			{
-				Citizens->RenderMood=false;
-			}
-			
+		
 		}
-	}
+	
+
 }
 void CPlayState::DrawTileContent()
 {
@@ -1002,7 +1002,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 		Citizen *Citizens = *it;
 		if (Citizens->active == true)
 		{
-			Citizens->Draw();
+			Citizens->Draw(SelectorX*100, SelectorY*100);
 		}
 	}
 	//Enable 2D text display and HUD

@@ -1,7 +1,5 @@
 #include "Citizen.h"
 
-
-
 Citizen::Citizen(void)
 
 	:TheMoods(Citizen::SAD)
@@ -191,7 +189,7 @@ std::string Citizen::GetMood(void)
 		return "SAD";
 		break;
 	case ENRAGE:
-		return "ENRAGE";
+		return "ENRAGED";
 		break;
 	case OKAY:
 		return "OKAY";
@@ -226,20 +224,17 @@ std::string Citizen::GetPlace(int i)
 	}
 }
 
-void Citizen::Draw()
+void Citizen::Draw(float PositionX, float PositionY)
 {
 	glEnable(GL_TEXTURE_2D);
 	if(this->RenderMood==true)
 	{
 		glPushMatrix();
-		glTranslatef(this->GetPosition().x-220,this->GetPosition().y,-5);
+		glTranslatef(PositionX-200,PositionY,-5);
 		this->StatsBoard();
 		glPopMatrix();
 	}
-	else
-	{
-
-	}
+	
 	glPushMatrix();
 	glTranslatef(this->GetPosition().x,this->GetPosition().y,-2);
 	RenderCitizen();
@@ -343,88 +338,91 @@ int Citizen::GetAnimationCounter(void)
 
 void Citizen::StatsBoard(void)
 {
+	
 	int TranslateZ=-1;
 	glPushMatrix();
-	glTranslatef(85,50,TranslateZ);
-	DrawInGameText("Current Mood:");
+		glTranslatef(85,50,TranslateZ);
+		DrawInGameText("Current Mood:");
 	glPopMatrix();
 
 	glColor3f(1,1,1);
+	glEnable(GL_BLEND);//blend 1
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//
+	glEnable(GL_TEXTURE_2D);//texture 1
+	glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, StatsBG.id);
+		DrawSquare(180,100);
+	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);//end of texture 1
+	//
 
 	glPushMatrix();
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, StatsBG.id);
-	DrawSquare(180,100);
-	glPopMatrix();
+		glEnable(GL_TEXTURE_2D);//texture 2
+		glTranslatef(-70,50,-1);
 
-
-	glPushMatrix();
-	glTranslatef(-70,50,-1);
-
-	if(this->GetMood()=="HAPPY")
-	{
-		glBindTexture(GL_TEXTURE_2D,Happy.id);
-	}
-	else if(this->GetMood()=="ENRAGED")
-	{
-		glBindTexture(GL_TEXTURE_2D, Enraged.id);
-	}
-	else if(this->GetMood()=="SAD")
-	{
-		glBindTexture(GL_TEXTURE_2D, Sad.id);
-	}
-	else if(this->GetMood()=="OKAY")
-	{
-		glBindTexture(GL_TEXTURE_2D, Okay.id);
-	}
-	DrawSquare(20,20);
-	glPushMatrix();
-	glTranslatef(6,-40,-1);
-	//DrawInGameText(GetMood());
-	glPopMatrix();
-
-	glPopMatrix();
-
-
-	glPushMatrix();
-	glTranslatef(0,-5,TranslateZ);
-	glPushMatrix();
-	glTranslatef(90,80,0);
-	DrawInGameText("Name/Owner:");
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-30,80,TranslateZ);
-	DrawInGameText(owner);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(90,0,TranslateZ);
-	DrawInGameText("Favourite:");
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-30,0,TranslateZ);
-	DrawInGameText(GetFavourites());
-	glPopMatrix();
-
-	glTranslatef(0,-25,TranslateZ);
-	glPushMatrix();
-	glTranslatef(140,0,0);
-	DrawInGameText("NearbyPlace:");
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-30,0,TranslateZ);
-	int translateY = 10;
-	for(int i =0; i<4; i++)
-	{
-		translateY -=10;
-		glTranslatef(0, translateY ,0);
-		DrawInGameText(GetPlace(i));
+		if(this->GetMood()=="HAPPY")
+		{
+			glBindTexture(GL_TEXTURE_2D,Happy.id);
+		}
+		else if(this->GetMood()=="ENRAGED")
+		{
+			glBindTexture(GL_TEXTURE_2D, Enraged.id);
+		}
+		else if(this->GetMood()=="SAD")
+		{
+			glBindTexture(GL_TEXTURE_2D, Sad.id);
+		}
+		else if(this->GetMood()=="OKAY")
+		{
+			glBindTexture(GL_TEXTURE_2D, Okay.id);
+		}
 		
-	}
+		DrawSquare(20,20);
+		glDisable(GL_TEXTURE_2D);//end of texture 2
+		
+	glPopMatrix();
+	glDisable(GL_BLEND);//end of blend 1
+
+	glPushMatrix();
+		glTranslatef(0,-5,TranslateZ);
+		glPushMatrix();
+			glTranslatef(90,80,0);
+			DrawInGameText("Name/Owner:");
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef(-30,80,TranslateZ);
+			DrawInGameText(owner);
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef(90,0,TranslateZ);
+			DrawInGameText("Favourite:");
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef(-30,0,TranslateZ);
+			DrawInGameText(GetFavourites());
+		glPopMatrix();
+
+		glTranslatef(0,-25,TranslateZ);
+		glPushMatrix();
+			glTranslatef(140,0,0);
+			DrawInGameText("NearbyPlace:");
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef(-30,0,TranslateZ);
+			int translateY = 10;
+			for(int i =0; i<4; i++)
+			{
+				translateY -=10;
+				glTranslatef(0, translateY ,0);
+				DrawInGameText(GetPlace(i));
+		
+			}
 	
-	glPopMatrix();
+		glPopMatrix();
 	glPopMatrix();
 
-
+	
 
 }
 
