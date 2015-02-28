@@ -37,7 +37,8 @@ public:
 	{
 		EATINGPLACE,
 		WORKPLACE,
-		NOTHING
+		NOTHING,
+		HOUSES
 	};
 
 	
@@ -56,7 +57,7 @@ public:
 	void SetPlace(std::string tag, int number);
 	
 	std::string GetFavourites(void);
-	std::string GetPlace(void);
+	std::string GetPlace(int i);
 
 	void RenderCitizen();
 
