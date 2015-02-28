@@ -71,31 +71,6 @@ void Citizen::MoodUpdate()
 {
 	int time = glutGet(GLUT_ELAPSED_TIME);
 	static int ctime = glutGet(GLUT_ELAPSED_TIME);
-	//std::cout <<"Citizen Position: " << GetPosition().x << std::endl;
-	//if(dir==1)
-	//{
-	//	AnimationInvert=false;
-	//	if(GetPosition().x+1<800)
-	//	{
-	//	//SetPosition(Vector3D(GetPosition().x+1,GetPosition().y,GetPosition().z));
-	//	}
-	//	else
-	//	{
-	//		dir=2;
-	//	}
-	//}
-	//else if(dir==2)
-	//{
-	//	AnimationInvert=true;
-	//	if(GetPosition().x-1>0)
-	//	{
-	//	//SetPosition(Vector3D(GetPosition().x-1,GetPosition().y,GetPosition().z));
-	//	}
-	//	else
-	//	{
-	//		dir=1;
-	//	}
-	//}
 	if (time - ctime > 300) 
 	{
 		dir = rand() % 2 + 1;
@@ -106,33 +81,45 @@ void Citizen::MoodUpdate()
 		}
 		ctime = time;
 	}
-	for(int i=0; i <3; i++)
+	for(int i=0; i <4; i++)
 	{
+
 		if(TheFavourites == Citizen::FOOD)
 		{
 			if(TheBuildings[i]==Citizen::EATINGPLACE)
 			{
 				this->happy=true;
+				break;
 			}
+			else
+			{
+				this->happy=false;
+			}
+
 		}
-		else if(TheFavourites == Citizen::WORK)
+		if(TheFavourites == Citizen::WORK)
 		{
 			if(TheBuildings[i]==Citizen::WORKPLACE)
 			{
 				this->happy=true;
+				break;
+			}else
+			{
+				this->happy=false;
 			}
 		}
-		else if(TheFavourites == Citizen::NOTHING)
+		if(TheFavourites == Citizen::SLACK)
 		{
 			if(TheBuildings[i]==Citizen::NOTHING)
 			{
 				this->happy=true;
+				break;
+			}else
+			{
+				this->happy=false;
 			}
 		}
-		else
-		{
-			this->happy=false;
-		}
+		
 	}
 	if(this->happy==true)
 	{
@@ -215,10 +202,8 @@ std::string Citizen::GetMood(void)
 	}
 }
 
-std::string Citizen::GetPlace(void)
+std::string Citizen::GetPlace(int i)
 {
-	for(int i =0; i <3 ; i++)
-	{
 	
 	switch(TheBuildings[i])
 	{
@@ -231,10 +216,13 @@ std::string Citizen::GetPlace(void)
 	case NOTHING:
 		return "NOTHING";
 		break;
+	case HOUSES:
+		return "HOUSES";
+		break;
 	default:
 		return "DEFAULT";
 		break;
-	}
+	
 	}
 }
 
@@ -278,6 +266,10 @@ void Citizen::SetPlace(std::string tag, int i)
 	if(tag =="nothing")
 	{
 		myBuilding = Citizen::NOTHING;
+	}
+	if(tag =="house")
+	{
+		myBuilding = Citizen::HOUSES;
 	}
 	this->TheBuildings[i] = myBuilding;
 }
@@ -413,14 +405,22 @@ void Citizen::StatsBoard(void)
 	DrawInGameText(GetFavourites());
 	glPopMatrix();
 
-	glTranslatef(0,-55,TranslateZ);
+	glTranslatef(0,-25,TranslateZ);
 	glPushMatrix();
-	glTranslatef(90,0,0);
+	glTranslatef(140,0,0);
 	DrawInGameText("NearbyPlace:");
 	glPopMatrix();
 	glPushMatrix();
 	glTranslatef(-30,0,TranslateZ);
-	DrawInGameText(GetPlace());
+	int translateY = 10;
+	for(int i =0; i<4; i++)
+	{
+		translateY -=10;
+		glTranslatef(0, translateY ,0);
+		DrawInGameText(GetPlace(i));
+		
+	}
+	
 	glPopMatrix();
 	glPopMatrix();
 

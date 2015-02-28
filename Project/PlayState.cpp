@@ -197,7 +197,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 								myTile[SelectorY][SelectorX].SetEmpty(true);
 								myTile[SelectorY][SelectorX].SetIsClickedOn(false);
 								Map[SelectorY][SelectorX]=10;
-								myTile[SelectorY][SelectorX].Tag ="nothing";
+								//myTile[SelectorY][SelectorX].Tag ="nothing";
 							}
 							if(myTile[SelectorY][SelectorX].GetBtype() == 1)
 							{
@@ -233,7 +233,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 										myTile[y][x].SetEmpty(false);
 										//resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
 										Map[SelectorY][SelectorX]=10;
-										myTile[y][x].Tag = "nothing";
+										//myTile[y][x].Tag = "nothing";
 									}
 								}
 							}
@@ -579,9 +579,8 @@ bool CPlayState::Init()
 		cout <<"Random2 "<<Random2<<endl;
 		if(Random == Random2)
 		{
-			
+			srand((unsigned int)i*i);
 			Random = rand()%3+1;
-			Random2 = rand()%3+1;
 		}
 		
 		cout <<"After Random "<<Random<<endl;
@@ -939,14 +938,17 @@ void CPlayState::DrawTileContent()
 			if(Map[y][x] == 1)
 			{//
 				myTile[y][x].SetBtype(1);
+				myTile[y][x].Tag = "house";
 			}
 			if(Map[y][x] == 2)
 			{
 				myTile[y][x].SetBtype(2);
+				myTile[y][x].Tag = "eatingplace";
 			}
 			if(Map[y][x] == 3)
 			{//
 				myTile[y][x].SetBtype(3);
+				myTile[y][x].Tag = "workplace";
 			}
 			if(Map[y][x] == 4)
 			{
