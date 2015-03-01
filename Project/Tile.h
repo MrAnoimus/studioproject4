@@ -6,10 +6,10 @@
 #include "Generalstore.h"
 #include "Shelter.h"
 #include "Obstacle.h"
+#include "Debris.h"
 
 class Tile
 {
-
 	enum
 	{
 		HOUSE = 0,
@@ -45,13 +45,13 @@ class Tile
 		Generalstore myGstore;
 		Shelter myShelter;
 		Obstacle myObstacle;
+		Debris myDebris;
 		GaugeBar myGaugeBar;
 		Tile(void);
 		~Tile(void);
 		TextureImage TileTexture;
 		void Init();
 		void Update();
-
 		//
 		void Draw();
 
@@ -75,7 +75,4 @@ class Tile
 		void SetPosition(Vector3D pos);
 		void SetColor(Vector3D c);
 		void SetIsClickedOn(bool co);
-
-
 };
-

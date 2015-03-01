@@ -234,6 +234,14 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 										Map[SelectorY][SelectorX]=10;
 										//myTile[y][x].Tag = "nothing";
 									}
+									if(myTile[SelectorY][SelectorX].GetBtype() == 6)
+									{
+										//once selected and click on set tile to not empty
+										myTile[y][x].SetEmpty(false);
+										//resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
+										Map[SelectorY][SelectorX]=10;
+										//myTile[y][x].Tag = "nothing";
+									}
 								}
 							}
 						}
@@ -322,17 +330,20 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 						if(myTile[SelectorY][SelectorX].GetBtype() == 1)
 						{
 							myTile[SelectorY][SelectorX].SetEmpty(false);
-							Map[SelectorY][SelectorX]=219;
+							//Map[SelectorY][SelectorX]=219;
+							Map[SelectorY][SelectorX]=220;
 						}
 						if(myTile[SelectorY][SelectorX].GetBtype() == 2)
 						{
 							myTile[SelectorY][SelectorX].SetEmpty(false);
-							Map[SelectorY][SelectorX]=219;
+							//Map[SelectorY][SelectorX]=219;
+							Map[SelectorY][SelectorX]=220;
 						}
 						if(myTile[SelectorY][SelectorX].GetBtype() == 3)
 						{
 							myTile[SelectorY][SelectorX].SetEmpty(false);
-							Map[SelectorY][SelectorX]=219;
+							//Map[SelectorY][SelectorX]=219;
+							Map[SelectorY][SelectorX]=220;
 						}
 					}
 				}
@@ -944,6 +955,11 @@ void CPlayState::DrawTileContent()
 			{//3 = UNBUILDABLE
 				myTile[y][x].SetType(4);
 				myTile[y][x].SetBtype(5);
+			}
+			if(Map[y][x] == 220)
+			{
+				myTile[y][x].SetType(4);
+				myTile[y][x].SetBtype(6);
 			}
 			if(Map[y][x] == 1)
 			{//

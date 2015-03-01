@@ -1,34 +1,33 @@
-#include "FoodCourt.h"
+#include "Debris.h"
 
 
-FoodCourt::FoodCourt(void)
+Debris::Debris(void)
 {
-
 }
 
-FoodCourt::~FoodCourt(void)
-{
 
+Debris::~Debris(void)
+{
 }
 
-void FoodCourt::Init(Vector3D pos)
+void Debris::Init(Vector3D pos)
 {
 	LoadTGA(&IsBuilding, "Textures/Building/loading.tga");
-	LoadTGA(&FoodCourtTexture, "Textures/Building/foodcourt.tga");
+	LoadTGA(&ObstacleTexture, "Textures/Building/debris.tga");
 	SetSize(50);
 	SetPosition(pos);
 	SetBPercentage(0);
-	SetCost(800);
+	SetCost(100);
 	SetTier(0);
 	this->rotationSpeed = 0.5f;
 	SetAlpha(1.0f);
 }
-void FoodCourt::Update()
+void Debris::Update()
 {
 	rotationSpeed++;
 }
 
-void FoodCourt::Draw()
+void Debris::Draw()
 {
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
@@ -36,11 +35,9 @@ void FoodCourt::Draw()
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glColor4f(1,1,1,GetAlpha());
 		glTranslatef(GetPosition().x,GetPosition().y,GetPosition().z);
-		if(GetTier() == 0)
-		{
-			glBindTexture(GL_TEXTURE_2D, FoodCourtTexture.id);
-		}
-		
+		//badland
+		glBindTexture(GL_TEXTURE_2D, ObstacleTexture.id);
+
 		glPushMatrix();
 			glBegin(GL_QUADS);
 				glTexCoord2f(1,1);
@@ -58,11 +55,11 @@ void FoodCourt::Draw()
 	glDisable(GL_BLEND);
 	glColor3f(1,1,1);
 }
-float FoodCourt::GetRSpeed()
+float Debris::GetRSpeed()
 {
 	return this->rotationSpeed;
 }
-void FoodCourt::SetRspeed(float rs)
+void Debris::SetRspeed(float rs)
 {
 	this->rotationSpeed = rs;
 }

@@ -32,6 +32,7 @@ void Tile::Init()
 	myGstore.Init(this->Position);
 	myShelter.Init(this->Position);
 	myObstacle.Init(this->Position);
+	myDebris.Init(this->Position);
 }
 void Tile::Update()
 {
@@ -100,13 +101,18 @@ void Tile::Update()
 				}break;
 				case 4:
 				{
-					myGaugeBar.update(0.5f);
+					myGaugeBar.update(1.0f);
 					myShelter.Update();
 				}break;
 				case 5:
 				{
 					myGaugeBar.update(0.5f);
 					myObstacle.Update();
+				}break;
+				case 6:
+				{
+					myGaugeBar.update(0.5f);
+					myDebris.Update();
 				}break;
 			}
 		}
@@ -163,6 +169,40 @@ void Tile::Draw()
 	{
 		DrawTileOutLine();
 		DrawTile();
+		switch(Btype)
+		{
+			case 1:
+			{
+				//set building speed
+				myHouse.SetAlpha(0.5f);
+				myHouse.Draw();
+			}break;
+			case 2:
+			{
+				myFCourt.SetAlpha(0.5f);
+				myFCourt.Draw();
+			}break;
+			case 3:
+			{
+				myGstore.SetAlpha(0.5f);
+				myGstore.Draw();
+			}break;
+			case 4:
+			{
+				myShelter.SetAlpha(0.5f);
+				myShelter.Draw();
+			}break;
+			case 5:
+			{
+				myObstacle.SetAlpha(0.5f);
+				myObstacle.Draw();
+			}break;
+			case 6:
+			{	
+				myDebris.SetAlpha(0.5f);
+				myDebris.Draw();
+			}break;
+		}
 	}else
 	{//mode off
 		Vector3D temp(0,0,-3);
@@ -207,6 +247,11 @@ void Tile::Draw()
 							myObstacle.SetPosition(this->Position+temp);
 							myObstacle.DrawBuildingbar(myObstacle.GetRSpeed());
 						}break;
+						case 6 :
+						{
+							myDebris.SetPosition(this->Position+temp);
+							myDebris.DrawBuildingbar(myDebris.GetRSpeed());
+						}break;
 					}
 				}else
 				{//bar 100%
@@ -214,25 +259,45 @@ void Tile::Draw()
 					{
 						case 1:
 						{
+							myHouse.SetAlpha(1.0f);
 							myHouse.Draw();
 						}break;
 						case 2:
 						{
+							myFCourt.SetAlpha(1.0f);
 							myFCourt.Draw();
 						}break;
 						case 3:
 						{
+							myGstore.SetAlpha(1.0f);
 							myGstore.Draw();
 						}break;
 						case 4:
 						{
+							myShelter.SetAlpha(1.0f);
 							myShelter.Draw();
 						}break;
 						case 5:
 						{
 							if(Empty)
 							{
+								myObstacle.SetAlpha(1.0f);
 								myObstacle.Draw();
+							}else
+							{
+								Selected = false;
+								ClickedOn = false;
+								myGaugeBar.setDone(false);
+								myGaugeBar.setPercentage(0);
+								Empty = true;
+							}
+						}break;
+						case 6:
+						{
+							if(Empty)
+							{
+								myDebris.SetAlpha(1.0f);
+								myDebris.Draw();
 							}else
 							{
 								Selected = false;
@@ -249,11 +314,6 @@ void Tile::Draw()
 		{//not clicked on
 			switch(Btype)
 			{
-				case 0:
-				{
-				/*	Empty = true;
-					ClickedOn = false;*/
-				}break;
 				case 1:
 				{
 					myHouse.SetPosition(this->Position+temp);
@@ -274,7 +334,6 @@ void Tile::Draw()
 					myGstore.Draw();
 					ClickedOn = true;
 					Empty = false;
-
 				}break;
 				case 4:
 				{
@@ -285,8 +344,15 @@ void Tile::Draw()
 				}break;
 				case 5:
 				{
+					myObstacle.SetAlpha(1.0f);
 					myObstacle.SetPosition(this->Position+temp);
 					myObstacle.Draw();
+				}break;
+				case 6:
+				{
+					myDebris.SetAlpha(1.0f);
+					myDebris.SetPosition(this->Position+temp);
+					myDebris.Draw();
 				}break;
 			}
 		}
