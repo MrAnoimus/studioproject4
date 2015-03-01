@@ -37,6 +37,10 @@ void Building::DrawBuildingbar(float r)
 }
 
 //getter
+float Building::GetAlpha()
+{
+	return this->Alpha;
+}
 int Building::GetTier()
 {
 	return this->Tier;
@@ -59,6 +63,10 @@ Vector3D Building::GetPosition()
 	return this->Position;
 }
 //setter
+void Building::SetAlpha(float a)
+{
+	this->Alpha = a;
+}
 void Building::SetTier(int t)
 {
 	this->Tier = t;

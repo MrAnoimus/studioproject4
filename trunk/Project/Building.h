@@ -13,6 +13,7 @@ class Building
 		float speed;
 		int Size;
 		int Tier;
+		float Alpha;
 	public:
 		
 		TextureImage IsBuilding;
@@ -22,12 +23,14 @@ class Building
 		void DrawBuildingbar(float r);
 
 		//get
+		float GetAlpha();
 		int GetTier();
 		float GetBPercentage();
 		int GetSize();
 		float GetCost();
 		Vector3D GetPosition();
 		//set
+		void SetAlpha(float a);
 		void SetTier(int t);
 		void SetBPercentage(float pc);
 		void SetSize(int size);

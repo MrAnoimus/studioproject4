@@ -19,6 +19,7 @@ void Generalstore::Init(Vector3D pos)
 	SetCost(600);
 	SetTier(0);
 	this->rotationSpeed = 0.4f;
+	SetAlpha(1.0f);
 }
 void Generalstore::Update()
 {
@@ -30,6 +31,7 @@ void Generalstore::Draw()
 	glEnable(GL_TEXTURE_2D);
 	glPushMatrix();
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glColor4f(1,1,1,GetAlpha());
 		glTranslatef(GetPosition().x,GetPosition().y,GetPosition().z);
 		if(GetTier() == 0)
 		{

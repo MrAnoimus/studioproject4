@@ -22,6 +22,7 @@ void House::Init(Vector3D pos)
 	SetTier(0);
 	this->deleted = false;
 	this->rotationSpeed = 1.0f;
+	SetAlpha(1.0f);
 }
 void House::Update()
 {
@@ -40,6 +41,7 @@ void House::Draw()
 		glEnable(GL_TEXTURE_2D);
 		glPushMatrix();
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glColor4f(1,1,1,GetAlpha());
 			glTranslatef(GetPosition().x,GetPosition().y,GetPosition().z);
 			if(GetTier() == 0)
 			{
@@ -62,7 +64,6 @@ void House::Draw()
 		glDisable(GL_BLEND);
 		glColor3f(1,1,1);
 	}
-	
 }
 bool House::GetDeleted()
 {
