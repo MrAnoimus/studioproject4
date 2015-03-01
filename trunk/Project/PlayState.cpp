@@ -148,6 +148,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 									Citizen *Citizens = *it;
 									if (Citizens->active == true&&Citizens->Movedout==false)
 									{
+										
 										if(i+1>=j)
 										{
 											Citizens->CitizenDestination->DestinationList.push_back(TheNode);
@@ -165,12 +166,6 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 											Citizens->CitizenDestination->DestinationList.push_back(TheNode);
 											break;
 										}
-									
-										/*if((Citizens->GetPosition().x != as.closeList[i]->x*100)&&(Citizens->GetPosition().y != as.closeList[i]->y*100))
-										{
-											myTile[SelectorY][SelectorX].myHouse.SetOwner(Citizens->GetName());
-										}*/
-									
 									}
 								}
 							}
@@ -190,6 +185,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 						//clicked on
 						if(myTile[SelectorY][SelectorX].IsClickedOn())
 						{
+							
 							if(myTile[SelectorY][SelectorX].GetBtype() == 0)
 							{
 								myTile[SelectorY][SelectorX].SetEmpty(true);
@@ -243,6 +239,31 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 										//resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
 										Map[SelectorY][SelectorX]=10;
 										//myTile[y][x].Tag = "nothing";
+									}
+								}
+							}
+
+							if(myTile[SelectorY][SelectorX].GetBtype()==1||myTile[SelectorY][SelectorX].GetBtype()==2||myTile[SelectorY][SelectorX].GetBtype()==3)
+							{
+								//update the previous house owners and update the place around their house to update their happiness level.
+								for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+								{
+									Citizen *Citizens = *it;
+									if(myTile[SelectorY-1][SelectorX].myHouse.GetOwner()==Citizens->GetName())
+									{
+										Citizens->SetPlace(myTile[SelectorY][SelectorX].Tag,3);
+									}
+									else if(myTile[SelectorY+1][SelectorX].myHouse.GetOwner()==Citizens->GetName())
+									{
+										Citizens->SetPlace(myTile[SelectorY][SelectorX].Tag,2);
+									}
+									else if(myTile[SelectorY][SelectorX-1].myHouse.GetOwner()==Citizens->GetName())
+									{
+										Citizens->SetPlace(myTile[SelectorY][SelectorX].Tag,1);
+									}
+									else if(myTile[SelectorY][SelectorX+1].myHouse.GetOwner()==Citizens->GetName())
+									{
+										Citizens->SetPlace(myTile[SelectorY][SelectorX].Tag,0);
 									}
 								}
 							}
