@@ -133,47 +133,46 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 						//
 						as.AddCloseList(Node);
 						if(result)
-					{
-						moving = true;
-
-						for(int i=0;i<(int)as.closeList.size();i++)
 						{
-							//Citizen stuff
-							CNode* TheNode = new CNode();
-							TheNode->x = as.closeList[i]->x*100;
-							TheNode->y = as.closeList[i]->y*100;
-							cout <<"Size: " <<(int)as.closeList.size() <<std::endl;
-							for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+							moving = true;
+							for(int i=0;i<(int)as.closeList.size();i++)
 							{
-								int j= (int)as.closeList.size();
-								Citizen *Citizens = *it;
-								if (Citizens->active == true&&Citizens->Movedout==false)
+								//Citizen stuff
+								CNode* TheNode = new CNode();
+								TheNode->x = as.closeList[i]->x*100;
+								TheNode->y = as.closeList[i]->y*100;
+								cout <<"Size: " <<(int)as.closeList.size() <<std::endl;
+								for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 								{
-									if(i+1>=j)
+									int j= (int)as.closeList.size();
+									Citizen *Citizens = *it;
+									if (Citizens->active == true&&Citizens->Movedout==false)
 									{
-										Citizens->CitizenDestination->DestinationList.push_back(TheNode);
-										myTile[SelectorY][SelectorX].myHouse.SetOwner(Citizens->GetName());
-										Citizens->owner = Citizens->GetName();
-										Citizens->SetPlace(myTile[SelectorY][SelectorX-1].Tag, 0);
-										Citizens->SetPlace(myTile[SelectorY][SelectorX+1].Tag, 1);
-										Citizens->SetPlace(myTile[SelectorY-1][SelectorX].Tag, 2);
-										Citizens->SetPlace(myTile[SelectorY+1][SelectorX].Tag, 3);
-										Citizens->Movedout=true;
-										break;
-									}
-									if(i>=1)
-									{				
-										Citizens->CitizenDestination->DestinationList.push_back(TheNode);
-										break;
-									}
+										if(i+1>=j)
+										{
+											Citizens->CitizenDestination->DestinationList.push_back(TheNode);
+											myTile[SelectorY][SelectorX].myHouse.SetOwner(Citizens->GetName());
+											Citizens->owner = Citizens->GetName();
+											Citizens->SetPlace(myTile[SelectorY][SelectorX-1].Tag, 0);
+											Citizens->SetPlace(myTile[SelectorY][SelectorX+1].Tag, 1);
+											Citizens->SetPlace(myTile[SelectorY-1][SelectorX].Tag, 2);
+											Citizens->SetPlace(myTile[SelectorY+1][SelectorX].Tag, 3);
+											Citizens->Movedout=true;
+											break;
+										}
+										if(i>=1)
+										{				
+											Citizens->CitizenDestination->DestinationList.push_back(TheNode);
+											break;
+										}
 									
-									/*if((Citizens->GetPosition().x != as.closeList[i]->x*100)&&(Citizens->GetPosition().y != as.closeList[i]->y*100))
-									{
-										myTile[SelectorY][SelectorX].myHouse.SetOwner(Citizens->GetName());
-									}*/
+										/*if((Citizens->GetPosition().x != as.closeList[i]->x*100)&&(Citizens->GetPosition().y != as.closeList[i]->y*100))
+										{
+											myTile[SelectorY][SelectorX].myHouse.SetOwner(Citizens->GetName());
+										}*/
 									
+									}
 								}
-							}
 							}
 						}
 					}
@@ -205,6 +204,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 								resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myHouse.GetCost());
 								Map[SelectorY][SelectorX]=1;
 								myTile[SelectorY][SelectorX].Tag ="house";
+								housecount+=1;
 							}
 							else if(myTile[SelectorY][SelectorX].GetBtype() == 2)
 							{
@@ -213,6 +213,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 								resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
 								Map[SelectorY][SelectorX]=2;
 								myTile[SelectorY][SelectorX].Tag ="eatingplace";
+								FcourtCount+=1;
 							}
 							else if(myTile[SelectorY][SelectorX].GetBtype() == 3)
 							{
@@ -221,6 +222,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 								resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myGstore.GetCost());
 								Map[SelectorY][SelectorX]=3;
 								myTile[SelectorY][SelectorX].Tag ="workplace";
+								GstoreCount +=1;
 							}
 							for(int y = 0; y < ROWS; y += 1)
 							{
@@ -330,20 +332,21 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 						if(myTile[SelectorY][SelectorX].GetBtype() == 1)
 						{
 							myTile[SelectorY][SelectorX].SetEmpty(false);
-							//Map[SelectorY][SelectorX]=219;
 							Map[SelectorY][SelectorX]=220;
+							//minus one house
+							housecount-=1;
 						}
 						if(myTile[SelectorY][SelectorX].GetBtype() == 2)
 						{
 							myTile[SelectorY][SelectorX].SetEmpty(false);
-							//Map[SelectorY][SelectorX]=219;
 							Map[SelectorY][SelectorX]=220;
+							FcourtCount -=1;
 						}
 						if(myTile[SelectorY][SelectorX].GetBtype() == 3)
 						{
 							myTile[SelectorY][SelectorX].SetEmpty(false);
-							//Map[SelectorY][SelectorX]=219;
 							Map[SelectorY][SelectorX]=220;
+							GstoreCount -= 1;
 						}
 					}
 				}
@@ -536,6 +539,7 @@ bool CPlayState::Init()
 	//load ttf fonts
 	our_font.init("Fonts/FFF_Tusj.TTF", 42);
 	//init keyboard values
+	housecount =0;
 	for(int i=0; i<255; i++)
 	{
 		myKeys[i] = false;
@@ -654,6 +658,25 @@ bool CPlayState::Init()
 	LoadTGA(&Choice2->button[1],"Textures/ExpensiveTree.tga");
 	Choice2->Set(500,700,460,500);
 	ListofButtons.push_back(Choice2);
+	//get amount of building etc
+	for(int y = 0; y < ROWS; y += 1)
+	{
+		for(int x = 0; x < COLS; x += 1)
+		{
+			if(Map[y][x] == 1)
+			{
+				housecount+=1;
+			}
+			if(Map[y][x] == 2)
+			{
+				FcourtCount+=1;
+			}
+			if(Map[y][x] == 3)
+			{
+				GstoreCount+=1;
+			}
+		}
+	}
 	return true;
 }
 void CPlayState::Cleanup()
@@ -700,21 +723,22 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		resource.SetWin(0);
 		theGSM->ChangeState( CResultState::Instance() );
 	}
-	static int lastTime = GetTickCount();
-	++frameCount;
-	int time = GetTickCount();
-	deltaTime = (time - lastTime) / 1000.f;
 	if(myKeys['t'] == true)
 	{
 		resource.SetWin(1);
 		theGSM->ChangeState( CResultState::Instance() );
 	}
+	static int lastTime = GetTickCount();
+	++frameCount;
+	int time = GetTickCount();
+	deltaTime = (time - lastTime) / 1000.f;
+	
 	if (myGameUI.myGameTime.daycheck == true)
 	{
-
 		REvent.IsDisplay = true;
 		REvent.Random();
 		REvent.CreateEventz(REvent.type);
+		calculateEarning();
 		theCamera->canPan = false;
 		myGameUI.myGameTime.daycheck = false;
 	}
@@ -1059,6 +1083,8 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	myGameUI.DrawResource(myGameUI.GetIconSize(),myGameUI.GetIconSize());
 	myGameUI.DrawResourceData(myGameUI.GetSize()*2,height-myGameUI.GetSize(),resource.GetMoney(),resource.GetCitizen(),resource.GetManPower());
 	//print(our_font,0,250,"PickX :%d PickY:%d",SelectorX,SelectorY);
+	print(our_font,0,250,"house number : %d",housecount);
+
 	RenderUI();
 	if(minigameobjects->minigame)
 	{
@@ -1128,6 +1154,26 @@ void CPlayState::RenderUI(void)
 		glPopMatrix();
 	}
 }
+void CPlayState::calculateEarning()
+{
+	float H_Fee = housecount * myTile[SelectorY][SelectorX].myHouse.GetMaintenanceFee();
+	float FC_Fee = FcourtCount * myTile[SelectorY][SelectorX].myFCourt.GetMaintenanceFee();
+	float GS_Fee = GstoreCount * myTile[SelectorY][SelectorX].myGstore.GetMaintenanceFee();
+	float TotalFee = H_Fee + FC_Fee + GS_Fee;
+	
+	float FC_Earning = FcourtCount * myTile[SelectorY][SelectorX].myFCourt.GetEarnings();
+	float GS_Earning = GstoreCount * myTile[SelectorY][SelectorX].myGstore.GetEarnings();
+	float ShelterFund;
+	if(myGameUI.myGameTime.GetDay() %  7 == 0 )
+	{
+		ShelterFund = myTile[SelectorY][SelectorX].myShelter.GetEarnings();
+	}else
+	{
+		ShelterFund = 0;
+	}
+	float myEarning = FC_Earning + GS_Earning + ShelterFund;
+	resource.SetMoney(resource.GetMoney() + myEarning -TotalFee );
+}
 Citizen* CPlayState::FetchObject()
 {
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
@@ -1166,7 +1212,6 @@ Citizen* CPlayState::FetchObject()
 	CitizenList.push_back(go);
 	return go;
 }
-
 void CPlayState::ClearTileMap(void)
 {
 	for(int y = 0;y<ROWS;y+=1)

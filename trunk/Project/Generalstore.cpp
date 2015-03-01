@@ -16,7 +16,9 @@ void Generalstore::Init(Vector3D pos)
 	SetSize(50);
 	SetPosition(pos);
 	SetBPercentage(0);
-	SetCost(600);
+	SetCost(400);
+	SetMaintenanceFee(150);
+	SetEarnings(300);
 	SetTier(0);
 	this->rotationSpeed = 0.4f;
 	SetAlpha(1.0f);

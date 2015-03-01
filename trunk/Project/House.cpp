@@ -18,7 +18,9 @@ void House::Init(Vector3D pos)
 	SetSize(50);
 	SetPosition(pos);
 	SetBPercentage(0);
-	SetCost(500);
+	SetCost(150);
+	SetMaintenanceFee(50);
+	SetEarnings(0);
 	SetTier(0);
 	this->deleted = false;
 	this->rotationSpeed = 1.0f;
