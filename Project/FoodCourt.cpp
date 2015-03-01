@@ -18,7 +18,9 @@ void FoodCourt::Init(Vector3D pos)
 	SetSize(50);
 	SetPosition(pos);
 	SetBPercentage(0);
-	SetCost(800);
+	SetCost(300);
+	SetMaintenanceFee(100);
+	SetEarnings(200);
 	SetTier(0);
 	this->rotationSpeed = 0.5f;
 	SetAlpha(1.0f);

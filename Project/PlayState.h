@@ -158,7 +158,11 @@ class CPlayState : public CGameState
 		Tile myTile[6][8];
 		int SelectorX;
 		int SelectorY;
-
+		int housecount;
+		int FcourtCount;
+		int GstoreCount;
+		float TotalEarning;
+		void calculateEarning();
 		//citizen stuff
 		Citizen* FetchObject();
 		std::vector<Citizen*> CitizenList;
@@ -173,5 +177,6 @@ class CPlayState : public CGameState
 		float width, height;
 
 		GameUI myGameUI;
+		
 };
 #endif

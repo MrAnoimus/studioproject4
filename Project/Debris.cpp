@@ -18,6 +18,8 @@ void Debris::Init(Vector3D pos)
 	SetPosition(pos);
 	SetBPercentage(0);
 	SetCost(100);
+	SetMaintenanceFee(0);
+	SetEarnings(0);
 	SetTier(0);
 	this->rotationSpeed = 0.5f;
 	SetAlpha(1.0f);

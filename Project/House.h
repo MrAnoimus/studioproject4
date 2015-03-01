@@ -21,6 +21,7 @@ class House : public Building
 		std::string GetOwner();
 		float GetRSpeed();
 		bool GetDeleted();
+		int GetCount();
 		//set
 		void SetOwner(std::string name);
 		void SetRspeed(float rs);

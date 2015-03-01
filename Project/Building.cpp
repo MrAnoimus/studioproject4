@@ -37,6 +37,15 @@ void Building::DrawBuildingbar(float r)
 }
 
 //getter
+float Building::GetMaintenanceFee()
+{
+	return this->MaintenanceFee;
+}
+float Building::GetEarnings()
+{
+	return this->Earnings;
+}
+
 float Building::GetAlpha()
 {
 	return this->Alpha;
@@ -63,6 +72,14 @@ Vector3D Building::GetPosition()
 	return this->Position;
 }
 //setter
+void Building::SetMaintenanceFee(float fee)
+{
+	this->MaintenanceFee = fee;
+}
+void Building::SetEarnings(float earn)
+{
+	this->Earnings = earn;
+}
 void Building::SetAlpha(float a)
 {
 	this->Alpha = a;

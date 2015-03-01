@@ -12,6 +12,8 @@ class Building
 		float BuildPercentage;
 		float speed;
 		int Size;
+		float MaintenanceFee;
+		float Earnings;
 		int Tier;
 		float Alpha;
 	public:
@@ -23,6 +25,8 @@ class Building
 		void DrawBuildingbar(float r);
 
 		//get
+		float GetMaintenanceFee();
+		float GetEarnings();
 		float GetAlpha();
 		int GetTier();
 		float GetBPercentage();
@@ -30,6 +34,8 @@ class Building
 		float GetCost();
 		Vector3D GetPosition();
 		//set
+		void SetMaintenanceFee(float fee);
+		void SetEarnings(float earn);
 		void SetAlpha(float a);
 		void SetTier(int t);
 		void SetBPercentage(float pc);
