@@ -60,7 +60,13 @@ void Tile::Update()
 		}
 		if(Type == UNBUILDABLE)
 		{
-			this->Color.Set(1,0,0);//red
+			if(Selected)
+			{
+				this->Color.Set(0,1,0);//green
+			}else
+			{
+				this->Color.Set(1,0,0);//red
+			}
 		}
 		if(!ClickedOn && !Selected && Type != UNBUILDABLE)
 		{
@@ -115,7 +121,6 @@ void Tile::DrawTileOutLine()
 		glPushMatrix();
 			glLineWidth(2);
 			glTranslatef(this->Position.x,this->Position.y,this->Position.z);
-			
 			glColor4f(0, 0, 0, 1.0f);
 			glBegin(GL_LINE_LOOP);
 				glTexCoord2f(0,0);
@@ -225,8 +230,6 @@ void Tile::Draw()
 						}break;
 						case 5:
 						{
-							myGaugeBar.setDone(false);
-							myGaugeBar.setPercentage(0);
 							if(Empty)
 							{
 								myObstacle.Draw();
@@ -288,7 +291,6 @@ void Tile::Draw()
 			}
 		}
 	}
-	
 }
 
 int Tile::GetBtype()

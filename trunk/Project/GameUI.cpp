@@ -21,74 +21,78 @@ void GameUI::Init()
 	LoadTGA(&SelectionTexture[4],"Textures/UI/Btype4.tga");
 	LoadTGA(&SelectionTexture[5],"Textures/UI/Btype5.tga");
 
-	LoadTGA(&MoneyTexture,"Textures/UI/money.tga");
-	LoadTGA(&ManTexture,"Textures/UI/money.tga");
-	LoadTGA(&citizenTexture,"Textures/UI/money.tga");
+	LoadTGA(&Icon_MoneyTexture,"Textures/UI/money.tga");
+	LoadTGA(&Icon_WorkerTexture,"Textures/UI/workerIcon.tga");
+	LoadTGA(&Icon_PopulationTexture,"Textures/UI/population_Icon.tga");
 	myGameTime.Init();
 	this->size = 50;
+	this->iconSize = 25;
 }
 void GameUI::Update()
 {
 	myGameTime.Update();
 }
-void GameUI::DrawResourceData(int x , int y,int money , int manpower , int citizennum)
+void GameUI::DrawResourceData(int x , int y,int money ,int population,int worker )
 {
-	print(Time_Font,x,y,"$$ :%d", money);
+	print(Time_Font,x,y,"$%d", money);
+	print(Time_Font,x,y-80,"%d", population);
+	print(Time_Font,x,y-160,"%d", worker);
 }
 void GameUI::DrawResource(int x , int y)
 {
+	//money
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 	glPushMatrix();
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glTranslatef(x,y,0);
-		glBindTexture(GL_TEXTURE_2D, MoneyTexture.id);
+		glBindTexture(GL_TEXTURE_2D, Icon_MoneyTexture.id);
 		glPushMatrix();
 			glBegin(GL_QUADS);
 				glTexCoord2f(0,0);
-				glVertex2f(-25,25);
+				glVertex2f(-iconSize,iconSize);
 				glTexCoord2f(1,0);
-				glVertex2f(25,25);
+				glVertex2f(iconSize,iconSize);
 				glTexCoord2f(1,1);
-				glVertex2f(25,-25);
+				glVertex2f(iconSize,-iconSize);
 				glTexCoord2f(0,1);
-				glVertex2f(-25,-25);
+				glVertex2f(-iconSize,-iconSize);
 			glEnd();
 		glPopMatrix();
 	glPopMatrix();
-	//
+	//citizen count
 	glPushMatrix();
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glTranslatef(x,y,0);
-		glBindTexture(GL_TEXTURE_2D, ManTexture.id);
+		glTranslatef(x,y+60,0);
+		glBindTexture(GL_TEXTURE_2D, Icon_PopulationTexture.id);
 		glPushMatrix();
 			glBegin(GL_QUADS);
 				glTexCoord2f(0,0);
-				glVertex2f(-25,25);
+				glVertex2f(-iconSize,iconSize);
 				glTexCoord2f(1,0);
-				glVertex2f(25,25);
+				glVertex2f(iconSize,iconSize);
 				glTexCoord2f(1,1);
-				glVertex2f(25,-25);
+				glVertex2f(iconSize,-iconSize);
 				glTexCoord2f(0,1);
-				glVertex2f(-25,-25);
+				glVertex2f(-iconSize,-iconSize);
 			glEnd();
 		glPopMatrix();
 	glPopMatrix();
-	//
+	//man power
 	glPushMatrix();
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glTranslatef(x,y,0);
-		glBindTexture(GL_TEXTURE_2D, citizenTexture.id);
+		glTranslatef(x,y+120,0);
+		glBindTexture(GL_TEXTURE_2D, Icon_WorkerTexture.id);
 		glPushMatrix();
 			glBegin(GL_QUADS);
 				glTexCoord2f(0,0);
-				glVertex2f(-25,25);
+				glVertex2f(-iconSize,iconSize);
 				glTexCoord2f(1,0);
-				glVertex2f(25,25);
+				glVertex2f(iconSize,iconSize);
 				glTexCoord2f(1,1);
-				glVertex2f(25,-25);
+				glVertex2f(iconSize,-iconSize);
 				glTexCoord2f(0,1);
-				glVertex2f(-25,-25);
+				glVertex2f(-iconSize,-iconSize);
 			glEnd();
 		glPopMatrix();
 	glPopMatrix();
@@ -150,6 +154,16 @@ void GameUI::DrawSelect(int x , int y ,bool mode , int type)
 }
 void GameUI::Draw(float x , float y)
 {
-	print(Time_Font,x,y,"Day : %d", myGameTime.GetDay());
-	print(Time_Font,x,y-100,"%d : %d", myGameTime.GetHour(),myGameTime.GetMinute());//,myGameTime.GetTimeFrame().c_str());
+	print(Time_Font,x,y,"Day : %02d", myGameTime.GetDay());
+	print(Time_Font,x,y-100,"%02d : %02d", myGameTime.GetHour(),myGameTime.GetMinute());//,myGameTime.GetTimeFrame().c_str());
+}
+
+int GameUI::GetIconSize()
+{
+	return iconSize;
+}
+
+int GameUI::GetSize()
+{
+	return size;
 }

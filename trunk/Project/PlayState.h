@@ -121,8 +121,6 @@ class CPlayState : public CGameState
 		int frameCount;
 	private:
 
-		
-
 		static CPlayState thePlayState;
 		//button
 		ButtonClass* OKbutton;
@@ -140,10 +138,9 @@ class CPlayState : public CGameState
 		float frequency;
 		//texture
 		TextureImage BackgroundTexture;
+		TextureImage BGTEST;
 		TextureImage MenuTexture[2];
 		TextureImage ResultTexture[2];
-		
-		
 		
 		//keyboard and mouse
 		bool myKeys[255];

@@ -187,7 +187,6 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 							//reset gaugebar
 							myTile[SelectorY][SelectorX].myGaugeBar.setDone(false);
 							myTile[SelectorY][SelectorX].myGaugeBar.setPercentage(0);
-
 						}
 						//clicked on
 						if(myTile[SelectorY][SelectorX].IsClickedOn())
@@ -515,6 +514,7 @@ bool CPlayState::Init()
 	//data used for testing 
 	//
 	//load texture here
+	LoadTGA(&BGTEST,"Textures/bg2.tga");
 	LoadTGA(&BackgroundTexture,"Textures/Farmbg.tga");
 	LoadTGA(&MenuTexture[0],"Textures/redbg.tga");
 	LoadTGA(&MenuTexture[1],"Textures/greenbg.tga");
@@ -814,7 +814,17 @@ void CPlayState::Update(CGameStateManager* theGSM)
 					}
 					myTile[SelectorY][SelectorX].SetIsSelected(true);
 				}
-				myTile[y][x].Update();
+				if(	myTile[y][x].GetModeOn() == true)
+				{
+					myTile[y][x].Update();
+				}else
+				{	
+					if(myTile[y][x].IsClickedOn() == false)
+					{
+						myTile[y][x].SetBtype(0);
+					}
+					myTile[y][x].Update();
+				}
 			}
 		}
 		for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
@@ -969,15 +979,14 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	theCamera->Update();
-	
+
 	minigameobjects->theCamera = theCamera;
 
 	glEnable(GL_TEXTURE_2D);
-	glPushMatrix();
 	glEnable(GL_BLEND);
+	glPushMatrix();
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glBindTexture (GL_TEXTURE_2D, BackgroundTexture.id);
-		glPushMatrix();
 			glBegin(GL_QUADS);
 			glTexCoord2f(1,1);
 			glVertex2f(0,600);
@@ -988,9 +997,29 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 			glTexCoord2f(1,0);
 			glVertex2f(0,0);				
 		glEnd();
+	glPopMatrix();
+
+	glPushMatrix();
+		//glColor3f(1,1,1);
+		glBindTexture (GL_TEXTURE_2D, BGTEST.id);
+		glTranslatef(0,200,0);
+		glPushMatrix();
+			glBegin(GL_QUADS);
+			glTexCoord2f(1,1);
+			glVertex2f(-width,height);
+			glTexCoord2f(0,1);
+			glVertex2f(width,height);
+			glTexCoord2f(0,0);
+			glVertex2f(width,-height);
+			glTexCoord2f(1,0);
+			glVertex2f(-width,-height);				
+		glEnd();
 		glPopMatrix();
+	glPopMatrix();
+	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
 
+	//
 	if(minigameobjects->minigame)
 	{
 		glTranslatef(0,0,-10);
@@ -1008,11 +1037,12 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	//Enable 2D text display and HUD
 	theCamera->SetHUD( true);
 	
-	myGameUI.Draw(0,height - 50);
-	myGameUI.DrawSelect(750,50,myTile[SelectorY][SelectorX].GetModeOn(),myTile[SelectorY][SelectorX].GetBtype());
-	myGameUI.DrawResource(725,130);
-	myGameUI.DrawResourceData(width-200,height-310,resource.GetMoney(),100,100);
-	print(our_font,0,250,"PickX :%d PickY:%d",SelectorX,SelectorY);
+	myGameUI.Draw(width-200,height - 50);
+	myGameUI.DrawSelect(750,200,myTile[SelectorY][SelectorX].GetModeOn(),myTile[SelectorY][SelectorX].GetBtype());
+	//money manpower citizen
+	myGameUI.DrawResource(myGameUI.GetIconSize(),myGameUI.GetIconSize());
+	myGameUI.DrawResourceData(myGameUI.GetSize()*2,height-myGameUI.GetSize(),resource.GetMoney(),resource.GetCitizen(),resource.GetManPower());
+	//print(our_font,0,250,"PickX :%d PickY:%d",SelectorX,SelectorY);
 	RenderUI();
 	if(minigameobjects->minigame)
 	{
