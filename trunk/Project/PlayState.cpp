@@ -461,8 +461,10 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 			for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 			{
 				Citizen *Citizens = *it;
-				Citizens->RenderMood=false;
-				
+				if(Citizens->active==true)
+				{
+					Citizens->RenderMood!= Citizens->RenderMood;
+				}
 			}
 		}
 
@@ -952,6 +954,10 @@ void CPlayState::Update(CGameStateManager* theGSM)
 				{
 					for(int x = 0; x < COLS; x += 1)
 					{
+						if(myTile[y][x].GetModeOn()==false)
+						{
+							Citizens->RenderMood=false;
+						}
 						if(myTile[y][x].GetPosition().x+50>=Citizens->GetPosition().x
 							&&myTile[y][x].GetPosition().x-50<=Citizens->GetPosition().x
 							&&myTile[y][x].GetPosition().y+50>=Citizens->GetPosition().y
@@ -988,6 +994,16 @@ void CPlayState::Update(CGameStateManager* theGSM)
 				else
 				{
 					Citizens->RenderMood=false;
+				}
+				for(int y = 0; y < ROWS; y += 1)
+				{
+					for(int x = 0; x < COLS; x += 1)
+					{
+						if(myTile[y][x].GetModeOn()==false)
+						{
+							Citizens->RenderMood=false;
+						}
+					}
 				}
 			}
 		
