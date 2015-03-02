@@ -212,11 +212,10 @@ void Tile::Draw()
 			if(!Empty)
 			{
 				//if not empty
-				Vector3D temp2(50,50,-4);
+				Vector3D temp2(50,-50,0);
 				myGaugeBar.setPos(this->Position+temp2);
 				if(myGaugeBar.getdone()==false)
 				{
-					myGaugeBar.draw();
 					switch(Btype)
 					{
 						case 1:
@@ -254,6 +253,7 @@ void Tile::Draw()
 							myDebris.DrawDestructing(myDebris.GetRSpeed());
 						}break;
 					}
+					myGaugeBar.draw();
 				}else
 				{//bar 100%
 					switch(Btype)

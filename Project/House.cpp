@@ -40,6 +40,7 @@ void House::Draw()
 	if(!deleted)
 	{
 		glEnable(GL_BLEND);
+		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_TEXTURE_2D);
 		glPushMatrix();
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -64,6 +65,7 @@ void House::Draw()
 		glPopMatrix();
 		glDisable(GL_TEXTURE_2D);
 		glDisable(GL_BLEND);
+		glDisable(GL_DEPTH_TEST);
 		glColor3f(1,1,1);
 	}
 }
