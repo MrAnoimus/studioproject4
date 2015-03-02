@@ -12,10 +12,24 @@ CResource::~CResource(void)
 }
 
 int CResource::NumOfFood = 100;
-int CResource::NumOfMoney = 100.0f;
-int	CResource::NumOfManPower = 100;
+int CResource::NumOfMoney = 100;
+int	CResource::NumOfManPower = 5;
 int	CResource::NumOfCitizen = 100;
 int	CResource::Win = 0;
+int CResource::maxManPower = 10;
+
+
+void CResource::Update()
+{
+	if(NumOfManPower<0)
+	{
+		NumOfManPower=0;
+	}
+	if(NumOfManPower>maxManPower)
+	{
+		NumOfManPower = maxManPower;
+	}
+}
 
 int CResource::GetFood(void)
 {
@@ -26,7 +40,10 @@ int CResource::GetWin(void)
 {
 	return  Win;
 }
-
+int CResource::GetMaxManPower()
+{
+	return maxManPower;
+}
 int CResource::GetManPower()
 {
 	return NumOfManPower;

@@ -201,6 +201,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 								Map[SelectorY][SelectorX]=1;
 								myTile[SelectorY][SelectorX].Tag ="house";
 								housecount+=1;
+								resource.SetManpower(resource.GetManPower() -1);
 							}
 							else if(myTile[SelectorY][SelectorX].GetBtype() == 2)
 							{
@@ -356,6 +357,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 							Map[SelectorY][SelectorX]=220;
 							//minus one house
 							housecount-=1;
+							resource.SetManpower(resource.GetManPower() +1);
 						}
 						if(myTile[SelectorY][SelectorX].GetBtype() == 2)
 						{
@@ -1105,7 +1107,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	myGameUI.DrawSelect(750,200,myTile[SelectorY][SelectorX].GetModeOn(),myTile[SelectorY][SelectorX].GetBtype());
 	//money manpower citizen
 	myGameUI.DrawResource(myGameUI.GetIconSize(),myGameUI.GetIconSize());
-	myGameUI.DrawResourceData(myGameUI.GetSize()*2,height-myGameUI.GetSize(),resource.GetMoney(),resource.GetCitizen(),resource.GetManPower());
+	myGameUI.DrawResourceData(myGameUI.GetSize()*2,height-myGameUI.GetSize()*2,resource.GetMoney(),resource.GetCitizen(),resource.GetManPower(),resource.GetMaxManPower());
 	//print(our_font,0,250,"PickX :%d PickY:%d",SelectorX,SelectorY);
 	print(our_font,0,250,"house number : %d",housecount);
 
