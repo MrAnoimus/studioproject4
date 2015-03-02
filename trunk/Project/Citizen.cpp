@@ -70,7 +70,7 @@ void Citizen::MoodUpdate()
 {
 	int time = glutGet(GLUT_ELAPSED_TIME);
 	static int ctime = glutGet(GLUT_ELAPSED_TIME);
-	if (time - ctime > 300) 
+	if (time - ctime > 100) 
 	{
 		dir = rand() % 2 + 1;
 		this->AnimationCounter--;
@@ -302,7 +302,7 @@ void Citizen::RenderCitizen(void)
 		glTexCoord2f(0.25 * AnimationCounter + 0.25, 1);
 		glVertex2f(50, 70);
 		glTexCoord2f(0.25 * AnimationCounter + 0.25, 0);
-		glVertex2f(70, 0);
+		glVertex2f(50, 0);
 		glTexCoord2f(0.25 * AnimationCounter, 0);
 		glVertex2f(0,0);
 		glTexCoord2f(0.25 * AnimationCounter, 1); 
@@ -411,11 +411,12 @@ void Citizen::StatsBoard(void)
 		glPopMatrix();
 		glPushMatrix();
 			glTranslatef(-30,0,TranslateZ);
-			int translateY = 10;
+			int translateY = 0;
 			for(int i =0; i<4; i++)
 			{
-				translateY -=10;
 				glTranslatef(0, translateY ,0);
+				translateY -=10;
+				translateY = -10;
 				DrawInGameText(GetPlace(i));
 		
 			}
