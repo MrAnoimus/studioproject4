@@ -2,12 +2,15 @@
 #ifndef INTROSTATE_H
 #define INTROSTATE_H
 
+#include "Resource.h"
 #include <mmsystem.h>
 #include "GameState.h"
 #include "freeType.h"
 
 #include "Definitions.h"
 #include "ButtonClass.h"
+
+
 
 //sound
 #include <irrKlang.h>
@@ -26,7 +29,7 @@ class CIntroState : public CGameState
 	//texture info
 
 	public:
-
+		CResource resource;
 		void changeSize(int w, int h);
 		void MouseMove (int x, int y);
 		void MouseClick(int button,int state,int x,int y);
@@ -118,6 +121,7 @@ class CIntroState : public CGameState
 		ButtonClass* startbutton;
 		ButtonClass* settingsbutton;
 		ButtonClass* exitbutton;
+		ButtonClass* contbutton;
 		std::vector<ButtonClass*> ListofButtons;
 
 };

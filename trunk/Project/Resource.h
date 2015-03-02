@@ -8,6 +8,7 @@ private:
 	static int NumOfManPower;
 	static int NumOfCitizen;
 	static int Win;
+	static int load;
 	static int maxManPower;
 public:
 
@@ -19,6 +20,9 @@ public:
 	int GetCitizen();
 	int GetWin();
 	void Update();
+	int GetLoad();
+
+	void SetLoad(int NewLoad);
 	void SetWin(int NewWin);
 	void SetFood(int NewFood);
 	void SetMoney(int NewMoney);

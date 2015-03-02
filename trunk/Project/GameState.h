@@ -23,6 +23,7 @@ class CGameState
 		virtual void MouseClick(int button,int state,int x,int y) = 0;
 		virtual void MouseMove(int x, int y) = 0;
 
+		 
 		void ChangeState(CGameStateManager* theGSM, CGameState* state)
 		{
 			theGSM->ChangeState(state);

@@ -11,6 +11,7 @@ CResource::~CResource(void)
 {
 }
 
+int CResource::load = 0;
 int CResource::NumOfFood = 100;
 int CResource::NumOfMoney = 100;
 int	CResource::NumOfManPower = 5;
@@ -44,6 +45,11 @@ int CResource::GetMaxManPower()
 {
 	return maxManPower;
 }
+int CResource::GetLoad(void)
+{
+	return load;
+}
+
 int CResource::GetManPower()
 {
 	return NumOfManPower;
@@ -82,4 +88,9 @@ void CResource::SetManpower(int NewManPower)
 void CResource::SetMoney(int NewMoney)
 {
 	NumOfMoney = NewMoney;
+}
+
+void CResource::SetLoad(int NewLoad)
+{
+	load = NewLoad;
 }

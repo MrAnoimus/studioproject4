@@ -506,10 +506,10 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 			}
 		}
 
+	
 		if(myKeys['k'] == true)
 		{
-			ofstream fout("LuaScript/save2.txt");
-			//minigame = false;
+			ofstream fout("LuaScript/Save/save2.txt");
 			if(fout.is_open())
 			{
 				cout <<endl;
@@ -524,17 +524,59 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 				}
 			}
 			fout.close();
+
+			ofstream fout2("LuaScript/Save/resource.lua");
+			if(fout2.is_open())
+			{
+				fout2<<"FOOD = "<<resource.GetFood()<<endl;
+				fout2<<"MONEY = "<<resource.GetMoney()<<endl;
+				fout2<<"MANPOWER = "<<resource.GetManPower()<<endl;
+				fout2<<"CITIZEN = "<<resource.GetCitizen()<<endl;
+			}
+			fout2.close();
+
+			ofstream fout3("LuaScript/Save/save3.txt");
+			if(fout3.is_open())
+			{
+				for(int y = 0; y < ROWS; y ++ )
+				{
+					for(int x = 0; x < COLS; x ++ )
+					{
+						if(myTile[y][x].GetBtype() == 1)
+						{
+							fout3<<myTile[y][x].myHouse.GetOwner()<<" ";
+						}
+					}
+				}
+			}
+			fout3.close();
 		}
+
 		if(myKeys['l'] == true)
 		{
 			cout <<endl;
-			for(int y = 0; y < ROWS; y ++ )
+	/*		for(int y = 0; y < ROWS; y ++ )
 			{
 				for(int x = 0; x < COLS; x ++ )
 				{
-					cout<<Map[y][x]<<",";
+					if(myTile[y][x].GetBtype() == 1)
+					{
+						cout<<myTile[y][x].myHouse.GetOwner()<<",";
+					}
+				}
+			}*/
+
+				for(int y = 0; y < ROWS; y ++ )
+			{
+				for(int x = 0; x < COLS; x ++ )
+				{
+					//if(myTile[y][x].GetBtype() == 1)
+					//{
+					cout<<myTile[y][x].GetBtype()<<",";
+					//}
 				}
 			}
+
 		}
 	}
 }
@@ -544,15 +586,82 @@ void CPlayState::KeyboardUp(unsigned char key, int x, int y)
 }
 bool CPlayState::Init()
 {
-	
-	//getting the initial array
+
+	if (resource.GetLoad() == 1)
+	{
+		ifstream ifile("LuaScript/Save/save2.txt");
+		for (int y = 0; y < ROWS; y ++ )
+		{
+			for(int x = 0; x < COLS; x ++ )
+			{
+				ifile>> Map[y][x];
+				cout << Map[y][x] <<",";
+			}
+		}
+	}
+
+	else if (resource.GetLoad()==0)
+	{
+		ifstream ifile("LuaScript/Save/DefaultM.txt");
+		for (int y = 0; y < ROWS; y ++ )
+		{
+			for(int x = 0; x < COLS; x ++ )
+			{
+				ifile>> Map[y][x];
+				cout << Map[y][x] <<",";
+			}
+		}
+	}
+	cout <<endl;
+	for(int y = 0; y < ROWS; y ++ )
+	{
+		for(int x = 0; x < COLS; x ++ )
+		{
+			//if(myTile[y][x].GetBtype() == 1)
+			//{
+			cout<<myTile[y][x].GetBtype()<<",";
+			//}
+		}
+	}
+
+
+	//cout <<"load : "<<resource.GetLoad();
+	//Citizen *go = new Citizen();
+	//go->active = true;
+	//int a = CitizenList.size();
+	//stringstream ss;
+	//ss << a;
+	//std::string str = go->GetName() + ss.str();
+	//go->SetName(str);
+	//CitizenList.push_back(go);
+
+	//for	(int y = 0; y < ROWS; y ++ )
+	//{
+	//	for(int x = 0; x < COLS; x ++ )
+	//	{
+	//		for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+	//		{
+
+	//			Citizen *Citizens = *it;
+
+	//			if ( myTile[SelectorY][SelectorX].myHouse.GetOwner() =="Hi")
+	//			{
+	//				myTile[SelectorY][SelectorX].myHouse.SetOwner(Citizens->GetName());
+	//				Citizens->owner = Citizens->GetName();
+	//			}
+	//		}
+	//	}
+	//}
+
+
+
 	width = glutGet(GLUT_SCREEN_WIDTH);
 	height = glutGet(GLUT_SCREEN_HEIGHT);
 	moving = false;
 	movingX = false;
 	myGameUI.Init();
-	lua_State *L2 = lua_open();
 
+	lua_State *L2 = lua_open();
 	luaL_openlibs(L2);
 	if (luaL_loadfile(L2, "LuaScript/test.lua") || lua_pcall(L2, 0, 0, 0))
 	{
@@ -563,24 +672,70 @@ bool CPlayState::Init()
 	double VOLUME = lua_tonumber(L2, 1);
 	volume =  VOLUME;
 
-	//sets the player resources;
-	//lua_getglobal(L2,"FOOD");
-	//int food = lua_tointeger(L2,2);
-	//resource.SetFood(food);
-
-	//lua_getglobal(L2,"MONEY");
-	//float money= (float)lua_tonumber(L2,3);
-	//resource.SetMoney(money);
-
-	//lua_getglobal(L2, "MANPOWER");
-	//int manpower = lua_tointeger(L2,4);
-	//resource.SetManpower(manpower);
-
-	//lua_getglobal(L2,"CITIZEN");
-	//int numOfCitizen= lua_tointeger(L2,5);
-	//resource.SetCitizen(numOfCitizen);
-
 	lua_close(L2);
+
+	//load
+	if (resource.GetLoad() ==1)
+	{
+		lua_State *L3 = lua_open();
+		luaL_openlibs(L3);
+		if (luaL_loadfile(L3, "LuaScript/Save/resource.lua") || lua_pcall(L3, 0, 0, 0))
+		{
+			printf("error: %s", lua_tostring(L3, -1));
+			return -1;
+		}
+		//sets the player resources;
+		lua_getglobal(L3,"FOOD");
+		int food = lua_tointeger(L3,1);
+		resource.SetFood(food);
+
+		lua_getglobal(L3,"MONEY");
+		int money= lua_tointeger(L3,2);
+		cout <<money;
+		resource.SetMoney(money);
+
+		lua_getglobal(L3, "MANPOWER");
+		int manpower = lua_tointeger(L3,3);
+		cout <<manpower;
+		resource.SetManpower(manpower);
+
+		lua_getglobal(L3,"CITIZEN");
+		int numOfCitizen= lua_tointeger(L3,4);
+		cout <<numOfCitizen;
+		resource.SetCitizen(numOfCitizen);
+		lua_close(L3);
+	}
+	//dont load
+	if (resource.GetLoad() ==0)
+	{
+		lua_State *L3 = lua_open();
+		luaL_openlibs(L3);
+		if (luaL_loadfile(L3, "LuaScript/Save/defaultR.lua") || lua_pcall(L3, 0, 0, 0))
+		{
+			printf("error: %s", lua_tostring(L3, -1));
+			return -1;
+		}
+		//sets the player resources;
+		lua_getglobal(L3,"FOOD");
+		int food = lua_tointeger(L3,1);
+		resource.SetFood(food);
+
+		lua_getglobal(L3,"MONEY");
+		int money= lua_tointeger(L3,2);
+		cout <<money;
+		resource.SetMoney(money);
+
+		lua_getglobal(L3, "MANPOWER");
+		int manpower = lua_tointeger(L3,3);
+		cout <<manpower;
+		resource.SetManpower(manpower);
+
+		lua_getglobal(L3,"CITIZEN");
+		int numOfCitizen= lua_tointeger(L3,4);
+		cout <<numOfCitizen;
+		resource.SetCitizen(numOfCitizen);
+		lua_close(L3);
+	}
 
 	//camera data and init
 	theCamera = new Camera( Camera::LAND_CAM );
@@ -755,6 +910,20 @@ void CPlayState::Resume()
 }
 void CPlayState::HandleEvents(CGameStateManager* theGSM)
 {
+
+	if(myKeys['h'] == true)
+	{
+		resource.SetWin(0);
+		theGSM->ChangeState( CResultState::Instance() );
+
+	}
+
+		if(myKeys['j'] == true)
+	{
+		resource.SetWin(1);
+		theGSM->ChangeState( CResultState::Instance() );
+
+	}
 
 	if(minigameobjects->minigame)
 	{
@@ -1040,6 +1209,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 			Citizen *Citizens = *it;
 			if (Citizens->active == true)
 			{	
+				
 				if(myTile[SelectorY][SelectorX].myHouse.GetOwner()==Citizens->GetName())
 				{
 					Citizens->RenderMood=true;
@@ -1111,6 +1281,20 @@ void CPlayState::DrawTileContent()
 			myTile[y][x].Draw();
 		}
 	}
+
+		for (int y = 0; y < ROWS; y ++ )
+	{
+		for(int x = 0; x < COLS; x ++ )
+		{
+			if(myTile[y][x].GetBtype() == 1)
+			{
+				if(myTile[y][x].myHouse.GetOwner() == "Hi")
+				{
+					myTile[y][x].myHouse.SetOwner("fuck");
+				}
+			}
+		}
+	}
 }
 void CPlayState::Draw(CGameStateManager* theGSM) 
 {
@@ -1166,6 +1350,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	DrawTileContent();
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 	{	
+		//here
 		Citizen *Citizens = *it;
 		if (Citizens->active == true)
 		{
