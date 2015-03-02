@@ -257,6 +257,12 @@ bool CIntroState::Init()
 	exitbutton->Set(350,450,520,580);
 	ListofButtons.push_back(exitbutton);
 
+	contbutton = new ButtonClass();
+	LoadTGA(&contbutton->button[0],"Textures/continueup.tga");
+	LoadTGA(&contbutton->button[1],"Textures/continuedown.tga");
+	contbutton->Set(240,580,330,400);
+	ListofButtons.push_back(contbutton);
+
 	return true;
 }
 void CIntroState::Cleanup()
@@ -283,18 +289,7 @@ void CIntroState::HandleEvents(CGameStateManager* theGSM)
 {
 	if (mouseInfo.mLButtonUp) 
 	{
-		/*if (mouseInfo.lastX >=240 && mouseInfo.lastX <= 563 && mouseInfo.lastY >= 410 && mouseInfo.lastY <=450)
-		{
-			theGSM->ChangeState( CPlayState::Instance() );
-			mouseInfo.mLButtonUp = false;
-		}
 
-		if (mouseInfo.lastX >=300 && mouseInfo.lastX <= 500 && mouseInfo.lastY >= 460 && mouseInfo.lastY <=500)
-		{
-			theGSM->ChangeState( CSettingState::Instance() );
-			mouseInfo.mLButtonUp = false;
-		}
-		mouseInfo.mLButtonUp = false;*/
 	}
 	if(myKeys[27]==true)
 	{
@@ -313,12 +308,21 @@ void CIntroState::Update(CGameStateManager* theGSM)
 		startbutton->Set(240,580,400,460);
 		settingsbutton->Set(300,520,460,520);
 		exitbutton->Set(350,450,520,580);
+		contbutton->Set(240,580,330,400);
 		sizechanged = false;
 	}
 
 	if(startbutton->buttonclicked)
 	{
+		resource.SetLoad(0);
 		theGSM->ChangeState( CPlayState::Instance() );
+		mouseInfo.mLButtonUp = false;
+	}
+
+	if(contbutton->buttonclicked)
+	{
+		resource.SetLoad(1);
+		theGSM->ChangeState( CPlayState::Instance() );	
 		mouseInfo.mLButtonUp = false;
 	}
 
@@ -332,6 +336,7 @@ void CIntroState::Update(CGameStateManager* theGSM)
 	{
 		exit(0);
 	}
+
 	//cout << "CIntroState::Update\n" << endl;
 	//MouseMove(mouseInfo.lastX,mouseInfo.lastY);
 	//std::cout<<mouseInfo.lastX<<","<<mouseInfo.lastY<<std::endl;
@@ -386,6 +391,10 @@ void CIntroState::Draw(CGameStateManager* theGSM)
 
 	glPushMatrix();
 		exitbutton->Render();
+	glPushMatrix();
+
+	glPushMatrix();
+		contbutton->Render();
 	glPushMatrix();
 
 	glDisable(GL_TEXTURE_2D);
