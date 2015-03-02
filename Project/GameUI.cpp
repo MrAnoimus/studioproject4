@@ -32,11 +32,11 @@ void GameUI::Update()
 {
 	myGameTime.Update();
 }
-void GameUI::DrawResourceData(int x , int y,int money ,int population,int worker )
+void GameUI::DrawResourceData(int x , int y,int money ,int population,int worker,int MaxWorker)
 {
 	print(Time_Font,x,y,"$%d", money);
 	print(Time_Font,x,y-80,"%d", population);
-	print(Time_Font,x,y-160,"%d", worker);
+	print(Time_Font,x,y-160,"%d/%d", worker,MaxWorker);
 }
 void GameUI::DrawResource(int x , int y)
 {

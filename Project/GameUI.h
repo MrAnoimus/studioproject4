@@ -20,7 +20,7 @@ class GameUI
 		~GameUI(void);
 		void Init();
 		void Update();
-		void DrawResourceData(int x , int y,int money ,int population,int worker );
+		void DrawResourceData(int x , int y,int money ,int population,int worker,int MaxWorker);
 		void DrawResource(int x , int y);
 		void DrawSelect(int x , int y ,bool mode, int type);
 		void Draw(float x , float y);
