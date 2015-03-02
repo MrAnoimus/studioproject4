@@ -25,6 +25,7 @@ void Tile::Init()
 	this->Tag = "nothing";
 	//building stuff
 	this->Btype = 0;
+	this->full = false;
 	this->startdestory = false;
 	myGaugeBar.init(1,0,1,this->Position);
 	myHouse.Init(this->Position);
@@ -55,7 +56,7 @@ void Tile::Update()
 				this->Color.Set(0,1,0);//green
 			}else
 			{
-				this->Color.Set(1,1,0);//yellow
+				this->Color.Set(1,0,0);//red
 			}
 			
 		}
@@ -245,12 +246,12 @@ void Tile::Draw()
 						{
 							//set building speed
 							myObstacle.SetPosition(this->Position+temp);
-							myObstacle.DrawBuildingbar(myObstacle.GetRSpeed());
+							myObstacle.DrawDestructing(myObstacle.GetRSpeed());
 						}break;
 						case 6 :
 						{
 							myDebris.SetPosition(this->Position+temp);
-							myDebris.DrawBuildingbar(myDebris.GetRSpeed());
+							myDebris.DrawDestructing(myDebris.GetRSpeed());
 						}break;
 					}
 				}else
@@ -358,7 +359,10 @@ void Tile::Draw()
 		}
 	}
 }
-
+bool Tile::GetFull()
+{
+	return full;
+}
 int Tile::GetBtype()
 {
 	return Btype;
@@ -392,6 +396,10 @@ Vector3D Tile::GetColor()
 	return Color;
 }
 //setter
+void Tile::SetFull(bool f)
+{
+	full = f;
+}
 void Tile::SetSize(int sz)
 {
 	Size = sz;

@@ -19,11 +19,13 @@ class Building
 	public:
 		
 		TextureImage IsBuilding;
+		TextureImage IsDestructing;
+
 		Building(void);
 		~Building(void);
 
 		void DrawBuildingbar(float r);
-
+		void DrawDestructing(float r);
 		//get
 		float GetMaintenanceFee();
 		float GetEarnings();

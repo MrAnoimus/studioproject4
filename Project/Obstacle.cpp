@@ -12,6 +12,7 @@ Obstacle::~Obstacle(void)
 void Obstacle::Init(Vector3D pos)
 {
 	LoadTGA(&IsBuilding, "Textures/Building/loading.tga");
+	LoadTGA(&IsDestructing, "Textures/Building/pixaxe.tga");
 	LoadTGA(&ObstacleTexture, "Textures/Building/badland.tga");
 	SetSize(50);
 	SetPosition(pos);
@@ -22,14 +23,31 @@ void Obstacle::Init(Vector3D pos)
 	SetTier(0);
 	this->rotationSpeed = 0.5f;
 	SetAlpha(1.0f);
+	test = true;
 }
 void Obstacle::Update()
 {
-	rotationSpeed++;
+	if(test)
+	{
+		rotationSpeed--;
+		if(rotationSpeed<=-45)
+		{
+			test= false;
+		}
+	}
+	if(!test)
+	{
+		rotationSpeed++;
+		if(rotationSpeed>=0)
+		{
+			test = true;
+		}
+	}
 }
 
 void Obstacle::Draw()
 {
+	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 	glPushMatrix();
@@ -38,7 +56,6 @@ void Obstacle::Draw()
 		glTranslatef(GetPosition().x,GetPosition().y,GetPosition().z);
 		//badland
 		glBindTexture(GL_TEXTURE_2D, ObstacleTexture.id);
-
 		glPushMatrix();
 			glBegin(GL_QUADS);
 				glTexCoord2f(1,1);
@@ -54,6 +71,7 @@ void Obstacle::Draw()
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
 	glColor3f(1,1,1);
 }
 float Obstacle::GetRSpeed()

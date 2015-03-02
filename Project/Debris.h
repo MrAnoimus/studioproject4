@@ -4,6 +4,7 @@ class Debris: public Building
 {
 	private:
 		float rotationSpeed;
+		bool test;
 	public:
 		TextureImage ObstacleTexture;
 		Debris(void);

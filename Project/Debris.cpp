@@ -13,6 +13,7 @@ Debris::~Debris(void)
 void Debris::Init(Vector3D pos)
 {
 	LoadTGA(&IsBuilding, "Textures/Building/loading.tga");
+	LoadTGA(&IsDestructing, "Textures/Building/pixaxe.tga");
 	LoadTGA(&ObstacleTexture, "Textures/Building/debris.tga");
 	SetSize(50);
 	SetPosition(pos);
@@ -23,10 +24,26 @@ void Debris::Init(Vector3D pos)
 	SetTier(0);
 	this->rotationSpeed = 0.5f;
 	SetAlpha(1.0f);
+	test = true;
 }
 void Debris::Update()
 {
-	rotationSpeed++;
+	if(test)
+	{
+		rotationSpeed--;
+		if(rotationSpeed<=-45)
+		{
+			test= false;
+		}
+	}
+	if(!test)
+	{
+		rotationSpeed++;
+		if(rotationSpeed>=0)
+		{
+			test = true;
+		}
+	}
 }
 
 void Debris::Draw()
