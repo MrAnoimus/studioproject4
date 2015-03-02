@@ -193,33 +193,46 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 								Map[SelectorY][SelectorX]=10;
 								//myTile[SelectorY][SelectorX].Tag ="nothing";
 							}
-							if(myTile[SelectorY][SelectorX].GetBtype() == 1)
+							if(myTile[SelectorY][SelectorX].GetBtype() == 1 )
 							{
 								//once selected and click on set tile to not empty
 								myTile[SelectorY][SelectorX].SetEmpty(false);
-								resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myHouse.GetCost());
-								Map[SelectorY][SelectorX]=1;
+								Map[SelectorY][SelectorX] = 1;
 								myTile[SelectorY][SelectorX].Tag ="house";
-								housecount+=1;
-								resource.SetManpower(resource.GetManPower() -1);
+								if(myTile[SelectorY][SelectorX].GetFull() == false)
+								{
+									resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myHouse.GetCost());
+									housecount+=1;
+									resource.SetManpower(resource.GetManPower() -1);
+								}
+								
 							}
 							else if(myTile[SelectorY][SelectorX].GetBtype() == 2)
 							{
 								//once selected and click on set tile to not empty
 								myTile[SelectorY][SelectorX].SetEmpty(false);
-								resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
+								
 								Map[SelectorY][SelectorX]=2;
 								myTile[SelectorY][SelectorX].Tag ="eatingplace";
-								FcourtCount+=1;
+								if(myTile[SelectorY][SelectorX].GetFull() == false)
+								{
+									resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
+									FcourtCount+=1;
+								}
+								
 							}
 							else if(myTile[SelectorY][SelectorX].GetBtype() == 3)
 							{
 								//once selected and click on set tile to not empty
 								myTile[SelectorY][SelectorX].SetEmpty(false);
-								resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myGstore.GetCost());
 								Map[SelectorY][SelectorX]=3;
 								myTile[SelectorY][SelectorX].Tag ="workplace";
-								GstoreCount +=1;
+								if(myTile[SelectorY][SelectorX].GetFull() == false)
+								{
+									resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myGstore.GetCost());
+									GstoreCount +=1;
+								}
+								
 							}
 							for(int y = 0; y < ROWS; y += 1)
 							{
@@ -812,10 +825,8 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		mouseInfo.mLButtonUp = false;
 		Choice2->buttonclicked = false;
 	}
-	
 	if (REvent.IsDisplay ==false)
 	{
-		
 		myGameUI.Update();
 		//tile selection check
 		
@@ -1029,6 +1040,7 @@ void CPlayState::DrawTileContent()
 			}
 			if(Map[y][x] == 1)
 			{//
+				myTile[y][x].SetFull(true);
 				myTile[y][x].SetBtype(1);
 				myTile[y][x].Tag = "house";
 			}
@@ -1038,7 +1050,7 @@ void CPlayState::DrawTileContent()
 				myTile[y][x].Tag = "eatingplace";
 			}
 			if(Map[y][x] == 3)
-			{//
+			{
 				myTile[y][x].SetBtype(3);
 				myTile[y][x].Tag = "workplace";
 			}
@@ -1048,6 +1060,7 @@ void CPlayState::DrawTileContent()
 			}
 			if(Map[y][x] == 10)
 			{
+				myTile[y][x].SetFull(false);
 				myTile[y][x].SetType(0);//tile color code
 			}
 			Vector3D temp(50 + x*100,50 +y*100,-1);
@@ -1125,7 +1138,8 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	myGameUI.DrawResource(myGameUI.GetIconSize(),myGameUI.GetIconSize());
 	myGameUI.DrawResourceData(myGameUI.GetSize()*2,height-myGameUI.GetSize()*2,resource.GetMoney(),resource.GetCitizen(),resource.GetManPower(),resource.GetMaxManPower());
 	//print(our_font,0,250,"PickX :%d PickY:%d",SelectorX,SelectorY);
-	print(our_font,0,250,"house number : %d",housecount);
+	//print(our_font,0,250,"house number : %d",housecount);
+	print(our_font,0,250,"empty? : %d",myTile[SelectorY][SelectorX].GetFull());
 
 	RenderUI();
 	if(minigameobjects->minigame)

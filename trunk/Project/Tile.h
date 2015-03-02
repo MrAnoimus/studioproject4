@@ -34,7 +34,7 @@ class Tile
 		int Size;
 		//building stuff
 		int Btype;
-		
+		bool full;
 		//don't want people to use this two drawing function outside of this class
 		void DrawTileOutLine();
 		void DrawTile();
@@ -56,6 +56,7 @@ class Tile
 		void Draw();
 
 		//Getter
+		bool GetFull();
 		int GetBtype();
 		bool GetModeOn();
 		bool IsSelected();
@@ -66,6 +67,7 @@ class Tile
 		bool IsClickedOn();
 
 		//Setter
+		void SetFull(bool f);
 		void SetSize(int sz);
 		void SetBtype(int t);
 		void SetModeOn(bool m);
