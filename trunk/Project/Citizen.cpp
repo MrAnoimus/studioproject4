@@ -15,6 +15,7 @@ Citizen::Citizen(void)
 	,Movedout(false)
 	,MovedBack(false)
 	,owner("string")
+	,sheltered(false)
 
 {
 	glEnable(GL_TEXTURE_2D);

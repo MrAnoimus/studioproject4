@@ -83,7 +83,9 @@ public:
 	std::string GetName(void);
 
 	bool Movedout;
-	bool MovedBack;std::string owner;
+	bool MovedBack;
+	std::string owner;
+	bool sheltered;
 private:
 	
 	
