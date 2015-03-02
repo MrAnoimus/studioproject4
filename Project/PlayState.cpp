@@ -898,6 +898,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 					{
 						if(Citizens->Movedout==true)
 						{
+
 							Vector3D position;
 							position.x = Citizens->CitizenDestination->DestinationList[Citizens->index]->x;
 							position.y = Citizens->CitizenDestination->DestinationList[Citizens->index]->y;
@@ -920,6 +921,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 							}
 							else
 							{
+								
 								if ((position -Citizens->GetPosition()).LengthSquared() > (0))
 								{
 									Vector3D direction(position - Citizens->GetPosition());
@@ -936,6 +938,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 									{
 										Citizens->MovedBack=false;
 										Citizens->Movedout=false;
+										Citizens->sheltered=false;
 									}
 								}
 							}

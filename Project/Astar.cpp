@@ -124,6 +124,7 @@ CNode* Astar::getFromCloseList(CNode* succ)
 // Search For Best Path ( Minimum Cost )
 bool Astar::Search(int (&grid)[ROWS2][COLS2])
 {
+	AddCloseList(start);
 	CNode *temp;	
 	cout << "Searching....\n\n";
 	AddOpenList(start);		// Add Start Node To Open List
