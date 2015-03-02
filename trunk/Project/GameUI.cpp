@@ -134,6 +134,10 @@ void GameUI::DrawSelect(int x , int y ,bool mode , int type)
 				{
 					glBindTexture(GL_TEXTURE_2D, SelectionTexture[5].id);
 				}break;
+				case 6:
+				{
+					glBindTexture(GL_TEXTURE_2D, SelectionTexture[5].id);
+				}break;
 			}
 			glPushMatrix();
 				glBegin(GL_QUADS);
