@@ -148,7 +148,6 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 									Citizen *Citizens = *it;
 									if (Citizens->active == true&&Citizens->Movedout==false)
 									{
-										
 										if(i+1>=j)
 										{
 											Citizens->CitizenDestination->DestinationList.push_back(TheNode);
@@ -234,6 +233,14 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 								}
 								
 							}
+							else if(myTile[SelectorY][SelectorX].GetBtype() == 5)
+							{
+								if(myTile[SelectorY][SelectorX].GetEmpty())
+								{
+									resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myObstacle.GetCost());
+								}
+							}
+
 							for(int y = 0; y < ROWS; y += 1)
 							{
 								for(int x = 0; x < COLS; x += 1)
@@ -242,7 +249,6 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 									{
 										//once selected and click on set tile to not empty
 										myTile[y][x].SetEmpty(false);
-										//resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
 										Map[SelectorY][SelectorX]=10;
 										//myTile[y][x].Tag = "nothing";
 									}
@@ -250,7 +256,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 									{
 										//once selected and click on set tile to not empty
 										myTile[y][x].SetEmpty(false);
-										//resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
+										resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myDebris.GetCost());
 										Map[SelectorY][SelectorX]=10;
 										//myTile[y][x].Tag = "nothing";
 									}
@@ -1448,7 +1454,7 @@ void CPlayState::calculateEarning()
 	float FC_Earning = FcourtCount * myTile[SelectorY][SelectorX].myFCourt.GetEarnings();
 	float GS_Earning = GstoreCount * myTile[SelectorY][SelectorX].myGstore.GetEarnings();
 	float ShelterFund;
-	if(myGameUI.myGameTime.GetDay() %  7 == 0 )
+	if(myGameUI.myGameTime.GetDay() %  3 == 0 )
 	{
 		ShelterFund = myTile[SelectorY][SelectorX].myShelter.GetEarnings();
 	}else
