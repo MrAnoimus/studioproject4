@@ -32,6 +32,7 @@ void Shelter::Update()
 
 void Shelter::Draw()
 {
+	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 	glPushMatrix();
@@ -57,6 +58,8 @@ void Shelter::Draw()
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
+	//glEnable(GL_DEPTH_TEST);
 	glColor3f(1,1,1);
 }
 float Shelter::GetRSpeed()
