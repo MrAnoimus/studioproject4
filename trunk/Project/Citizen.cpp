@@ -14,7 +14,7 @@ Citizen::Citizen(void)
 	,index(0)
 	,Movedout(false)
 	,MovedBack(false)
-	,owner("string")
+	,owner("JunHwee")
 	,sheltered(false)
 
 {
@@ -59,7 +59,6 @@ Citizen::Citizen(void)
 	{
 		TheBuildings[i] = Citizen::WORKPLACE;
 	}
-	
 }
 
 Citizen::~Citizen(void)

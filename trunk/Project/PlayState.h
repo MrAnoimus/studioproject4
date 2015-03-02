@@ -27,6 +27,10 @@
 //sound
 #include <irrKlang.h>
 using namespace irrklang;
+
+#include <windows.h>
+#include <cstdlib>
+
 //for mini game
 
 
@@ -171,5 +175,6 @@ class CPlayState : public CGameState
 
 		GameUI myGameUI;
 		
+		string rNAME;
 };
 #endif

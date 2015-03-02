@@ -10,6 +10,9 @@
 #include <string>
 #include "Destination.h"
 
+#include <windows.h>
+#include <cstdlib>
+#include <fstream>
 #pragma once
 
 using namespace std;

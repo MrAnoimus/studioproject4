@@ -47,8 +47,8 @@ bool MiniGame::Init(Camera* theCamera)
 		//mg->active = true;
 		mg->vel.y = -200;
 		/*mg->pos.x = 800 - Math::RandIntMinMax(320, 780) + theCamera->GetPosition().x - 400;*/
-		 mg->pos.x = Math::RandIntMinMax(150, 590);
-		mg->pos.y = 600 - Math::RandIntMinMax(110, 310) + theCamera->GetPosition().y - 300;
+		 mg->pos.x = Math::RandIntMinMax(20, 450);
+		mg->pos.y = Math::RandIntMinMax(350, 450);
 		m_goList.push_back(mg);
 	}
 
@@ -146,8 +146,8 @@ void MiniGame::Update()
 					{
 						mg->vel.y = -200;
 						/*mg->pos.x = 800 - Math::RandIntMinMax(320, 780) + theCamera->GetPosition().x - 400;*/
-						mg->pos.x = Math::RandIntMinMax(150, 590);
-						mg->pos.y = 600 - Math::RandIntMinMax(110, 310) + theCamera->GetPosition().y - 300;
+						mg->pos.x = Math::RandIntMinMax(20, 450);
+						mg->pos.y = Math::RandIntMinMax(350, 450);
 					/*	mg->pos.x = 400;
 						mg->pos.y = 490;*/
 					}
@@ -183,8 +183,8 @@ void MiniGame::Update()
 								}
 								break;
 							}
-							if(catcher->pos.x <= 150){catcher->pos.x = 150;}
-							if(catcher->pos.x >= 590){catcher->pos.x = 590;}
+							if(catcher->pos.x <= 20){catcher->pos.x = 20;}
+							if(catcher->pos.x >= 430){catcher->pos.x = 430;}
 						}
 
 					}
@@ -200,8 +200,8 @@ void MiniGame::Update()
 				{mg2->vel.y = -200;}
 				mg2->counter++;
 				/*mg2->pos.x = 800 - Math::RandIntMinMax(320, 780) + theCamera->GetPosition().x - 400;*/
-				mg2->pos.x = Math::RandIntMinMax(150, 590);
-				mg2->pos.y = 600 - Math::RandIntMinMax(110, 150) + theCamera->GetPosition().y - 300;
+				mg2->pos.x = Math::RandIntMinMax(20, 450);
+				mg2->pos.y = Math::RandIntMinMax(350, 450);
 
 			
 				for(std::vector<GameObject *>::iterator it = m_goList.begin(); it != m_goList.end(); ++it)
@@ -213,7 +213,7 @@ void MiniGame::Update()
 						{
 							if((mg2->pos - mg->pos).Length() <= 60)
 							{
-								mg2->pos.x = Math::RandIntMinMax(150, 590);
+								Math::RandIntMinMax(20, 450);
 							}
 						}
 					}
