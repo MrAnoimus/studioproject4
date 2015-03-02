@@ -807,6 +807,7 @@ bool CPlayState::Init()
 
 	//end of choice
 
+
 	for(int i =0; i< resource.GetCitizen(); i++)
 	{
 		
@@ -820,16 +821,16 @@ bool CPlayState::Init()
 		srand((unsigned int)i);
 		Random = rand()%3+1;
 		Random2 = Random;
-		cout <<"Random "<<Random<<endl;
-		cout <<"Random2 "<<Random2<<endl;
+		/*cout <<"Random "<<Random<<endl;
+		cout <<"Random2 "<<Random2<<endl;*/
 		if(Random == Random2)
 		{
 			srand((unsigned int)i*i);
 			Random = rand()%3+1;
 		}
 		
-		cout <<"After Random "<<Random<<endl;
-		cout <<"After Random2 "<<Random2<<endl;
+		/*cout <<"After Random "<<Random<<endl;
+		cout <<"After Random2 "<<Random2<<endl;*/
 		
 		if(Random==1)
 		{
@@ -844,6 +845,27 @@ bool CPlayState::Init()
 			go->SetFavourite(Citizen::WORK);
 		}
 		go->SetPosition(Vector3D(100,100,0));
+
+		ifstream myFile;
+		myFile.open("Names/namesM.txt");
+		string rnames[50]; // holds the 50 names in the file.
+
+		int x = 0;
+		int randNum;
+		while (myFile.good())
+		{
+			getline(myFile, rnames[x]);
+			x++;
+		}
+		srand((unsigned int) i);
+		
+		/*randNum = Math::RandIntMinMax(0, 49);*/
+		randNum = rand() % 50 + 1;
+		rNAME = rnames[randNum];
+	
+		myFile.close();
+
+		//go->SetName(rNAME);
 	}
 	//mg init
 	minigameobjects = new MiniGame();
@@ -1487,18 +1509,19 @@ Citizen* CPlayState::FetchObject()
 				go->SetFavourite(Citizen::WORK);
 			}
 					return go;
-				}
-			}
+		}
+	}
 
 	Citizen *go = new Citizen();
 	go->active = true;
 	int a = CitizenList.size();
 	stringstream ss;
 	ss << a;
-	std::string str = go->GetName() + ss.str();
-	go->SetName(str);
-	
-	
+	//std::string str = go->GetName() + ss.str();
+
+	go->SetName(rNAME + ss.str());
+	//go->SetName(str);
+
 	CitizenList.push_back(go);
 	return go;
 }
