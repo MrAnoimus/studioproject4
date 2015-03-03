@@ -227,18 +227,23 @@ std::string Citizen::GetPlace(int i)
 void Citizen::Draw(float PositionX, float PositionY)
 {
 	glEnable(GL_TEXTURE_2D);
+	glColor4f(1.0f,1.0f,1.0f,1.0f);
+	glPushMatrix();
+	glTranslatef(this->GetPosition().x,this->GetPosition().y,-2);
+	RenderCitizen();
+
+	
+	glPopMatrix();
+	
+	
 	if(this->RenderMood==true)
 	{
 		glPushMatrix();
-		glTranslatef(PositionX-200,PositionY,-5);
+		glTranslatef(PositionX-200,PositionY,-2);
 		this->StatsBoard();
 		glPopMatrix();
 	}
 	
-	glPushMatrix();
-	glTranslatef(this->GetPosition().x,this->GetPosition().y,-2);
-	RenderCitizen();
-	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 }
 
@@ -272,6 +277,7 @@ void Citizen::SetPlace(std::string tag, int i)
 void Citizen::RenderCitizen(void)
 {
 	glPushMatrix();
+	
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -336,15 +342,11 @@ int Citizen::GetAnimationCounter(void)
 	return this->AnimationCounter;
 }
 
-void Citizen::StatsBoard(void)
+void Citizen::StatsBoard()
 {
 	
+	
 	int TranslateZ=-1;
-	glPushMatrix();
-		glTranslatef(85,50,TranslateZ);
-		DrawInGameText("Current Mood:");
-	glPopMatrix();
-
 	glColor3f(1,1,1);
 	glEnable(GL_BLEND);//blend 1
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -352,14 +354,14 @@ void Citizen::StatsBoard(void)
 	glEnable(GL_TEXTURE_2D);//texture 1
 	glPushMatrix();
 		glBindTexture(GL_TEXTURE_2D, StatsBG.id);
-		DrawSquare(180,100);
+		DrawSquare(160,100);
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);//end of texture 1
 	//
 
 	glPushMatrix();
 		glEnable(GL_TEXTURE_2D);//texture 2
-		glTranslatef(-70,50,-1);
+		glTranslatef(-40,30,-1);
 
 		if(this->GetMood()=="HAPPY")
 		{
@@ -378,16 +380,20 @@ void Citizen::StatsBoard(void)
 			glBindTexture(GL_TEXTURE_2D, Okay.id);
 		}
 		
-		DrawSquare(20,20);
+		DrawSquare(10,10);
 		glDisable(GL_TEXTURE_2D);//end of texture 2
 		
 	glPopMatrix();
 	glDisable(GL_BLEND);//end of blend 1
 
 	glPushMatrix();
+		glPushMatrix();
+			glTranslatef(90,30,0);
+			DrawInGameText("Current Mood:");
+		glPopMatrix();
 		glTranslatef(0,-5,TranslateZ);
 		glPushMatrix();
-			glTranslatef(90,80,0);
+			glTranslatef(90,60,0);
 			DrawInGameText("Name/Owner:");
 		glPopMatrix();
 		glPushMatrix();
@@ -405,7 +411,7 @@ void Citizen::StatsBoard(void)
 
 		glTranslatef(0,-25,TranslateZ);
 		glPushMatrix();
-			glTranslatef(140,0,0);
+			glTranslatef(90,0,0);
 			DrawInGameText("NearbyPlace:");
 		glPopMatrix();
 		glPushMatrix();
@@ -424,13 +430,13 @@ void Citizen::StatsBoard(void)
 	glPopMatrix();
 
 	
-
 }
 
 void Citizen::DrawInGameText(std::string Text)
 {
 	glPushMatrix();
 	glColor3f(0.0f, 0.0f, 0.0f);//needs to be called before RasterPos
+	
 	glRasterPos2i(0, 00);
 	std::string s = Text;
 	void * font = GLUT_BITMAP_9_BY_15;

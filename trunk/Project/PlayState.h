@@ -53,7 +53,9 @@ class CPlayState : public CGameState
 		int  lastX, lastY;
 	}theMouseInfo;
 	public:
-		
+		int homeless;
+		float ChoiceChance;
+		float DestoryedChance;
 		int checker;
 		int Random;
 		int Random2;
