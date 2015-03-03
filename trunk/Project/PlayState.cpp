@@ -1550,7 +1550,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	theCamera->SetHUD( true);
 	
 	checkUIName();
-	myGameUI.Draw((width/2)-200,height - 50,Bnames.c_str(),cost,myTile[SelectorY][SelectorX].GetModeOn());
+	myGameUI.Draw((width/2)-300,height - 50,Bnames.c_str(),cost,myTile[SelectorY][SelectorX].GetModeOn());
 	myGameUI.DrawSelect(750,200,myTile[SelectorY][SelectorX].GetModeOn(),myTile[SelectorY][SelectorX].GetBtype());
 	//money manpower citizen
 	myGameUI.DrawResource(myGameUI.GetIconSize(),myGameUI.GetIconSize());
