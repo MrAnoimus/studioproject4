@@ -33,7 +33,6 @@ void Tile::Init()
 	myGstore.Init(this->Position);
 	myShelter.Init(this->Position);
 	myObstacle.Init(this->Position);
-	myDebris.Init(this->Position);
 }
 void Tile::Update()
 {
@@ -109,11 +108,6 @@ void Tile::Update()
 				{
 					myGaugeBar.update(0.5f);
 					myObstacle.Update();
-				}break;
-				case 6:
-				{
-					myGaugeBar.update(0.5f);
-					myDebris.Update();
 				}break;
 			}
 		}
@@ -203,11 +197,6 @@ void Tile::Draw()
 				myObstacle.SetAlpha(0.5f);
 				myObstacle.Draw();
 			}break;
-			case 6:
-			{	
-				myDebris.SetAlpha(0.5f);
-				myDebris.Draw();
-			}break;
 		}
 	}else
 	{//mode off
@@ -252,11 +241,6 @@ void Tile::Draw()
 							myObstacle.SetPosition(this->Position+temp);
 							myObstacle.DrawDestructing(myObstacle.GetRSpeed());
 						}break;
-						case 6 :
-						{
-							myDebris.SetPosition(this->Position+temp);
-							myDebris.DrawDestructing(myDebris.GetRSpeed());
-						}break;
 					}
 					myGaugeBar.draw();
 				}else
@@ -289,21 +273,6 @@ void Tile::Draw()
 							{
 								myObstacle.SetAlpha(1.0f);
 								myObstacle.Draw();
-							}else
-							{
-								Selected = false;
-								ClickedOn = false;
-								myGaugeBar.setDone(false);
-								myGaugeBar.setPercentage(0);
-								Empty = true;
-							}
-						}break;
-						case 6:
-						{
-							if(Empty)
-							{
-								myDebris.SetAlpha(1.0f);
-								myDebris.Draw();
 							}else
 							{
 								Selected = false;
@@ -353,12 +322,6 @@ void Tile::Draw()
 					myObstacle.SetAlpha(1.0f);
 					myObstacle.SetPosition(this->Position+temp);
 					myObstacle.Draw();
-				}break;
-				case 6:
-				{
-					myDebris.SetAlpha(1.0f);
-					myDebris.SetPosition(this->Position+temp);
-					myDebris.Draw();
 				}break;
 			}
 		}

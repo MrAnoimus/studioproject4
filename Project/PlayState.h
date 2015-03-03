@@ -151,6 +151,7 @@ class CPlayState : public CGameState
 		float frequency;
 		//texture
 		TextureImage BackgroundTexture;
+		TextureImage Frame;
 		TextureImage BGTEST;
 		TextureImage MenuTexture[2];
 		TextureImage ResultTexture[2];

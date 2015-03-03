@@ -242,13 +242,6 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 									resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myObstacle.GetCost());
 								}
 							}
-							else if(myTile[SelectorY][SelectorX].GetBtype() == 6)
-							{
-								if(myTile[SelectorY][SelectorX].GetEmpty())
-								{
-									resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myDebris.GetCost());
-								}
-							}
 							for(int y = 0; y < ROWS; y += 1)
 							{
 								for(int x = 0; x < COLS; x += 1)
@@ -258,15 +251,6 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 										//once selected and click on set tile to not empty
 										myTile[y][x].SetEmpty(false);
 										Map[SelectorY][SelectorX]=10;
-										//myTile[y][x].Tag = "nothing";
-									}
-									if(myTile[SelectorY][SelectorX].GetBtype() == 6)
-									{
-										//once selected and click on set tile to not empty
-										myTile[y][x].SetEmpty(false);
-										//resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myDebris.GetCost());
-										Map[SelectorY][SelectorX]=10;
-
 										//myTile[y][x].Tag = "nothing";
 									}
 								}
@@ -435,9 +419,9 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 						if(myTile[SelectorY][SelectorX].GetBtype() == 1)
 						{
 							myTile[SelectorY][SelectorX].SetEmpty(true);
-							
-							Map[SelectorY][SelectorX]=220;
-							myTile[SelectorY][SelectorX].SetBtype(6);
+							myTile[SelectorY][SelectorX].myObstacle.SetDiff(false);
+							Map[SelectorY][SelectorX]=219;
+							//myTile[SelectorY][SelectorX].SetBtype(6);
 							//minus one house
 							housecount-=1;
 							resource.SetManpower(resource.GetManPower() +1);
@@ -445,15 +429,15 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 						if(myTile[SelectorY][SelectorX].GetBtype() == 2)
 						{
 							myTile[SelectorY][SelectorX].SetEmpty(true);
-							myTile[SelectorY][SelectorX].SetBtype(6);
-							Map[SelectorY][SelectorX]=220;
+							myTile[SelectorY][SelectorX].myObstacle.SetDiff(false);
+							Map[SelectorY][SelectorX]=219;
 							FcourtCount -=1;
 						}
 						if(myTile[SelectorY][SelectorX].GetBtype() == 3)
 						{
 							myTile[SelectorY][SelectorX].SetEmpty(true);
-							myTile[SelectorY][SelectorX].SetBtype(6);
-							Map[SelectorY][SelectorX]=220;
+							myTile[SelectorY][SelectorX].myObstacle.SetDiff(false);
+							Map[SelectorY][SelectorX]=219;
 							GstoreCount -= 1;
 						}
 						if(myTile[SelectorY][SelectorX].GetBtype()==1||myTile[SelectorY][SelectorX].GetBtype()==2||myTile[SelectorY][SelectorX].GetBtype()==3)
@@ -771,7 +755,7 @@ bool CPlayState::Init()
 	LoadTGA(&MenuTexture[1],"Textures/greenbg.tga");
 	LoadTGA(&ResultTexture[0],"Textures/WinScreen.tga");
 	LoadTGA(&ResultTexture[1],"Textures/LosingScreen.tga");
-
+	LoadTGA(&Frame,"Textures/frame.tga");
 
 	//load ttf fonts
 	our_font.init("Fonts/FFF_Tusj.TTF", 42);
@@ -1293,7 +1277,6 @@ void CPlayState::Update(CGameStateManager* theGSM)
 			}	
 			//////
 		}
-		
 		if(SelectorX >7)
 		{
 			SelectorX = 7;
@@ -1406,7 +1389,6 @@ void CPlayState::Update(CGameStateManager* theGSM)
 									}
 								}
 							}
-
 						}
 					}
 				}
@@ -1444,43 +1426,38 @@ void CPlayState::Update(CGameStateManager* theGSM)
 				}
 			}
 		}
-		}
-		if(minigameobjects->minigame)
-		{
-			minigameobjects->Update();
-		}
-	
-	
-		for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
-		{
-			Citizen *Citizens = *it;
-			if (Citizens->active == true)
-			{	
+	}
+	if(minigameobjects->minigame)
+	{
+		minigameobjects->Update();
+	}
+	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+	{
+		Citizen *Citizens = *it;
+		if (Citizens->active == true)
+		{	
 				
-				if(myTile[SelectorY][SelectorX].myHouse.GetOwner()==Citizens->GetName())
-				{
-					Citizens->RenderMood=true;
+			if(myTile[SelectorY][SelectorX].myHouse.GetOwner()==Citizens->GetName())
+			{
+				Citizens->RenderMood=true;
 					
-				}
-				else
+			}
+			else
+			{
+				Citizens->RenderMood=false;
+			}
+			for(int y = 0; y < ROWS; y += 1)
+			{
+				for(int x = 0; x < COLS; x += 1)
 				{
-					Citizens->RenderMood=false;
-				}
-				for(int y = 0; y < ROWS; y += 1)
-				{
-					for(int x = 0; x < COLS; x += 1)
+					if(myTile[y][x].GetModeOn()==false)
 					{
-						if(myTile[y][x].GetModeOn()==false)
-						{
-							Citizens->RenderMood=false;
-						}
+						Citizens->RenderMood=false;
 					}
 				}
 			}
-		
 		}
-	
-
+	}
 }
 
 void CPlayState::DrawTileContent()
@@ -1493,11 +1470,6 @@ void CPlayState::DrawTileContent()
 			{//3 = UNBUILDABLE
 				myTile[y][x].SetType(4);
 				myTile[y][x].SetBtype(5);
-			}
-			if(Map[y][x] == 220)
-			{
-				myTile[y][x].SetType(4);
-				myTile[y][x].SetBtype(6);
 			}
 			if(Map[y][x] == 1)
 			{//
@@ -1559,11 +1531,6 @@ void CPlayState::checkUIName()
 		Bnames = "Tree";
 		cost = myTile[SelectorY][SelectorX].myObstacle.GetCost();
 	}
-	if(myTile[SelectorY][SelectorX].GetBtype() == 6)
-	{
-		Bnames = "Debris";
-		cost = myTile[SelectorY][SelectorX].myDebris.GetCost();
-	}
 }
 void CPlayState::Draw(CGameStateManager* theGSM) 
 {
@@ -1572,13 +1539,14 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	theCamera->Update();
 
 	minigameobjects->theCamera = theCamera;
-	
+
+	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
 
-	
 	glPushMatrix();
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glColor4f(1,1,1,1);
 		glBindTexture (GL_TEXTURE_2D, BackgroundTexture.id);
 			glBegin(GL_QUADS);
 			glTexCoord2f(1,1);
@@ -1591,7 +1559,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 			glVertex2f(0,0);				
 		glEnd();
 	glPopMatrix();
-	
+
 	glPushMatrix();
 		//glColor3f(1,1,1);
 		glBindTexture (GL_TEXTURE_2D, BGTEST.id);
@@ -1614,7 +1582,20 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
 
-
+	/*glPushMatrix();
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBindTexture (GL_TEXTURE_2D, Frame.id);
+			glBegin(GL_QUADS);
+			glTexCoord2f(1,1);
+			glVertex2f(0,800);
+			glTexCoord2f(0,1);
+			glVertex2f(1000,800);
+			glTexCoord2f(0,0);
+			glVertex2f(1000,0);
+			glTexCoord2f(1,0);
+			glVertex2f(0,0);				
+		glEnd();
+	glPopMatrix();*/
 	//
 	if(minigameobjects->minigame)
 	{
@@ -1749,7 +1730,7 @@ Citizen* CPlayState::FetchObject()
 			{
 				go->SetFavourite(Citizen::WORK);
 			}
-					return go;
+			return go;
 		}
 	}
 

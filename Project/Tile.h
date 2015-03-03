@@ -6,7 +6,6 @@
 #include "Generalstore.h"
 #include "Shelter.h"
 #include "Obstacle.h"
-#include "Debris.h"
 
 class Tile
 {
@@ -45,7 +44,6 @@ class Tile
 		Generalstore myGstore;
 		Shelter myShelter;
 		Obstacle myObstacle;
-		Debris myDebris;
 		GaugeBar myGaugeBar;
 		Tile(void);
 		~Tile(void);
