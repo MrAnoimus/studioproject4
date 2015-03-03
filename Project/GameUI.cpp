@@ -200,8 +200,8 @@ void GameUI::DrawSelect(int x , int y ,bool mode , int type)
 }
 void GameUI::Draw(float x , float y,std::string Bname,int cost,bool modeon)
 {
-	print(Time_Font,x,y,"Day : %02d", myGameTime.GetDay());
-	print(Time_Font,x,y-100,"%02d : %02d", myGameTime.GetHour(),myGameTime.GetMinute());
+	print(Time_Font,x,y,"Day : %02d ", myGameTime.GetDay());
+	print(Time_Font,x+300,y,"TIME : %02d : %02d", myGameTime.GetHour(),myGameTime.GetMinute());
 	if(modeon)
 	{
 		print(Time_Font,x-50,y-500,"%s",Bname.c_str());
