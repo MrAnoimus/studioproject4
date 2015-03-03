@@ -70,9 +70,11 @@ void CIntroState::MouseMove(int x , int y)
 	for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
 		(*it)->UpdateMouseMove(x,y);
 
-	if(startbutton->buttonhover)
-	{hoverStart = true;}
+	if(startbutton->buttonhover){hoverStart = true;}
 	else{hoverStart = false;}
+
+	if(contbutton->buttonhover){hoverCont = true;}
+	else{hoverCont = false;}
 
 	if(settingsbutton->buttonhover){hoverSet = true;}
 	else{hoverSet = false;}
@@ -97,11 +99,21 @@ void CIntroState::MouseMove(int x , int y)
 	if(hoverStart)
 	{	
 		if(menuGUIstart == NULL)
-			{menuGUIstart = theSoundEngine->play2D ("SFX/misc_menu_2.wav", false, true);}		
+			{menuGUIstart = theSoundEngine->play2D ("SFX/misc_menu.wav", false, true);}		
 		/*else{menuGUIstart == NULL;
-			 menuGUIstart = theSoundEngine->play2D ("SFX/misc_menu_2.wav", false, true);}*/
+			 menuGUIstart = theSoundEngine->play2D ("SFX/misc_menu.wav", false, true);}*/
 		if(menuGUIstart->getIsPaused() == true){menuGUIstart->setIsPaused(false);}
 		else if(menuGUIstart->isFinished() == true){menuGUIstart = NULL;}
+	}
+
+	if(hoverCont)
+	{	
+		if(menuGUIcont == NULL)
+			{menuGUIcont = theSoundEngine->play2D ("SFX/misc_menu_2.wav", false, true);}		
+		/*else{menuGUIcont == NULL;
+			 menuGUIcont = theSoundEngine->play2D ("SFX/misc_menu_2.wav", false, true);}*/
+		if(menuGUIcont->getIsPaused() == true){menuGUIcont->setIsPaused(false);}
+		else if(menuGUIcont->isFinished() == true){menuGUIcont = NULL;}
 	}
 
 	if(hoverSet)
@@ -238,12 +250,20 @@ bool CIntroState::Init()
 	hoverStart = false;
 	hoverSet = false;
 	hoverExit = false;
+	hoverCont = false;
 
 	startbutton = new ButtonClass();
 	LoadTGA(&startbutton->button[0],"Textures/startup.tga");
 	LoadTGA(&startbutton->button[1],"Textures/startdown.tga");
-	startbutton->Set(240,580,400,460);
+	startbutton->Set(240,580,340,400);
 	ListofButtons.push_back(startbutton);
+
+	
+	contbutton = new ButtonClass();
+	LoadTGA(&contbutton->button[0],"Textures/continueup.tga");
+	LoadTGA(&contbutton->button[1],"Textures/continuedown.tga");
+	contbutton->Set(300,520,400,460);
+	ListofButtons.push_back(contbutton);
 
 	settingsbutton = new ButtonClass();
 	LoadTGA(&settingsbutton->button[0],"Textures/settingsup.tga");
@@ -256,12 +276,6 @@ bool CIntroState::Init()
 	LoadTGA(&exitbutton->button[1],"Textures/exitdown.tga");
 	exitbutton->Set(350,450,520,580);
 	ListofButtons.push_back(exitbutton);
-
-	contbutton = new ButtonClass();
-	LoadTGA(&contbutton->button[0],"Textures/continueup.tga");
-	LoadTGA(&contbutton->button[1],"Textures/continuedown.tga");
-	contbutton->Set(240,580,330,400);
-	ListofButtons.push_back(contbutton);
 
 	return true;
 }
@@ -305,10 +319,10 @@ void CIntroState::Update(CGameStateManager* theGSM)
 {
 	if (sizechanged)
 	{
-		startbutton->Set(240,580,400,460);
+		startbutton->Set(240,580,340,400);
+		contbutton->Set(300,520,400,460);
 		settingsbutton->Set(300,520,460,520);
 		exitbutton->Set(350,450,520,580);
-		contbutton->Set(240,580,330,400);
 		sizechanged = false;
 	}
 

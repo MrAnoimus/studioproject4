@@ -864,8 +864,10 @@ bool CPlayState::Init()
 	returnbutton = new ButtonClass();
 	LoadTGA(&returnbutton->button[0],"Textures/returnup.tga");
 	LoadTGA(&returnbutton->button[1],"Textures/returndown.tga");
-	returnbutton->Set(360,460,230,260);
+	returnbutton->Set(340,480,330,370);
 	ListofButtons.push_back(returnbutton);
+
+	daypassed = 1;
 
 	//load ttf fonts
 	minigameobjects->mgfont.init("Fonts/GretoonHighlight.TTF", 72);
@@ -875,6 +877,25 @@ bool CPlayState::Init()
 	LoadTGA(&OKbutton->button[1],"Textures/okdown.tga");
 	OKbutton->Set(350,450,400,460);
 	ListofButtons.push_back(OKbutton);
+
+	//game ui buttons
+	NormSpeed = new ButtonClass();
+	LoadTGA(&NormSpeed->button[0],"Textures/normalspeedup.tga");
+	LoadTGA(&NormSpeed->button[1],"Textures/normalspeeddown.tga");
+	NormSpeed->Set(680,695,150,165);
+	ListofButtons.push_back(NormSpeed);
+
+	MinSpeed = new ButtonClass();
+	LoadTGA(&MinSpeed->button[0],"Textures/minutespeedup.tga");
+	LoadTGA(&MinSpeed->button[1],"Textures/minutespeeddown.tga");
+	MinSpeed->Set(705,735,150,165);
+	ListofButtons.push_back(MinSpeed);
+
+	HrSpeed = new ButtonClass();
+	LoadTGA(&HrSpeed->button[0],"Textures/hourspeedup.tga");
+	LoadTGA(&HrSpeed->button[1],"Textures/hourspeeddown.tga");
+	HrSpeed->Set(745,790,150,165);
+	ListofButtons.push_back(HrSpeed);
 
 	Choice1 = new ButtonClass();
 	LoadTGA(&Choice1->button[0],"Textures/CheapTree.tga");
@@ -971,6 +992,30 @@ void CPlayState::Update(CGameStateManager* theGSM)
 {
 	
 	checker = 0;
+
+	if(NormSpeed->buttonclicked)
+	{
+		myGameUI.myGameTime.Fincrement = 10;
+		myGameUI.myGameTime.HrIncrement = 1;
+		mouseInfo.mLButtonUp = false;
+		NormSpeed->buttonclicked = false;
+	}
+
+	if(MinSpeed->buttonclicked)
+	{
+		myGameUI.myGameTime.Fincrement = 100;
+		mouseInfo.mLButtonUp = false;
+		MinSpeed->buttonclicked = false;
+	}
+
+	if(HrSpeed->buttonclicked)
+	{
+		myGameUI.myGameTime.Fincrement = 100;
+		myGameUI.myGameTime.HrIncrement = 3;
+		mouseInfo.mLButtonUp = false;
+		HrSpeed->buttonclicked = false;
+	}
+
 	if(myKeys['r'] == true)
 	{
 		resource.SetWin(0);
@@ -994,7 +1039,18 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		calculateEarning();
 		theCamera->canPan = false;
 		myGameUI.myGameTime.daycheck = false;
+		daypassed++;
 	}
+
+	if(daypassed %2 == 0 && resource.GetMoney() <= 800)
+	{
+		myGameUI.myGameTime.Fincrement = 10;
+		myGameUI.myGameTime.HrIncrement = 1;
+		minigameobjects->minigame = true;
+		minigameobjects->playing = true;
+		daypassed = 1;
+	}
+
 	if(minigameobjects->minigame)
 	{
 		theCamera->canPan = false;
@@ -1011,15 +1067,19 @@ void CPlayState::Update(CGameStateManager* theGSM)
 	{
 		minigameobjects->minigame = false;
 		mouseInfo.mLButtonUp = false;
+		returnbutton->buttonclicked = false;
 	}
 
 	if (sizechanged)
 	{
 		OKbutton->Set(240,580,400,460);
-		returnbutton->Set(360,460,230,260);
+		returnbutton->Set(340,480,330,370);
 		Choice1->Set(300,520,460,520);
 		Choice2->Set(350,450,520,580);
 		Savebutton->Set(600,650,0,50);
+		NormSpeed->Set(680,695,150,165);
+		MinSpeed->Set(705,735,150,165);
+		HrSpeed->Set(745,790,150,165);
 		sizechanged = false;
 	}
 	if(OKbutton->buttonclicked)
@@ -1464,6 +1524,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
 
+
 	//
 	if(minigameobjects->minigame)
 	{
@@ -1495,6 +1556,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	print(our_font,0,250,"empty? : %d",myTile[SelectorY][SelectorX].GetFull());
 
 	RenderUI();
+
 	if(minigameobjects->minigame)
 	{
 		if(minigameobjects->timer <= 0)
@@ -1527,6 +1589,11 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 }
 void CPlayState::RenderUI(void)
 {
+	
+	NormSpeed->Render();
+	MinSpeed->Render();
+	HrSpeed->Render();
+
 	//print(our_font,0,250,"Current Money :%.2f\nCurrent Manpower :%1i\nCurrent Citizen:%1i",PlayerResource.GetMoney() ,PlayerResource.GetManPower(),PlayerResource.GetCitizen());
 	if(minigameobjects->minigame)
 	{
