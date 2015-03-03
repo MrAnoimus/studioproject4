@@ -190,7 +190,6 @@ class CPlayState : public CGameState
 		float width, height;
 
 		GameUI myGameUI;
-		
 		string rNAME;
 
 		void checkUIName();
