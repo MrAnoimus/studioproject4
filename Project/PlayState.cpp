@@ -240,7 +240,13 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 									resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myObstacle.GetCost());
 								}
 							}
-
+							else if(myTile[SelectorY][SelectorX].GetBtype() == 6)
+							{
+								if(myTile[SelectorY][SelectorX].GetEmpty())
+								{
+									resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myDebris.GetCost());
+								}
+							}
 							for(int y = 0; y < ROWS; y += 1)
 							{
 								for(int x = 0; x < COLS; x += 1)
@@ -256,8 +262,9 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 									{
 										//once selected and click on set tile to not empty
 										myTile[y][x].SetEmpty(false);
-										resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myDebris.GetCost());
+										//resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myDebris.GetCost());
 										Map[SelectorY][SelectorX]=10;
+
 										//myTile[y][x].Tag = "nothing";
 									}
 								}
@@ -372,22 +379,25 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 					{
 						if(myTile[SelectorY][SelectorX].GetBtype() == 1)
 						{
-							myTile[SelectorY][SelectorX].SetEmpty(false);
+							myTile[SelectorY][SelectorX].SetEmpty(true);
 							
 							Map[SelectorY][SelectorX]=220;
+							myTile[SelectorY][SelectorX].SetBtype(6);
 							//minus one house
 							housecount-=1;
 							resource.SetManpower(resource.GetManPower() +1);
 						}
 						if(myTile[SelectorY][SelectorX].GetBtype() == 2)
 						{
-							myTile[SelectorY][SelectorX].SetEmpty(false);
+							myTile[SelectorY][SelectorX].SetEmpty(true);
+							myTile[SelectorY][SelectorX].SetBtype(6);
 							Map[SelectorY][SelectorX]=220;
 							FcourtCount -=1;
 						}
 						if(myTile[SelectorY][SelectorX].GetBtype() == 3)
 						{
-							myTile[SelectorY][SelectorX].SetEmpty(false);
+							myTile[SelectorY][SelectorX].SetEmpty(true);
+							myTile[SelectorY][SelectorX].SetBtype(6);
 							Map[SelectorY][SelectorX]=220;
 							GstoreCount -= 1;
 						}
@@ -450,7 +460,6 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 					myTile[SelectorY][SelectorX].SetBtype(0);
 				}
 			}
-			
 		}
 		if(myKeys['2']==true)
 		{
