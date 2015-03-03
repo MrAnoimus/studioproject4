@@ -168,6 +168,7 @@ void Tile::Draw()
 {
 	if(ModeOn)
 	{
+		Vector3D temp(0,0,-3);
 		DrawTileOutLine();
 		DrawTile();
 		switch(Btype)
@@ -175,21 +176,25 @@ void Tile::Draw()
 			case 1:
 			{
 				//set building speed
+				myHouse.SetPosition(this->Position+temp);
 				myHouse.SetAlpha(0.5f);
 				myHouse.Draw();
 			}break;
 			case 2:
 			{
+				myFCourt.SetPosition(this->Position+temp);
 				myFCourt.SetAlpha(0.5f);
 				myFCourt.Draw();
 			}break;
 			case 3:
 			{
+				myGstore.SetPosition(this->Position+temp);
 				myGstore.SetAlpha(0.5f);
 				myGstore.Draw();
 			}break;
 			case 4:
 			{
+				myShelter.SetPosition(this->Position+temp);
 				myShelter.SetAlpha(0.5f);
 				myShelter.Draw();
 			}break;
