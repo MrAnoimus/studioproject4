@@ -874,16 +874,10 @@ bool CPlayState::Init()
 	NormSpeed->Set(680,695,150,165);
 	ListofButtons.push_back(NormSpeed);
 
-	MinSpeed = new ButtonClass();
-	LoadTGA(&MinSpeed->button[0],"Textures/minutespeedup.tga");
-	LoadTGA(&MinSpeed->button[1],"Textures/minutespeeddown.tga");
-	MinSpeed->Set(705,735,150,165);
-	ListofButtons.push_back(MinSpeed);
-
 	HrSpeed = new ButtonClass();
 	LoadTGA(&HrSpeed->button[0],"Textures/hourspeedup.tga");
 	LoadTGA(&HrSpeed->button[1],"Textures/hourspeeddown.tga");
-	HrSpeed->Set(745,790,150,165);
+	HrSpeed->Set(705,735,150,165);
 	ListofButtons.push_back(HrSpeed);
 
 	Choice1 = new ButtonClass();
@@ -1015,12 +1009,6 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		mouseInfo.mLButtonUp = false;
 		NormSpeed->buttonclicked = false;
 	}
-	if(MinSpeed->buttonclicked)
-	{
-		myGameUI.myGameTime.Fincrement = 100;
-		mouseInfo.mLButtonUp = false;
-		MinSpeed->buttonclicked = false;
-	}
 
 	if(HrSpeed->buttonclicked)
 	{
@@ -1056,13 +1044,14 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		daypassed++;
 	}
 
-	if(daypassed %2 == 0 && resource.GetMoney() <= 800)
+	if(daypassed == 3 && resource.GetMoney() <= 800)
 	{
+		minigameobjects->Init(theCamera);
 		myGameUI.myGameTime.Fincrement = 10;
 		myGameUI.myGameTime.HrIncrement = 1;
 		minigameobjects->minigame = true;
 		minigameobjects->playing = true;
-		daypassed = 1;
+		daypassed = 0;
 	}
 
 	if(minigameobjects->minigame)
@@ -1071,6 +1060,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		theCamera->isZoomIn = false;
 		theCamera->isZoomOut = false;
 	}
+
 	if(minigameobjects->addcash)
 	{
 		resource.SetMoney(resource.GetMoney() + minigameobjects->cash);
@@ -1092,8 +1082,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		Choice2->Set(350,450,520,580);
 		Savebutton->Set(600,650,0,50);
 		NormSpeed->Set(680,695,150,165);
-		MinSpeed->Set(705,735,150,165);
-		HrSpeed->Set(745,790,150,165);
+		HrSpeed->Set(705,735,150,165);
 		sizechanged = false;
 	}
 	if(OKbutton->buttonclicked)
@@ -1172,7 +1161,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 	//	theGSM->ChangeState( CResultState::Instance() );
 	//}
 
-	if (myGameUI.myGameTime.GetDay() == 4)
+	if (myGameUI.myGameTime.GetDay() == 12)
 	{
 		resource.SetWin(0);
 		theGSM->ChangeState( CResultState::Instance() );
@@ -1540,14 +1529,18 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	glPopMatrix();
 	glColor4f(1.0f,1.0f,1.0f,1.0f);
 	glPushMatrix();
-	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
-	{	
+
+	if(!minigameobjects->minigame)
+	{
+		for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+		{	
 		
-		//here
-		Citizen *Citizens = *it;
-		if (Citizens->active == true)
-		{
-			Citizens->Draw(SelectorX*100,SelectorY*100);
+			//here
+			Citizen *Citizens = *it;
+			if (Citizens->active == true)
+			{
+				Citizens->Draw(SelectorX*100,SelectorY*100);
+			}
 		}
 	}
 	glPopMatrix();
@@ -1602,7 +1595,6 @@ void CPlayState::RenderUI(void)
 {
 	
 	NormSpeed->Render();
-	MinSpeed->Render();
 	HrSpeed->Render();
 
 	//print(our_font,0,250,"Current Money :%.2f\nCurrent Manpower :%1i\nCurrent Citizen:%1i",PlayerResource.GetMoney() ,PlayerResource.GetManPower(),PlayerResource.GetCitizen());
