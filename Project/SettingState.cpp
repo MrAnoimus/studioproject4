@@ -144,7 +144,7 @@ bool CSettingState::Init()
 	//Read a value from the lua text file
 	lua_State *L2 = lua_open();
 	luaL_openlibs(L2);
-	if (luaL_loadfile(L2, "LuaScript/test.lua") || lua_pcall(L2, 0, 0, 0))
+	if (luaL_loadfile(L2, "LuaScript/setting.lua") || lua_pcall(L2, 0, 0, 0))
 	{
 		printf("error: %s", lua_tostring(L2, -1));
 		return -1;
@@ -263,7 +263,7 @@ void CSettingState::Update(CGameStateManager* theGSM)
 		{
 		
 			ofstream file;
-			file.open("LuaScript/test.lua");
+			file.open("LuaScript/setting.lua");
 			file <<"VOLUME = ";
 			file << volume;
 			file.close();
