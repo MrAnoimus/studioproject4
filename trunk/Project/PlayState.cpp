@@ -1040,7 +1040,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		myGameUI.myGameTime.daycheck = false;
 		daypassed++;
 		calculateEarning();
-		if(daypassed!=3)
+		if(daypassed!=2)
 		{
 			REvent.IsDisplay = true;
 			REvent.Random();
@@ -1048,8 +1048,9 @@ void CPlayState::Update(CGameStateManager* theGSM)
 			theCamera->canPan = false;
 		}
 		
-		if(daypassed==3 && resource.GetMoney() <= 800)
+		if(daypassed==2 && resource.GetMoney() <= 800)
 		{
+			minigameobjects->Init(theCamera);
 			myGameUI.myGameTime.Fincrement = 0;
 			myGameUI.myGameTime.HrIncrement = 0;
 
@@ -1171,12 +1172,12 @@ void CPlayState::Update(CGameStateManager* theGSM)
 	}
 
 
-	////conditions
-	////if (resource.GetMoney() <= 0)
-	////{
-	////	resource.SetWin(1);
-	////	theGSM->ChangeState( CResultState::Instance() );
-	////}
+	//conditions
+	if (resource.GetMoney() <= 0)
+	{
+		resource.SetWin(1);
+		theGSM->ChangeState( CResultState::Instance() );
+	}
 
 	if (myGameUI.myGameTime.GetDay() == 8)
 	{
