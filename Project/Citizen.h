@@ -22,6 +22,7 @@ class Citizen: public Human
 public:
 	int index;
 	Destination* CitizenDestination;
+	bool started;
 	bool active;
 	enum Favourite
 	{

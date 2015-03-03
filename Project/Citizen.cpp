@@ -16,6 +16,7 @@ Citizen::Citizen(void)
 	,MovedBack(false)
 	,owner("JunHwee")
 	,sheltered(false)
+	,started(false)
 
 {
 	glEnable(GL_TEXTURE_2D);
@@ -259,15 +260,15 @@ void Citizen::SetPlace(std::string tag, int i)
 	{
 		myBuilding = Citizen::WORKPLACE;
 	}
-	if(tag == "eatingplace")
+	else if(tag == "eatingplace")
 	{
 		myBuilding = Citizen::EATINGPLACE;
 	}
-	if(tag =="nothing")
+	else if(tag =="nothing")
 	{
 		myBuilding = Citizen::NOTHING;
 	}
-	if(tag =="house")
+	else if(tag =="house")
 	{
 		myBuilding = Citizen::HOUSES;
 	}
@@ -429,7 +430,7 @@ void Citizen::StatsBoard()
 		glPopMatrix();
 	glPopMatrix();
 
-	
+	glColor3f(1,1,1);
 }
 
 void Citizen::DrawInGameText(std::string Text)
