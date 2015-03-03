@@ -177,6 +177,7 @@ void CResultState::Draw(CGameStateManager* theGSM)
 	glEnable(GL_TEXTURE_2D);
 	if (resource.GetWin() == 0)
 	{
+		
 		// Draw Background image
 		glPushMatrix();
 			glEnable(GL_BLEND);
@@ -194,12 +195,14 @@ void CResultState::Draw(CGameStateManager* theGSM)
 					glVertex2f(0,0);				
 				glEnd();
 			glPopMatrix();
-			//glDisable(GL_BLEND);
+			glDisable(GL_BLEND);
 		glPopMatrix();
+		print(our_font,0,250,"Money: %d",resource.GetMoney());
 	}
 
 	if (resource.GetWin() == 1)
 	{
+		
 		glPushMatrix();
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -216,8 +219,9 @@ void CResultState::Draw(CGameStateManager* theGSM)
 					glVertex2f(0,0);				
 				glEnd();
 			glPopMatrix();
-			//glDisable(GL_BLEND);
+			glDisable(GL_BLEND);
 		glPopMatrix();
+		print(our_font,0,250,"Money: %d",resource.GetMoney());
 	}
 
 	glDisable(GL_TEXTURE_2D);

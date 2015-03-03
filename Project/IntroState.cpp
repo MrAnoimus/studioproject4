@@ -297,7 +297,7 @@ void CIntroState::HandleEvents(CGameStateManager* theGSM)
 	}
 	if(myKeys['w'] == true)
 	{
-		theGSM->ChangeState( CPlayState::Instance() );
+		theGSM->ChangeState( CResultState::Instance() );
 	}
 }
 
@@ -399,6 +399,7 @@ void CIntroState::Draw(CGameStateManager* theGSM)
 
 	glDisable(GL_TEXTURE_2D);
 	//drawFPS();
+	//print(our_font,750,100,"Money: %d",resource.GetMoney());
 	theCamera->SetHUD( false );
 	// Flush off any entity which is not drawn yet, so that we maintain the frame rate.
 	glFlush();

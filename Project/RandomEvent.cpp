@@ -195,6 +195,33 @@ void CRandomEvent::HandleREvents(int type)
 		glPopMatrix();
 		glDisable(GL_TEXTURE_2D);
 		break;
+
+		default:
+			glEnable(GL_TEXTURE_2D);
+		glPushMatrix();
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture (GL_TEXTURE_2D, EventTexture[7].id);
+			glPushMatrix();
+				glTranslatef(100,50,-1);
+				glScalef(0.75,0.75,0.75);
+				glBegin(GL_QUADS);
+				glTexCoord2f(1,1);
+				glVertex2f(0,600);
+				glTexCoord2f(0,1);
+				glVertex2f(800,600);
+				glTexCoord2f(0,0);
+				glVertex2f(800,0);
+				glTexCoord2f(1,0);
+				glVertex2f(0,0);				
+				glEnd();
+			glPopMatrix();
+			glDisable(GL_BLEND);
+		glPopMatrix();
+		glDisable(GL_TEXTURE_2D);
+		break;
 	}
+	
+		
 	
 }

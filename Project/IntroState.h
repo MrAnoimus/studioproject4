@@ -9,6 +9,7 @@
 
 #include "Definitions.h"
 #include "ButtonClass.h"
+#include "ResultState.h"
 
 
 
