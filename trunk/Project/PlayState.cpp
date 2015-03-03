@@ -1557,14 +1557,14 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	theCamera->SetHUD( true);
 	
 	checkUIName();
-	myGameUI.Draw(width-200,height - 50,Bnames.c_str(),cost,myTile[SelectorY][SelectorX].GetModeOn());
+	myGameUI.Draw((width/2)-200,height - 50,Bnames.c_str(),cost,myTile[SelectorY][SelectorX].GetModeOn());
 	myGameUI.DrawSelect(750,200,myTile[SelectorY][SelectorX].GetModeOn(),myTile[SelectorY][SelectorX].GetBtype());
 	//money manpower citizen
 	myGameUI.DrawResource(myGameUI.GetIconSize(),myGameUI.GetIconSize());
 	myGameUI.DrawResourceData(myGameUI.GetSize()*2,height-myGameUI.GetSize()*2,resource.GetMoney(),resource.GetCitizen(),resource.GetManPower(),resource.GetMaxManPower(),checker,homeless);
 	//print(our_font,0,250,"PickX :%d PickY:%d",SelectorX,SelectorY);
 	//print(our_font,0,250,"house number : %d",housecount);
-	print(our_font,0,250,"empty? : %d",myTile[SelectorY][SelectorX].GetFull());
+	//print(our_font,0,250,"empty? : %d",myTile[SelectorY][SelectorX].GetFull());
 
 	RenderUI();
 
