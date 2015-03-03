@@ -90,9 +90,6 @@
     <ClCompile Include="GameTime.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="Debris.cpp">
-      <Filter>Tiles\Building</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IntroState.h">
@@ -197,9 +194,6 @@
     </ClInclude>
     <ClInclude Include="GameTime.h">
       <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Debris.h">
-      <Filter>Tiles\Building</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

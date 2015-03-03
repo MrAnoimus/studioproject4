@@ -92,7 +92,6 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Choices.cpp" />
     <ClCompile Include="Citizen.cpp" />
-    <ClCompile Include="Debris.cpp" />
     <ClCompile Include="Destination.cpp" />
     <ClCompile Include="FoodCourt.cpp" />
     <ClCompile Include="FreeType.cpp" />
@@ -126,7 +125,6 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Choices.h" />
     <ClInclude Include="Citizen.h" />
-    <ClInclude Include="Debris.h" />
     <ClInclude Include="Definitions.h" />
     <ClInclude Include="Destination.h" />
     <ClInclude Include="FoodCourt.h" />

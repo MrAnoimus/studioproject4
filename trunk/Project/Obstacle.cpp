@@ -14,6 +14,8 @@ void Obstacle::Init(Vector3D pos)
 	LoadTGA(&IsBuilding, "Textures/Building/loading.tga");
 	LoadTGA(&IsDestructing, "Textures/Building/pixaxe.tga");
 	LoadTGA(&ObstacleTexture, "Textures/Building/badland.tga");
+	LoadTGA(&debrisTexture, "Textures/Building/debris.tga");
+
 	SetSize(50);
 	SetPosition(pos);
 	SetBPercentage(0);
@@ -24,6 +26,7 @@ void Obstacle::Init(Vector3D pos)
 	this->rotationSpeed = 0.5f;
 	SetAlpha(1.0f);
 	test = true;
+	diff = true;
 }
 void Obstacle::Update()
 {
@@ -55,7 +58,14 @@ void Obstacle::Draw()
 		glColor4f(1,1,1,GetAlpha());
 		glTranslatef(GetPosition().x,GetPosition().y,GetPosition().z);
 		//badland
-		glBindTexture(GL_TEXTURE_2D, ObstacleTexture.id);
+		if(diff)
+		{
+			glBindTexture(GL_TEXTURE_2D, ObstacleTexture.id);
+		}else
+		{
+			glBindTexture(GL_TEXTURE_2D, debrisTexture.id);
+		}
+		
 		glPushMatrix();
 			glBegin(GL_QUADS);
 				glTexCoord2f(1,1);
@@ -79,6 +89,16 @@ float Obstacle::GetRSpeed()
 {
 	return this->rotationSpeed;
 }
+bool Obstacle::GetDiff()
+{
+	return this->diff;
+}
+
+void Obstacle::SetDiff(bool d)
+{
+	this->diff = d;
+}
+
 void Obstacle::SetRspeed(float rs)
 {
 	this->rotationSpeed = rs;
