@@ -190,26 +190,26 @@ bool CSettingState::Init()
 	//mouseInfo.lastY = glutGet(GLUT_WINDOW_HEIGHT) >> 1;
 
 	SaveButton = new ButtonClass();
-	LoadTGA(&SaveButton->button[0],"Textures/confirm.tga");
-	LoadTGA(&SaveButton->button[1],"Textures/confirm.tga");
+	LoadTGA(&SaveButton->button[0],"Textures/confirmup.tga");
+	LoadTGA(&SaveButton->button[1],"Textures/confirmdown.tga");
 	SaveButton->Set(100,300,460,500);
 	ListofButtons.push_back(SaveButton);
 
 	ExitButton = new ButtonClass();
-	LoadTGA(&ExitButton->button[0],"Textures/cancel.tga");
-	LoadTGA(&ExitButton->button[1],"Textures/cancel.tga");
+	LoadTGA(&ExitButton->button[0],"Textures/cancelup.tga");
+	LoadTGA(&ExitButton->button[1],"Textures/canceldown.tga");
 	ExitButton->Set(500,700,460,500);
 	ListofButtons.push_back(ExitButton);
 
 	PlusButton = new ButtonClass();
-	LoadTGA(&PlusButton->button[0],"Textures/plus.tga");
-	LoadTGA(&PlusButton->button[1],"Textures/plus.tga");
+	LoadTGA(&PlusButton->button[0],"Textures/plusup.tga");
+	LoadTGA(&PlusButton->button[1],"Textures/plusdown.tga");
 	PlusButton->Set(650,700,160,200);
 	ListofButtons.push_back(PlusButton);
 
 	MinusButton = new ButtonClass();
-	LoadTGA(&MinusButton->button[0],"Textures/minus.tga");
-	LoadTGA(&MinusButton->button[1],"Textures/minus.tga");
+	LoadTGA(&MinusButton->button[0],"Textures/minusup.tga");
+	LoadTGA(&MinusButton->button[1],"Textures/minusdown.tga");
 	MinusButton->Set(300,350,170,190);
 	ListofButtons.push_back(MinusButton);
 	return true;

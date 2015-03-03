@@ -89,7 +89,7 @@ void MiniGame::Update()
 				timer = 0;
 			}
 
-			if(timer <= 0 && playing == true )
+			if(timer <= 0 && playing == true)
 			{
 				playing = false;
 				addcash = true;
@@ -162,7 +162,7 @@ void MiniGame::Update()
 								mg->counter--;
 								it = m_goList.erase(it);
 								
-								cash += 10;
+								cash += 50;
 								//resource->SetMoney(resource->GetMoney()+100);
 
 								if(mgsfx == NULL)
@@ -236,7 +236,7 @@ void MiniGame::Draw()
 {
 
 	glPushMatrix();//3
-	glTranslatef(150,50,0);
+	glTranslatef(150,50,-5);
 	glBindTexture (GL_TEXTURE_2D, MGTexture[0].id);
 	DrawMGBG();
 	

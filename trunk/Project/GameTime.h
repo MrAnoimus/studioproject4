@@ -12,8 +12,7 @@ class CGameTime
 		float Second;
 		string TimeFrame;
 		string CurrentTime;
-		float Fincrement;
-		float Iincrement;
+		
 	public:
 		CGameTime();
 		~CGameTime();
@@ -32,5 +31,9 @@ class CGameTime
 		int GetMinute(void);
 		int GetSecond(void);
 		string GetTimeFrame(void);
+		float Fincrement;
+		float Iincrement;
+		float HrIncrement;
+		float DayIncrement;
 };
 

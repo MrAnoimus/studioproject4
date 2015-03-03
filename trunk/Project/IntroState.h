@@ -53,7 +53,7 @@ class CIntroState : public CGameState
 			return &theIntroState;
 		}
 
-		bool hoverStart, hoverSet, hoverExit; 
+		bool hoverStart, hoverSet, hoverExit, hoverCont; 
 
 	protected:
 		CIntroState() :theCamera(NULL)
@@ -115,6 +115,7 @@ class CIntroState : public CGameState
 		ISoundEngine* theSoundEngine;
 		//game sounds
 		ISound* menuGUIstart;
+		ISound* menuGUIcont;
 		ISound* menuGUIset;
 		ISound* menuGUIexit;
 		ISound* introBGM;

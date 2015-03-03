@@ -13,6 +13,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include "Node.h"
+
+#include "GameTime.h"
+
 //for mini game
 #include "GameObject.h"
 #include "MyMath.h"
@@ -120,6 +123,12 @@ class CPlayState : public CGameState
 	private:
 
 		static CPlayState thePlayState;
+		
+		//game ui buttons
+		ButtonClass* NormSpeed;
+		ButtonClass* MinSpeed;
+		ButtonClass* HrSpeed;
+
 		//button
 		ButtonClass* OKbutton;
 		ButtonClass* Choice1;
@@ -127,7 +136,10 @@ class CPlayState : public CGameState
 		ButtonClass* Savebutton;
 		//minigame buttons
 		ButtonClass* returnbutton;
+
+		//button list
 		std::vector<ButtonClass*> ListofButtons;
+
 		// The camera
 		Camera* theCamera;
 		// Camera
@@ -182,5 +194,8 @@ class CPlayState : public CGameState
 		void checkUIName();
 		std::string Bnames;
 		int cost;
+
+		int daypassed;
+
 };
 #endif

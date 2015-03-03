@@ -17,6 +17,8 @@ void CGameTime::Init()
 	Fincrement = 10.0f;
 	TimeFrame = "AM";
 	Iincrement = 1;
+	HrIncrement = 1;
+	DayIncrement = 1;
 	daycheck = false;
 }
 void CGameTime::Update()
@@ -30,13 +32,13 @@ void CGameTime::Update()
 	}
 	if(Minute>59)
 	{
-		Hour += Iincrement;
+		Hour += HrIncrement;
 		Minute = 0;
 	}
 	if(Hour>23)
 	{
 		Hour = 0;
-		Day+=Iincrement;
+		Day += DayIncrement;
 		daycheck = true;
 	}
 	if(Day>30)
