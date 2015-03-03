@@ -54,7 +54,7 @@ public:
 	std::string GetMood();
 	Citizen(void);
 	~Citizen(void);
-	void Draw(float PositionX, float PositionY);
+	void Draw(float x, float y);
 
 	void SetFavourite(Favourite MyFavourites);
 	void SetPlace(std::string tag, int number);

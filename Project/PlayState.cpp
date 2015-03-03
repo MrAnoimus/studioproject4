@@ -116,6 +116,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 			{
 				if (state == GLUT_DOWN)
 				{
+					
 					ClearTileMap();
 					mouseInfo.mLButtonUp = state;
 					mouseInfo.lastX = x;
@@ -158,6 +159,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 											Citizens->SetPlace(myTile[SelectorY-1][SelectorX].Tag, 2);
 											Citizens->SetPlace(myTile[SelectorY+1][SelectorX].Tag, 3);
 											Citizens->Movedout=true;
+											homeless--;
 											break;
 										}
 										if(i>=1)
@@ -339,6 +341,59 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 			mouseInfo.mRButtonUp = state;
 			if(state == GLUT_DOWN)
 			{
+				//for existing citizens when game already start
+				//for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+				//	{
+				//		
+				//		Citizen *Citizens = *it;
+				//		Astar as(px,py,1,1);
+				//		//
+				//		bool result = as.Search(Map);
+
+				//		CNode* Node = new CNode;
+				//		Node->x = 1;
+				//		Node->y = 1;
+				//		//
+				//		as.AddCloseList(Node);
+				//		if(result)
+				//		{
+				//			moving = true;
+				//			for(int i=0;i<(int)as.closeList.size();i++)
+				//			{
+				//				//Citizen stuff
+				//				CNode* TheNode = new CNode();
+				//				TheNode->x = as.closeList[i]->x*100;
+				//				TheNode->y = as.closeList[i]->y*100;
+				//				cout <<"Size: " <<(int)as.closeList.size() <<std::endl;
+				//				for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+				//				{
+				//					int j= (int)as.closeList.size();
+				//					Citizen *Citizens = *it;
+				//					if (Citizens->active == true&&Citizens->Movedout==true)
+				//					{
+				//						
+				//						if(i+1>=j)
+				//						{
+				//							Citizens->CitizenDestination->DestinationList.push_back(TheNode);
+				//							
+				//							Citizens->owner = Citizens->GetName();
+				//							Citizens->SetPlace(myTile[SelectorY][SelectorX-1].Tag, 0);
+				//							Citizens->SetPlace(myTile[SelectorY][SelectorX+1].Tag, 1);
+				//							Citizens->SetPlace(myTile[SelectorY-1][SelectorX].Tag, 2);
+				//							Citizens->SetPlace(myTile[SelectorY+1][SelectorX].Tag, 3);
+				//							Citizens->Movedout=false;
+				//							break;
+				//						}
+				//						if(i>=1)
+				//						{				
+				//							Citizens->CitizenDestination->DestinationList.push_back(TheNode);
+				//							break;
+				//						}
+				//					}
+				//				}
+				//			}
+				//		}
+				//	}
 				if(myTile[SelectorY][SelectorX].GetModeOn() == false)
 				{
 					if(theCamera->GetPosition().z >=-500)
@@ -803,6 +858,7 @@ bool CPlayState::Init()
 			go->SetFavourite(Citizen::WORK);
 		}
 		go->SetPosition(Vector3D(100,100,0));
+		homeless++;
 
 		ifstream myFile;
 		myFile.open("Names/namesM.txt");
@@ -843,6 +899,7 @@ bool CPlayState::Init()
 					Citizens->owner = Citizens->GetName();
 					Citizens->SetPosition(Vector3D (10 + x*100,y*100,-1) );	
 					Citizens->Movedout=true;
+					homeless--;
 					break;
 					}
 					
@@ -990,6 +1047,33 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 }
 void CPlayState::Update(CGameStateManager* theGSM) 
 {
+	cout << homeless << endl;
+	if(myGameUI.myGameTime.GetDay()==1&&myGameUI.myGameTime.GetHour()==12&&myGameUI.myGameTime.GetMinute()==0&&myGameUI.myGameTime.GetSecond()==0)
+	{
+		TheChoice->SetPopup(true);
+	}
+	if(DestoryedChance>0)
+	{
+		float Destroyed=0;
+		srand(time(NULL));
+		Destroyed = rand()%100;
+		srand(time(NULL));
+		cout << "Chance" << Destroyed << endl;
+		if(Destroyed <= DestoryedChance)
+		{
+			for(int y = 0; y < ROWS; y += 1)
+			{
+				for(int x = 0; x < COLS; x += 1)
+				{
+					if(Map[y][x] == 1)
+					{
+						Map[y][x] = 220;
+					}
+				}
+			}
+		}
+		
+	}
 	
 	checker = 0;
 
@@ -1094,6 +1178,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		TheChoice->popup = false;
 		mouseInfo.mLButtonUp = false;
 		Choice1->buttonclicked = false;
+		DestoryedChance=20;
 	}
 	if(Choice2->buttonclicked)
 	{
@@ -1311,6 +1396,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 										Citizens->MovedBack=false;
 										Citizens->Movedout=false;
 										Citizens->sheltered=false;
+										homeless++;
 										while(Citizens->index<Citizens->CitizenDestination->DestinationList.size()-1)
 										{
 											Citizens->index++;
@@ -1486,9 +1572,11 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	theCamera->Update();
 
 	minigameobjects->theCamera = theCamera;
-
+	
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
+
+	
 	glPushMatrix();
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glBindTexture (GL_TEXTURE_2D, BackgroundTexture.id);
@@ -1503,7 +1591,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 			glVertex2f(0,0);				
 		glEnd();
 	glPopMatrix();
-
+	
 	glPushMatrix();
 		//glColor3f(1,1,1);
 		glBindTexture (GL_TEXTURE_2D, BGTEST.id);
@@ -1521,6 +1609,8 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 		glEnd();
 		glPopMatrix();
 	glPopMatrix();
+
+
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
 
@@ -1530,21 +1620,28 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	{
 		glTranslatef(0,0,-10);
 		minigameobjects->Draw();
-	}	
-	
-		DrawTileContent();
-	
+	}
+	glPushMatrix();
+	DrawTileContent();
+	glPopMatrix();
+	glColor4f(1.0f,1.0f,1.0f,1.0f);
+	glPushMatrix();
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 	{	
+		
 		//here
 		Citizen *Citizens = *it;
 		if (Citizens->active == true)
 		{
-			Citizens->Draw(SelectorX*100, SelectorY*100);
+			Citizens->Draw(SelectorX*100,SelectorY*100);
 		}
 	}
+	glPopMatrix();
+	
+	
 	//Enable 2D text display and HUD
 	theCamera->SetHUD( true);
+	
 	checkUIName();
 	myGameUI.Draw(width-200,height - 50,Bnames.c_str(),cost,myTile[SelectorY][SelectorX].GetModeOn());
 	myGameUI.DrawSelect(750,200,myTile[SelectorY][SelectorX].GetModeOn(),myTile[SelectorY][SelectorX].GetBtype());
