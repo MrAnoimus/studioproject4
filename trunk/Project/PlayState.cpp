@@ -4,7 +4,7 @@
 #include <iostream>
 #include <time.h>
 #include "ResultState.h"
-extern "C" 
+extern "C"
 {
 	#include "lua.h"
 	#include "lualib.h"
@@ -50,7 +50,7 @@ void CPlayState::MouseMove(int x , int y)
 	{
 		(*it)->UpdateMouseMove(x,y);
 	}
-	
+
 	//to check where camera pan
 	if(theCamera->canPan == true)
 	{
@@ -91,7 +91,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 	{
 		case GLUT_LEFT_BUTTON:
 		{
-			
+
 			if (!mouseInfo.mLButtonUp)
 			{
 				for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
@@ -116,7 +116,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 			{
 				if (state == GLUT_DOWN)
 				{
-					
+
 					ClearTileMap();
 					mouseInfo.mLButtonUp = state;
 					mouseInfo.lastX = x;
@@ -163,7 +163,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 											break;
 										}
 										if(i>=1)
-										{				
+										{
 											Citizens->CitizenDestination->DestinationList.push_back(TheNode);
 											break;
 										}
@@ -186,7 +186,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 						//clicked on
 						if(myTile[SelectorY][SelectorX].IsClickedOn())
 						{
-							
+
 							if(myTile[SelectorY][SelectorX].GetBtype() == 0)
 							{
 								myTile[SelectorY][SelectorX].SetEmpty(true);
@@ -206,13 +206,13 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 									housecount+=1;
 									resource.SetManpower(resource.GetManPower() -1);
 								}
-								
+
 							}
 							else if(myTile[SelectorY][SelectorX].GetBtype() == 2)
 							{
 								//once selected and click on set tile to not empty
 								myTile[SelectorY][SelectorX].SetEmpty(false);
-								
+
 								Map[SelectorY][SelectorX]=2;
 								myTile[SelectorY][SelectorX].Tag ="eatingplace";
 								if(myTile[SelectorY][SelectorX].GetFull() == false)
@@ -220,7 +220,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 									resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myFCourt.GetCost());
 									FcourtCount+=1;
 								}
-								
+
 							}
 							else if(myTile[SelectorY][SelectorX].GetBtype() == 3)
 							{
@@ -233,7 +233,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 									resource.SetMoney(resource.GetMoney()-myTile[SelectorY][SelectorX].myGstore.GetCost());
 									GstoreCount +=1;
 								}
-								
+
 							}
 							else if(myTile[SelectorY][SelectorX].GetBtype() == 5)
 							{
@@ -328,7 +328,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				//for existing citizens when game already start
 				//for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 				//	{
-				//		
+				//
 				//		Citizen *Citizens = *it;
 				//		Astar as(px,py,1,1);
 				//		//
@@ -355,11 +355,11 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				//					Citizen *Citizens = *it;
 				//					if (Citizens->active == true&&Citizens->Movedout==true)
 				//					{
-				//						
+				//
 				//						if(i+1>=j)
 				//						{
 				//							Citizens->CitizenDestination->DestinationList.push_back(TheNode);
-				//							
+				//
 				//							Citizens->owner = Citizens->GetName();
 				//							Citizens->SetPlace(myTile[SelectorY][SelectorX-1].Tag, 0);
 				//							Citizens->SetPlace(myTile[SelectorY][SelectorX+1].Tag, 1);
@@ -369,7 +369,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				//							break;
 				//						}
 				//						if(i>=1)
-				//						{				
+				//						{
 				//							Citizens->CitizenDestination->DestinationList.push_back(TheNode);
 				//							break;
 				//						}
@@ -472,7 +472,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 		{
 			if(state == GLUT_DOWN)
 			{
-			
+
 			}break;
 		}
 	}
@@ -566,7 +566,7 @@ void CPlayState::KeyboardUp(unsigned char key, int x, int y)
 }
 bool CPlayState::Init()
 {
-	
+
 	if (resource.GetLoad() == 1)
 	{
 		ifstream ifile("LuaScript/Save/save2.txt");
@@ -613,7 +613,7 @@ bool CPlayState::Init()
 
 	lua_State *L2 = lua_open();
 	luaL_openlibs(L2);
-	if (luaL_loadfile(L2, "LuaScript/test.lua") || lua_pcall(L2, 0, 0, 0))
+	if (luaL_loadfile(L2, "LuaScript/setting.lua") || lua_pcall(L2, 0, 0, 0))
 	{
 		printf("error: %s", lua_tostring(L2, -1));
 		return -1;
@@ -654,6 +654,22 @@ bool CPlayState::Init()
 		int numOfCitizen= lua_tointeger(L3,4);
 		cout <<numOfCitizen;
 		resource.SetCitizen(numOfCitizen);
+
+
+		lua_getglobal(L3,"DAY");
+		int day= lua_tointeger(L3,5);
+		cout <<day;
+		myGameUI.myGameTime.SetDay(day);
+
+		lua_getglobal(L3,"HOUR");
+		int hour= lua_tointeger(L3,6);
+		myGameUI.myGameTime.SetHour(hour);
+		cout <<hour;
+
+		lua_getglobal(L3,"MINUTE");
+		int minute= lua_tointeger(L3,7);
+		cout <<minute;
+		myGameUI.myGameTime.SetMinute(minute);
 		lua_close(L3);
 	}
 	//dont load
@@ -694,7 +710,7 @@ bool CPlayState::Init()
 	theCamera->SetDirection( 0.0, 0.0, 1.0 );
 	angle = 0.0f;
 	frequency = 30.0f;
-	//data used for testing 
+	//data used for testing
 	//
 	//load texture here
 	LoadTGA(&BGTEST,"Textures/bg2.tga");
@@ -755,7 +771,7 @@ bool CPlayState::Init()
 
 	for(int i =0; i< resource.GetCitizen(); i++)
 	{
-		
+
 		Citizen *go;
 		go = FetchObject();
 		go->active = true;
@@ -773,10 +789,10 @@ bool CPlayState::Init()
 			srand((unsigned int)i*i);
 			Random = rand()%3+1;
 		}
-		
+
 		/*cout <<"After Random "<<Random<<endl;
 		cout <<"After Random2 "<<Random2<<endl;*/
-		
+
 		if(Random==1)
 		{
 			go->SetFavourite(Citizen::FOOD);
@@ -804,11 +820,11 @@ bool CPlayState::Init()
 			x++;
 		}
 		srand((unsigned int) i);
-		
+
 		/*randNum = Math::RandIntMinMax(0, 49);*/
 		randNum = rand() % 50 + 1;
 		rNAME = rnames[randNum];
-	
+
 		myFile.close();
 
 		//go->SetName(rNAME);
@@ -823,18 +839,18 @@ bool CPlayState::Init()
 			{
 				for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 				{
-					
+
 					Citizen *Citizens = *it;
 					if(Citizens->active==true&&Citizens->Movedout==false)
 					{
 					myTile[y][x].myHouse.SetOwner(Citizens->GetName());
 					Citizens->owner = Citizens->GetName();
-					Citizens->SetPosition(Vector3D (10 + x*100,y*100,-1) );	
+					Citizens->SetPosition(Vector3D (10 + x*100,y*100,-1) );
 					Citizens->Movedout=true;
 					homeless--;
 					break;
 					}
-					
+
 				}
 			}
 		}
@@ -895,7 +911,7 @@ bool CPlayState::Init()
 	Savebutton = new ButtonClass();
 	LoadTGA(&Savebutton->button[0],"Textures/save.tga");
 	LoadTGA(&Savebutton->button[1],"Textures/save.tga");
-	Savebutton->Set(600,650,0,50);
+	Savebutton->Set(750,800,5,50);
 	ListofButtons.push_back(Savebutton);
 	//get amount of building etc
 	for(int y = 0; y < ROWS; y += 1)
@@ -933,21 +949,6 @@ void CPlayState::Resume()
 }
 void CPlayState::HandleEvents(CGameStateManager* theGSM)
 {
-
-	if(myKeys['h'] == true)
-	{
-		resource.SetWin(0);
-		theGSM->ChangeState( CResultState::Instance() );
-
-	}
-
-		if(myKeys['j'] == true)
-	{
-		resource.SetWin(1);
-		theGSM->ChangeState( CResultState::Instance() );
-
-	}
-
 	if(minigameobjects->minigame)
 	{
 		GameObject* catcher2 = (GameObject*)minigameobjects->catcher;
@@ -957,7 +958,7 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 			{
 				if(myKeys['a'] == true)
 				{
-					minigameobjects->mgctr2++; 
+					minigameobjects->mgctr2++;
 					minigameobjects->inverted = true;
 					catcher2->pos.x += 2;
 				}
@@ -971,7 +972,7 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 		}
 	}
 }
-void CPlayState::Update(CGameStateManager* theGSM) 
+void CPlayState::Update(CGameStateManager* theGSM)
 {
 	//cout << homeless << endl;
 	if(myGameUI.myGameTime.GetDay()==1&&myGameUI.myGameTime.GetHour()==12&&myGameUI.myGameTime.GetMinute()==0&&myGameUI.myGameTime.GetSecond()==0)
@@ -1032,27 +1033,37 @@ void CPlayState::Update(CGameStateManager* theGSM)
 	++frameCount;
 	int time = GetTickCount();
 	deltaTime = (time - lastTime) / 1000.f;
-	
-	if (myGameUI.myGameTime.daycheck == true)
+
+	if (myGameUI.myGameTime.daycheck == true)// && daypassed != 3)
 	{
-		REvent.IsDisplay = true;
-		REvent.Random();
-		REvent.CreateEventz(REvent.type);
-		calculateEarning();
-		theCamera->canPan = false;
+	
 		myGameUI.myGameTime.daycheck = false;
 		daypassed++;
+		calculateEarning();
+		if(daypassed!=3)
+		{
+			REvent.IsDisplay = true;
+			REvent.Random();
+			REvent.CreateEventz(REvent.type);
+			theCamera->canPan = false;
+		}
+		
+		if(daypassed==3 && resource.GetMoney() <= 800)
+		{
+			myGameUI.myGameTime.Fincrement = 0;
+			myGameUI.myGameTime.HrIncrement = 0;
+
+			minigameobjects->minigame = true;
+			minigameobjects->playing = true;
+			daypassed = 0;
+		}
 	}
 
-	if(daypassed == 3 && resource.GetMoney() <= 800)
-	{
-		minigameobjects->Init(theCamera);
-		myGameUI.myGameTime.Fincrement = 10;
-		myGameUI.myGameTime.HrIncrement = 1;
-		minigameobjects->minigame = true;
-		minigameobjects->playing = true;
-		daypassed = 0;
-	}
+
+	
+
+
+
 
 	if(minigameobjects->minigame)
 	{
@@ -1072,6 +1083,9 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		minigameobjects->minigame = false;
 		mouseInfo.mLButtonUp = false;
 		returnbutton->buttonclicked = false;
+
+		myGameUI.myGameTime.Fincrement = 10;
+		myGameUI.myGameTime.HrIncrement = 1;
 	}
 
 	if (sizechanged)
@@ -1080,7 +1094,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		returnbutton->Set(340,480,330,370);
 		Choice1->Set(300,520,460,520);
 		Choice2->Set(350,450,520,580);
-		Savebutton->Set(600,650,0,50);
+		Savebutton->Set(700,750,10,60);
 		NormSpeed->Set(680,695,150,165);
 		HrSpeed->Set(705,735,150,165);
 		sizechanged = false;
@@ -1093,7 +1107,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		OKbutton->buttonclicked = false;
 	}
 	if(Choice1->buttonclicked)
-	{ 
+	{
 		TheChoice->popup = false;
 		mouseInfo.mLButtonUp = false;
 		Choice1->buttonclicked = false;
@@ -1131,12 +1145,15 @@ void CPlayState::Update(CGameStateManager* theGSM)
 			fout2<<"MONEY = "<<resource.GetMoney()<<endl;
 			fout2<<"MANPOWER = "<<resource.GetManPower()<<endl;
 			fout2<<"CITIZEN = "<<resource.GetCitizen()<<endl;
+			fout2<<"DAY = "<<myGameUI.myGameTime.GetDay()<<endl;
+			fout2<<"HOUR = "<<myGameUI.myGameTime.GetHour()<<endl;
+			fout2<<"MINUTE = "<<myGameUI.myGameTime.GetMinute()<<endl;
 		}
 		fout2.close();
 
 		Savebutton->buttonclicked = false;
 	}
-	
+
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 	{
 		Citizen *Citizens = *it;
@@ -1152,27 +1169,27 @@ void CPlayState::Update(CGameStateManager* theGSM)
 			}
 		}
 	}
-	
-	
-	//conditions
-	//if (resource.GetMoney() <= 0)
-	//{
-	//	resource.SetWin(1);
-	//	theGSM->ChangeState( CResultState::Instance() );
-	//}
 
-	if (myGameUI.myGameTime.GetDay() == 12)
+
+	////conditions
+	////if (resource.GetMoney() <= 0)
+	////{
+	////	resource.SetWin(1);
+	////	theGSM->ChangeState( CResultState::Instance() );
+	////}
+
+	if (myGameUI.myGameTime.GetDay() == 8)
 	{
 		resource.SetWin(0);
 		theGSM->ChangeState( CResultState::Instance() );
 	}
 
 
-	
+
 	if (REvent.IsDisplay ==false)
 	{
 		//tile selection check
-		
+
 		if(myTile[SelectorY][SelectorX].GetModeOn())
 		{
 			int offsetX;
@@ -1193,7 +1210,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 			}else
 			{
 				SelectorY = ((-mouseInfo.lastY + height+(offsetY/4))/ offsetY);
-			}	
+			}
 			//////
 		}else
 		{
@@ -1234,7 +1251,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 				{
 					myTile[y][x].Update();
 				}else
-				{	
+				{
 					if(myTile[y][x].IsClickedOn() == false)
 					{
 						myTile[y][x].SetBtype(0);
@@ -1282,7 +1299,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 							}
 							else
 							{
-								
+
 								if ((position -Citizens->GetPosition()).LengthSquared() > (0))
 								{
 									Vector3D direction(position - Citizens->GetPosition());
@@ -1342,9 +1359,9 @@ void CPlayState::Update(CGameStateManager* theGSM)
 										myTile[y][x].myHouse.SetOwner(" ");
 										Citizens->MovedBack=true;
 									}
-								}	
+								}
 							}
-					}	
+					}
 				}
 			}
 		}
@@ -1357,12 +1374,12 @@ void CPlayState::Update(CGameStateManager* theGSM)
 	{
 		Citizen *Citizens = *it;
 		if (Citizens->active == true)
-		{	
-				
+		{
+
 			if(myTile[SelectorY][SelectorX].myHouse.GetOwner()==Citizens->GetName())
 			{
 				Citizens->RenderMood=true;
-					
+
 			}
 			else
 			{
@@ -1424,7 +1441,7 @@ void CPlayState::DrawTileContent()
 		}
 	}
 
-			
+
 }
 void CPlayState::checkUIName()
 {
@@ -1454,7 +1471,7 @@ void CPlayState::checkUIName()
 		cost = myTile[SelectorY][SelectorX].myObstacle.GetCost();
 	}
 }
-void CPlayState::Draw(CGameStateManager* theGSM) 
+void CPlayState::Draw(CGameStateManager* theGSM)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
@@ -1478,7 +1495,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 			glTexCoord2f(0,0);
 			glVertex2f(800,0);
 			glTexCoord2f(1,0);
-			glVertex2f(0,0);				
+			glVertex2f(0,0);
 		glEnd();
 	glPopMatrix();
 
@@ -1495,7 +1512,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 			glTexCoord2f(0,0);
 			glVertex2f(width,-height);
 			glTexCoord2f(1,0);
-			glVertex2f(-width,-height);				
+			glVertex2f(-width,-height);
 		glEnd();
 		glPopMatrix();
 	glPopMatrix();
@@ -1515,7 +1532,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 			glTexCoord2f(0,0);
 			glVertex2f(1000,0);
 			glTexCoord2f(1,0);
-			glVertex2f(0,0);				
+			glVertex2f(0,0);
 		glEnd();
 	glPopMatrix();*/
 	//
@@ -1533,8 +1550,8 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	if(!minigameobjects->minigame)
 	{
 		for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
-		{	
-		
+		{
+
 			//here
 			Citizen *Citizens = *it;
 			if (Citizens->active == true)
@@ -1544,11 +1561,11 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 		}
 	}
 	glPopMatrix();
-	
-	
+
+
 	//Enable 2D text display and HUD
 	theCamera->SetHUD( true);
-	
+
 	checkUIName();
 	myGameUI.Draw((width/2)-300,height - 50,Bnames.c_str(),cost,myTile[SelectorY][SelectorX].GetModeOn());
 	myGameUI.DrawSelect(750,200,myTile[SelectorY][SelectorX].GetModeOn(),myTile[SelectorY][SelectorX].GetBtype());
@@ -1593,7 +1610,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 }
 void CPlayState::RenderUI(void)
 {
-	
+
 	NormSpeed->Render();
 	HrSpeed->Render();
 
@@ -1619,7 +1636,7 @@ void CPlayState::calculateEarning()
 	float FC_Fee = FcourtCount * myTile[SelectorY][SelectorX].myFCourt.GetMaintenanceFee();
 	float GS_Fee = GstoreCount * myTile[SelectorY][SelectorX].myGstore.GetMaintenanceFee();
 	float TotalFee = H_Fee + FC_Fee + GS_Fee;
-	
+
 	float FC_Earning = FcourtCount * myTile[SelectorY][SelectorX].myFCourt.GetEarnings();
 	float GS_Earning = GstoreCount * myTile[SelectorY][SelectorX].myGstore.GetEarnings();
 	float ShelterFund;
@@ -1641,8 +1658,8 @@ Citizen* CPlayState::FetchObject()
 		if (!go->active)
 		{
 			go->active = true;
-			
-			int Random = (rand() % 3 + 1);	
+
+			int Random = (rand() % 3 + 1);
 			if(Random==1)
 			{
 				go->SetFavourite(Citizen::FOOD);

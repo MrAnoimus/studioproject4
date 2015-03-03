@@ -197,7 +197,6 @@ void CResultState::Draw(CGameStateManager* theGSM)
 			glPopMatrix();
 			glDisable(GL_BLEND);
 		glPopMatrix();
-		print(our_font,0,250,"Money: %d",resource.GetMoney());
 	}
 
 	if (resource.GetWin() == 1)
@@ -221,7 +220,6 @@ void CResultState::Draw(CGameStateManager* theGSM)
 			glPopMatrix();
 			glDisable(GL_BLEND);
 		glPopMatrix();
-		print(our_font,0,250,"Money: %d",resource.GetMoney());
 	}
 
 	glDisable(GL_TEXTURE_2D);
