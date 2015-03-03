@@ -142,7 +142,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 								CNode* TheNode = new CNode();
 								TheNode->x = as.closeList[i]->x*100;
 								TheNode->y = as.closeList[i]->y*100;
-								cout <<"Size: " <<(int)as.closeList.size() <<std::endl;
+								//cout <<"Size: " <<(int)as.closeList.size() <<std::endl;
 								for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 								{
 									int j= (int)as.closeList.size();
@@ -539,7 +539,6 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 		{
 			theCamera->canPan = !theCamera->canPan;
 		}
-		
 		if(myKeys['p'] == true)
 		{
 			for(int y = 0; y < ROWS; y += 1)
@@ -559,58 +558,7 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 				}
 			}
 		}
-
-	
-		if(myKeys['k'] == true)
-		{
-			ofstream fout("LuaScript/Save/save2.txt");
-			if(fout.is_open())
-			{
-				cout <<endl;
-				cout << "File Opened successfully!!!. Writing data from array to file" << endl;
-				for(int y = 0; y < ROWS; y ++ )
-				{
-					for(int x = 0; x < COLS; x ++ )
-					{
-						fout << Map[y][x]<<" ";
-						cout <<Map[y][x]<<",";
-					}
-				}
-			}
-			fout.close();
-
-			ofstream fout2("LuaScript/Save/resource.lua");
-			if(fout2.is_open())
-			{
-				fout2<<"FOOD = "<<resource.GetFood()<<endl;
-				fout2<<"MONEY = "<<resource.GetMoney()<<endl;
-				fout2<<"MANPOWER = "<<resource.GetManPower()<<endl;
-				fout2<<"CITIZEN = "<<resource.GetCitizen()<<endl;
-			}
-			fout2.close();
-
-			ofstream fout3("LuaScript/Save/save3.txt");
-			if(fout3.is_open())
-			{
-				for(int y = 0; y < ROWS; y ++ )
-				{
-					for(int x = 0; x < COLS; x ++ )
-					{
-						if(myTile[y][x].GetBtype() == 1)
-						{
-							fout3<<myTile[y][x].myHouse.GetOwner()<<" ";
-						}
-					}
-				}
-			}
-			fout3.close();
-		}
-
-		if(myKeys['l'] == true)
-		{
-			cout <<endl;		
-		}
-		}
+	}
 }
 void CPlayState::KeyboardUp(unsigned char key, int x, int y)
 {
@@ -1031,7 +979,7 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 }
 void CPlayState::Update(CGameStateManager* theGSM) 
 {
-	cout << homeless << endl;
+	//cout << homeless << endl;
 	if(myGameUI.myGameTime.GetDay()==1&&myGameUI.myGameTime.GetHour()==12&&myGameUI.myGameTime.GetMinute()==0&&myGameUI.myGameTime.GetSecond()==0)
 	{
 		TheChoice->SetPopup(true);
@@ -1042,7 +990,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		srand(time(NULL));
 		Destroyed = rand()%100;
 		srand(time(NULL));
-		cout << "Chance" << Destroyed << endl;
+		//cout << "Chance" << Destroyed << endl;
 		if(Destroyed <= DestoryedChance)
 		{
 			for(int y = 0; y < ROWS; y += 1)
@@ -1051,14 +999,12 @@ void CPlayState::Update(CGameStateManager* theGSM)
 				{
 					if(Map[y][x] == 1)
 					{
-						Map[y][x] = 220;
+						Map[y][x] = 219;
 					}
 				}
 			}
 		}
-		
 	}
-	
 	checker = 0;
 
 	if(NormSpeed->buttonclicked)
@@ -1068,7 +1014,6 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		mouseInfo.mLButtonUp = false;
 		NormSpeed->buttonclicked = false;
 	}
-
 	if(MinSpeed->buttonclicked)
 	{
 		myGameUI.myGameTime.Fincrement = 100;
@@ -1199,21 +1144,6 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		}
 		fout2.close();
 
-		ofstream fout3("LuaScript/Save/save3.txt");
-		if(fout3.is_open())
-		{
-			for(int y = 0; y < ROWS; y ++ )
-			{
-				for(int x = 0; x < COLS; x ++ )
-				{
-					if(myTile[y][x].GetBtype() == 1)
-					{
-						fout3<<myTile[y][x].myHouse.GetOwner()<<" ";
-					}
-				}
-			}
-		}
-		fout3.close();
 		Savebutton->buttonclicked = false;
 	}
 	
@@ -1224,7 +1154,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		if (Citizens->GetMood() == "ENRAGED")
 		{
 			checker ++;
-			cout <<"checker" <<checker<<endl;
+			//cout <<"checker" <<checker<<endl;
 			if (checker >=5)
 			{
 				resource.SetWin(1);
@@ -1251,7 +1181,6 @@ void CPlayState::Update(CGameStateManager* theGSM)
 	
 	if (REvent.IsDisplay ==false)
 	{
-		myGameUI.Update();
 		//tile selection check
 		
 		if(myTile[SelectorY][SelectorX].GetModeOn())
@@ -1276,6 +1205,9 @@ void CPlayState::Update(CGameStateManager* theGSM)
 				SelectorY = ((-mouseInfo.lastY + height+(offsetY/4))/ offsetY);
 			}	
 			//////
+		}else
+		{
+			myGameUI.Update();
 		}
 		if(SelectorX >7)
 		{
