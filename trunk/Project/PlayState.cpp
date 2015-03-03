@@ -159,6 +159,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 											Citizens->SetPlace(myTile[SelectorY-1][SelectorX].Tag, 2);
 											Citizens->SetPlace(myTile[SelectorY+1][SelectorX].Tag, 3);
 											Citizens->Movedout=true;
+											Citizens->MovedBack=false;
 											homeless--;
 											break;
 										}
@@ -192,7 +193,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 								myTile[SelectorY][SelectorX].SetEmpty(true);
 								myTile[SelectorY][SelectorX].SetIsClickedOn(false);
 								Map[SelectorY][SelectorX]=10;
-								//myTile[SelectorY][SelectorX].Tag ="nothing";
+								myTile[SelectorY][SelectorX].Tag ="nothing";
 							}
 							if(myTile[SelectorY][SelectorX].GetBtype() == 1 )
 							{
@@ -262,6 +263,8 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 								for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 								{
 									Citizen *Citizens = *it;
+									if((SelectorY-1)>=0&&(SelectorY+1)<=6&&(SelectorX-1)>=0&&(SelectorX+1)<=8)
+									{
 									if(myTile[SelectorY-1][SelectorX].myHouse.GetOwner()==Citizens->GetName())
 									{
 										Citizens->SetPlace(myTile[SelectorY][SelectorX].Tag,3);
@@ -277,6 +280,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 									else if(myTile[SelectorY][SelectorX+1].myHouse.GetOwner()==Citizens->GetName())
 									{
 										Citizens->SetPlace(myTile[SelectorY][SelectorX].Tag,0);
+									}
 									}
 								}
 							}
@@ -326,6 +330,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 			if(state == GLUT_DOWN)
 			{
 				//for existing citizens when game already start
+
 				//for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 				//	{
 				//
@@ -378,6 +383,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 				//			}
 				//		}
 				//	}
+
 				if(myTile[SelectorY][SelectorX].GetModeOn() == false)
 				{
 					if(theCamera->GetPosition().z >=-500)
@@ -418,6 +424,56 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 					{
 						if(myTile[SelectorY][SelectorX].GetBtype() == 1)
 						{
+							for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+							{
+									Citizen *Citizens = *it;
+									{
+										if(Citizens->GetName()==myTile[SelectorY][SelectorX].myHouse.GetOwner()
+										&&Citizens->GetPosition().x!=myTile[1][1].GetPosition().x*100
+										&&Citizens->GetPosition().y!=myTile[1][1].GetPosition().y*100)
+										{
+										Astar as(px,py,1,1);
+										//
+										bool result = as.Search(Map);
+										CNode* Node = new CNode;
+										Node->x = 1;
+										Node->y = 1;
+										//
+										as.AddCloseList(Node);
+										if(result)
+										{
+											for(int i=0;i<(int)as.closeList.size();i++)
+											{
+												//Citizen stuff
+												CNode* TheNode = new CNode();
+												TheNode->x = as.closeList[i]->x*100;
+												TheNode->y = as.closeList[i]->y*100;
+												cout <<"Size: " <<(int)as.closeList.size() <<std::endl;
+												
+												int j= (int)as.closeList.size();	
+												if (Citizens->active == true)
+													{
+										
+														if(i+1>=j)
+														{
+															Citizens->CitizenDestination->DestinationList.push_back(TheNode);			
+															Citizens->MovedBack=false;
+															Citizens->Movedout=true;
+															
+															break;
+														}
+														if(i>=1)
+														{				
+															Citizens->CitizenDestination->DestinationList.push_back(TheNode);
+															break;
+														}
+													}
+												}
+											
+										}
+										}
+								}
+								}
 							myTile[SelectorY][SelectorX].SetEmpty(true);
 							myTile[SelectorY][SelectorX].myObstacle.SetDiff(false);
 							Map[SelectorY][SelectorX]=219;
@@ -425,6 +481,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 							//minus one house
 							housecount-=1;
 							resource.SetManpower(resource.GetManPower() +1);
+							
 						}
 						if(myTile[SelectorY][SelectorX].GetBtype() == 2)
 						{
@@ -567,6 +624,16 @@ void CPlayState::KeyboardUp(unsigned char key, int x, int y)
 bool CPlayState::Init()
 {
 
+	for (int y = 0; y < ROWS; y ++ )
+	{
+		for(int x = 0; x < COLS; x ++ )
+		{
+			myTile[y][x].Tag="nothing";
+				
+		}
+	}
+	
+
 	if (resource.GetLoad() == 1)
 	{
 		ifstream ifile("LuaScript/Save/save2.txt");
@@ -576,6 +643,7 @@ bool CPlayState::Init()
 			{
 				ifile>> Map[y][x];
 				cout << Map[y][x] <<",";
+				
 			}
 		}
 	}
@@ -774,9 +842,13 @@ bool CPlayState::Init()
 
 		Citizen *go;
 		go = FetchObject();
+		go->started=false;
 		go->active = true;
 		go->Movedout=false;
-
+		for(int i=0; i<4; i++)
+		{
+			go->SetPlace("nothing",i);
+		}
 		//srand((unsigned int)deltaTime);
 		//srand((unsigned int)deltaTime);
 		srand((unsigned int)i);
@@ -845,7 +917,10 @@ bool CPlayState::Init()
 					{
 					myTile[y][x].myHouse.SetOwner(Citizens->GetName());
 					Citizens->owner = Citizens->GetName();
-					Citizens->SetPosition(Vector3D (10 + x*100,y*100,-1) );
+
+					Citizens->SetPosition(Vector3D (x*100,y*100,-1) );	
+					Citizens->started=true;
+
 					Citizens->Movedout=true;
 					homeless--;
 					break;
@@ -1173,7 +1248,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 
 
 	//conditions
-	if (resource.GetMoney() <= 0)
+	if (resource.GetMoney() <= 0&&myGameUI.myGameTime.GetDay() == 8)
 	{
 		resource.SetWin(1);
 		theGSM->ChangeState( CResultState::Instance() );
@@ -1181,8 +1256,16 @@ void CPlayState::Update(CGameStateManager* theGSM)
 
 	if (myGameUI.myGameTime.GetDay() == 8)
 	{
+		if(homeless<=0)
+		{
 		resource.SetWin(0);
 		theGSM->ChangeState( CResultState::Instance() );
+		}
+		else
+		{
+		resource.SetWin(1);
+		theGSM->ChangeState( CResultState::Instance() );
+		}
 	}
 
 
@@ -1237,6 +1320,29 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		{
 			for(int x = 0; x < COLS; x += 1)
 			{
+				for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+				{
+					Citizen *Citizens = *it;
+					if((y-1)>=0&&(y+1)<=6&&(x-1)>=0&&(x+1)<=8)
+					{
+						if(myTile[y-1][x].myHouse.GetOwner()==Citizens->GetName())
+						{
+							Citizens->SetPlace(myTile[y][x].Tag,3);
+						}
+						if(myTile[y+1][x].myHouse.GetOwner()==Citizens->GetName())
+						{
+							Citizens->SetPlace(myTile[y][x].Tag,2);
+						}
+						if(myTile[y][x-1].myHouse.GetOwner()==Citizens->GetName())
+						{
+							Citizens->SetPlace(myTile[y][x].Tag,1);
+						}
+						if(myTile[y][x+1].myHouse.GetOwner()==Citizens->GetName())
+						{
+							Citizens->SetPlace(myTile[y][x].Tag,0);
+						}
+					}
+				}
 				if(SelectorX != x && SelectorY != y)
 				{
 					myTile[y][x].SetIsSelected(false);
@@ -1276,13 +1382,13 @@ void CPlayState::Update(CGameStateManager* theGSM)
 					{
 						if(Citizens->Movedout==true)
 						{
-
 							Vector3D position;
 							position.x = Citizens->CitizenDestination->DestinationList[Citizens->index]->x;
 							position.y = Citizens->CitizenDestination->DestinationList[Citizens->index]->y;
 							position.z = Citizens->GetPosition().z;
-							if(Citizens->MovedBack==false)
+							if(Citizens->MovedBack==false||Citizens->started==true)
 							{
+
 								if ((position -Citizens->GetPosition()).LengthSquared() > (0))
 								{
 									Vector3D direction(position - Citizens->GetPosition());
@@ -1410,6 +1516,7 @@ void CPlayState::DrawTileContent()
 			{//3 = UNBUILDABLE
 				myTile[y][x].SetType(4);
 				myTile[y][x].SetBtype(5);
+				myTile[y][x].Tag="nothing";
 			}
 			if(Map[y][x] == 1)
 			{//
@@ -1542,15 +1649,17 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 		glTranslatef(0,0,-10);
 		minigameobjects->Draw();
 	}
-	glPushMatrix();
+	
 	DrawTileContent();
-	glPopMatrix();
+	
 	glColor4f(1.0f,1.0f,1.0f,1.0f);
 	glPushMatrix();
+
 
 	if(!minigameobjects->minigame)
 	{
 		for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+
 		{
 
 			//here
