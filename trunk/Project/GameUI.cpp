@@ -24,6 +24,8 @@ void GameUI::Init()
 	LoadTGA(&Icon_MoneyTexture,"Textures/UI/money.tga");
 	LoadTGA(&Icon_WorkerTexture,"Textures/UI/workerIcon.tga");
 	LoadTGA(&Icon_PopulationTexture,"Textures/UI/population_Icon.tga");
+	LoadTGA(&Icon_AngryTexture,"Textures/Enraged.tga");
+	LoadTGA(&Icon_Homeless,"Textures/Building/shelter.tga");
 	myGameTime.Init();
 	this->size = 50;
 	this->iconSize = 25;
@@ -32,11 +34,13 @@ void GameUI::Update()
 {
 	myGameTime.Update();
 }
-void GameUI::DrawResourceData(int x , int y,int money ,int population,int worker,int MaxWorker)
+void GameUI::DrawResourceData(int x , int y,int money ,int population,int worker,int MaxWorker,int angrypeople , int homelesspeople)
 {
 	print(Time_Font,x,y,"$%d", money);
 	print(Time_Font,x,y-80,"%d", population);
 	print(Time_Font,x,y-160,"%d/%d", worker,MaxWorker);
+	print(Time_Font,x,y-240,"%d", angrypeople);
+	print(Time_Font,x,y-300,"%d", homelesspeople);
 }
 void GameUI::DrawResource(int x , int y)
 {
@@ -96,7 +100,44 @@ void GameUI::DrawResource(int x , int y)
 			glEnd();
 		glPopMatrix();
 	glPopMatrix();
+
+	glPushMatrix();
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glTranslatef(x,y+180,0);
+		glBindTexture(GL_TEXTURE_2D, Icon_AngryTexture.id);
+		glPushMatrix();
+			glBegin(GL_QUADS);
+				glTexCoord2f(0,0);
+				glVertex2f(-iconSize,iconSize);
+				glTexCoord2f(1,0);
+				glVertex2f(iconSize,iconSize);
+				glTexCoord2f(1,1);
+				glVertex2f(iconSize,-iconSize);
+				glTexCoord2f(0,1);
+				glVertex2f(-iconSize,-iconSize);
+			glEnd();
+		glPopMatrix();
+	glPopMatrix();
+
+	glPushMatrix();
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glTranslatef(x,y+240,0);
+		glBindTexture(GL_TEXTURE_2D, Icon_Homeless.id);
+		glPushMatrix();
+			glBegin(GL_QUADS);
+				glTexCoord2f(0,0);
+				glVertex2f(-iconSize,iconSize);
+				glTexCoord2f(1,0);
+				glVertex2f(iconSize,iconSize);
+				glTexCoord2f(1,1);
+				glVertex2f(iconSize,-iconSize);
+				glTexCoord2f(0,1);
+				glVertex2f(-iconSize,-iconSize);
+			glEnd();
+		glPopMatrix();
+	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
+
 	glDisable(GL_BLEND);
 }
 void GameUI::DrawSelect(int x , int y ,bool mode , int type)

@@ -1647,7 +1647,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	myGameUI.DrawSelect(750,200,myTile[SelectorY][SelectorX].GetModeOn(),myTile[SelectorY][SelectorX].GetBtype());
 	//money manpower citizen
 	myGameUI.DrawResource(myGameUI.GetIconSize(),myGameUI.GetIconSize());
-	myGameUI.DrawResourceData(myGameUI.GetSize()*2,height-myGameUI.GetSize()*2,resource.GetMoney(),resource.GetCitizen(),resource.GetManPower(),resource.GetMaxManPower());
+	myGameUI.DrawResourceData(myGameUI.GetSize()*2,height-myGameUI.GetSize()*2,resource.GetMoney(),resource.GetCitizen(),resource.GetManPower(),resource.GetMaxManPower(),checker,homeless);
 	//print(our_font,0,250,"PickX :%d PickY:%d",SelectorX,SelectorY);
 	//print(our_font,0,250,"house number : %d",housecount);
 	print(our_font,0,250,"empty? : %d",myTile[SelectorY][SelectorX].GetFull());
