@@ -154,12 +154,19 @@ void GameUI::DrawSelect(int x , int y ,bool mode , int type)
 		glPopMatrix();
 		glDisable(GL_TEXTURE_2D);
 		glDisable(GL_BLEND);
+
 	}
 }
-void GameUI::Draw(float x , float y)
+void GameUI::Draw(float x , float y,std::string Bname,int cost,bool modeon)
 {
 	print(Time_Font,x,y,"Day : %02d", myGameTime.GetDay());
-	print(Time_Font,x,y-100,"%02d : %02d", myGameTime.GetHour(),myGameTime.GetMinute());//,myGameTime.GetTimeFrame().c_str());
+	print(Time_Font,x,y-100,"%02d : %02d", myGameTime.GetHour(),myGameTime.GetMinute());
+	if(modeon)
+	{
+		print(Time_Font,x-50,y-500,"%s",Bname.c_str());
+		print(Time_Font,x-50,y-600,"Cost:\n%08d",cost);
+	}
+	
 }
 
 int GameUI::GetIconSize()

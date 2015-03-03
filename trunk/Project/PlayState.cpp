@@ -1386,6 +1386,39 @@ void CPlayState::DrawTileContent()
 
 			
 }
+void CPlayState::checkUIName()
+{
+	if(myTile[SelectorY][SelectorX].GetBtype() == 1)
+	{
+		Bnames = "House";
+		cost = myTile[SelectorY][SelectorX].myHouse.GetCost();
+	}
+	if(myTile[SelectorY][SelectorX].GetBtype() == 2)
+	{
+		Bnames = "Foodstore";
+		cost = myTile[SelectorY][SelectorX].myFCourt.GetCost();
+	}
+	if(myTile[SelectorY][SelectorX].GetBtype() == 3)
+	{
+		Bnames = "General store";
+		cost = myTile[SelectorY][SelectorX].myGstore.GetCost();
+	}
+	if(myTile[SelectorY][SelectorX].GetBtype() == 4)
+	{
+		Bnames = "Shelter";
+		cost = myTile[SelectorY][SelectorX].myShelter.GetCost();
+	}
+	if(myTile[SelectorY][SelectorX].GetBtype() == 5)
+	{
+		Bnames = "Tree";
+		cost = myTile[SelectorY][SelectorX].myObstacle.GetCost();
+	}
+	if(myTile[SelectorY][SelectorX].GetBtype() == 6)
+	{
+		Bnames = "Debris";
+		cost = myTile[SelectorY][SelectorX].myDebris.GetCost();
+	}
+}
 void CPlayState::Draw(CGameStateManager* theGSM) 
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -1451,8 +1484,8 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	}
 	//Enable 2D text display and HUD
 	theCamera->SetHUD( true);
-	
-	myGameUI.Draw(width-200,height - 50);
+	checkUIName();
+	myGameUI.Draw(width-200,height - 50,Bnames.c_str(),cost,myTile[SelectorY][SelectorX].GetModeOn());
 	myGameUI.DrawSelect(750,200,myTile[SelectorY][SelectorX].GetModeOn(),myTile[SelectorY][SelectorX].GetBtype());
 	//money manpower citizen
 	myGameUI.DrawResource(myGameUI.GetIconSize(),myGameUI.GetIconSize());

@@ -178,5 +178,9 @@ class CPlayState : public CGameState
 		GameUI myGameUI;
 		
 		string rNAME;
+
+		void checkUIName();
+		std::string Bnames;
+		int cost;
 };
 #endif
