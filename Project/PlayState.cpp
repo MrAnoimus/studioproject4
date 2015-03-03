@@ -999,6 +999,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 				{
 					if(Map[y][x] == 1)
 					{
+						myTile[y][x].myObstacle.SetDiff(false);
 						Map[y][x] = 219;
 					}
 				}
