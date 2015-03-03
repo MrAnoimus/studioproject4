@@ -183,8 +183,6 @@ void MiniGame::Update()
 								}
 								break;
 							}
-							if(catcher->pos.x <= 20){catcher->pos.x = 20;}
-							if(catcher->pos.x >= 430){catcher->pos.x = 430;}
 						}
 
 					}
@@ -224,11 +222,16 @@ void MiniGame::Update()
 			}
 		}
 	}
-			if(timer <= 0)
+		if(playing == false)
+		{
+			if(!m_goList.empty())
 			{
-				if(!m_goList.empty())
+				m_goList[0]->counter = 0;	
 				m_goList.clear();
 			}
+		}
+		if(catcher->pos.x <= 20){catcher->pos.x = 20;}
+		if(catcher->pos.x >= 430){catcher->pos.x = 430;}
 		//END FOR ALL OF MINI GAME==================================================
 }
 
