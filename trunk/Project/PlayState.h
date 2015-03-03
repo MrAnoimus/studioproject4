@@ -51,6 +51,7 @@ class CPlayState : public CGameState
 	}theMouseInfo;
 	public:
 		
+		int checker;
 		int Random;
 		int Random2;
 		int Map[ROWS][COLS];
@@ -123,6 +124,7 @@ class CPlayState : public CGameState
 		ButtonClass* OKbutton;
 		ButtonClass* Choice1;
 		ButtonClass* Choice2;
+		ButtonClass* Savebutton;
 		//minigame buttons
 		ButtonClass* returnbutton;
 		std::vector<ButtonClass*> ListofButtons;

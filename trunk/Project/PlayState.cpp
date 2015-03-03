@@ -569,31 +569,9 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 
 		if(myKeys['l'] == true)
 		{
-			cout <<endl;
-	/*		for(int y = 0; y < ROWS; y ++ )
-			{
-				for(int x = 0; x < COLS; x ++ )
-				{
-					if(myTile[y][x].GetBtype() == 1)
-					{
-						cout<<myTile[y][x].myHouse.GetOwner()<<",";
-					}
-				}
-			}*/
-
-				for(int y = 0; y < ROWS; y ++ )
-			{
-				for(int x = 0; x < COLS; x ++ )
-				{
-					//if(myTile[y][x].GetBtype() == 1)
-					//{
-					cout<<myTile[y][x].GetBtype()<<",";
-					//}
-				}
-			}
-
+			cout <<endl;		
 		}
-	}
+		}
 }
 void CPlayState::KeyboardUp(unsigned char key, int x, int y)
 {
@@ -601,7 +579,7 @@ void CPlayState::KeyboardUp(unsigned char key, int x, int y)
 }
 bool CPlayState::Init()
 {
-
+	
 	if (resource.GetLoad() == 1)
 	{
 		ifstream ifile("LuaScript/Save/save2.txt");
@@ -640,36 +618,6 @@ bool CPlayState::Init()
 	}
 
 
-	//cout <<"load : "<<resource.GetLoad();
-	//Citizen *go = new Citizen();
-	//go->active = true;
-	//int a = CitizenList.size();
-	//stringstream ss;
-	//ss << a;
-	//std::string str = go->GetName() + ss.str();
-	//go->SetName(str);
-	//CitizenList.push_back(go);
-
-	//for	(int y = 0; y < ROWS; y ++ )
-	//{
-	//	for(int x = 0; x < COLS; x ++ )
-	//	{
-	//		for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
-	//		{
-
-	//			Citizen *Citizens = *it;
-
-	//			if ( myTile[SelectorY][SelectorX].myHouse.GetOwner() =="Hi")
-	//			{
-	//				myTile[SelectorY][SelectorX].myHouse.SetOwner(Citizens->GetName());
-	//				Citizens->owner = Citizens->GetName();
-	//			}
-	//		}
-	//	}
-	//}
-
-
-
 	width = glutGet(GLUT_SCREEN_WIDTH);
 	height = glutGet(GLUT_SCREEN_HEIGHT);
 	moving = false;
@@ -689,6 +637,7 @@ bool CPlayState::Init()
 
 	lua_close(L2);
 
+	checker =0;
 	//load
 	if (resource.GetLoad() ==1)
 	{
@@ -767,7 +716,7 @@ bool CPlayState::Init()
 	LoadTGA(&MenuTexture[1],"Textures/greenbg.tga");
 	LoadTGA(&ResultTexture[0],"Textures/WinScreen.tga");
 	LoadTGA(&ResultTexture[1],"Textures/LosingScreen.tga");
-	
+
 
 	//load ttf fonts
 	our_font.init("Fonts/FFF_Tusj.TTF", 42);
@@ -876,6 +825,31 @@ bool CPlayState::Init()
 
 		//go->SetName(rNAME);
 	}
+
+		//herez
+	for (int y = 0; y < ROWS; y ++ )
+	{
+		for(int x = 0; x < COLS; x ++ )
+		{
+			if (Map[y][x] == 1)
+			{
+				for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+				{
+					
+					Citizen *Citizens = *it;
+					if(Citizens->active==true&&Citizens->Movedout==false)
+					{
+					myTile[y][x].myHouse.SetOwner(Citizens->GetName());
+					Citizens->owner = Citizens->GetName();
+					Citizens->SetPosition(Vector3D (10 + x*100,y*100,-1) );	
+					Citizens->Movedout=true;
+					break;
+					}
+					
+				}
+			}
+		}
+	}
 	//mg init
 	minigameobjects = new MiniGame();
 	minigameobjects->Init(theCamera);
@@ -913,6 +887,12 @@ bool CPlayState::Init()
 	LoadTGA(&Choice2->button[1],"Textures/ExpensiveTree.tga");
 	Choice2->Set(500,700,460,500);
 	ListofButtons.push_back(Choice2);
+
+	Savebutton = new ButtonClass();
+	LoadTGA(&Savebutton->button[0],"Textures/save.tga");
+	LoadTGA(&Savebutton->button[1],"Textures/save.tga");
+	Savebutton->Set(600,650,0,50);
+	ListofButtons.push_back(Savebutton);
 	//get amount of building etc
 	for(int y = 0; y < ROWS; y += 1)
 	{
@@ -932,6 +912,8 @@ bool CPlayState::Init()
 			}
 		}
 	}
+
+
 	return true;
 }
 void CPlayState::Cleanup()
@@ -987,6 +969,8 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 }
 void CPlayState::Update(CGameStateManager* theGSM) 
 {
+	
+	checker = 0;
 	if(myKeys['r'] == true)
 	{
 		resource.SetWin(0);
@@ -1035,6 +1019,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		returnbutton->Set(360,460,230,260);
 		Choice1->Set(300,520,460,520);
 		Choice2->Set(350,450,520,580);
+		Savebutton->Set(600,650,0,50);
 		sizechanged = false;
 	}
 	if(OKbutton->buttonclicked)
@@ -1056,6 +1041,85 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		mouseInfo.mLButtonUp = false;
 		Choice2->buttonclicked = false;
 	}
+
+	if(Savebutton->buttonclicked)
+	{
+		ofstream fout("LuaScript/Save/save2.txt");
+		if(fout.is_open())
+		{
+			cout <<endl;
+			cout << "File Opened successfully!!!. Writing data from array to file" << endl;
+			for(int y = 0; y < ROWS; y ++ )
+			{
+				for(int x = 0; x < COLS; x ++ )
+				{
+					fout << Map[y][x]<<" ";
+					cout <<Map[y][x]<<",";
+				}
+			}
+		}
+		fout.close();
+
+		ofstream fout2("LuaScript/Save/resource.lua");
+		if(fout2.is_open())
+		{
+			fout2<<"FOOD = "<<resource.GetFood()<<endl;
+			fout2<<"MONEY = "<<resource.GetMoney()<<endl;
+			fout2<<"MANPOWER = "<<resource.GetManPower()<<endl;
+			fout2<<"CITIZEN = "<<resource.GetCitizen()<<endl;
+		}
+		fout2.close();
+
+		ofstream fout3("LuaScript/Save/save3.txt");
+		if(fout3.is_open())
+		{
+			for(int y = 0; y < ROWS; y ++ )
+			{
+				for(int x = 0; x < COLS; x ++ )
+				{
+					if(myTile[y][x].GetBtype() == 1)
+					{
+						fout3<<myTile[y][x].myHouse.GetOwner()<<" ";
+					}
+				}
+			}
+		}
+		fout3.close();
+		Savebutton->buttonclicked = false;
+	}
+	
+	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+	{
+		Citizen *Citizens = *it;
+
+		if (Citizens->GetMood() == "ENRAGED")
+		{
+			checker ++;
+			cout <<"checker" <<checker<<endl;
+			if (checker >=5)
+			{
+				resource.SetWin(1);
+				theGSM->ChangeState( CResultState::Instance() );
+			}
+		}
+	}
+	
+	
+	//conditions
+	//if (resource.GetMoney() <= 0)
+	//{
+	//	resource.SetWin(1);
+	//	theGSM->ChangeState( CResultState::Instance() );
+	//}
+
+	if (myGameUI.myGameTime.GetDay() == 4)
+	{
+		resource.SetWin(0);
+		theGSM->ChangeState( CResultState::Instance() );
+	}
+
+
+	
 	if (REvent.IsDisplay ==false)
 	{
 		myGameUI.Update();
@@ -1272,6 +1336,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 	
 
 }
+
 void CPlayState::DrawTileContent()
 {
 	for(int y = 0; y < ROWS; y += 1)
@@ -1319,19 +1384,7 @@ void CPlayState::DrawTileContent()
 		}
 	}
 
-		for (int y = 0; y < ROWS; y ++ )
-	{
-		for(int x = 0; x < COLS; x ++ )
-		{
-			if(myTile[y][x].GetBtype() == 1)
-			{
-				if(myTile[y][x].myHouse.GetOwner() == "Hi")
-				{
-					myTile[y][x].myHouse.SetOwner("fuck");
-				}
-			}
-		}
-	}
+			
 }
 void CPlayState::Draw(CGameStateManager* theGSM) 
 {
@@ -1384,7 +1437,9 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 		glTranslatef(0,0,-10);
 		minigameobjects->Draw();
 	}	
-	DrawTileContent();
+	
+		DrawTileContent();
+	
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 	{	
 		//here
@@ -1429,27 +1484,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 		  Choice2->Render();
 		glPopMatrix();
 	}
-	/*if(resource.GetMoney() <=0)
-	{
-		glEnable(GL_TEXTURE_2D);
-		glPushMatrix();
-		glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glBindTexture (GL_TEXTURE_2D, ResultTexture[1].id);
-			glPushMatrix();
-				glBegin(GL_QUADS);
-				glTexCoord2f(1,1);
-				glVertex2f(0,600);
-				glTexCoord2f(0,1);
-				glVertex2f(800,600);
-				glTexCoord2f(0,0);
-				glVertex2f(800,0);
-				glTexCoord2f(1,0);
-				glVertex2f(0,0);				
-			glEnd();
-			glPopMatrix();
-		glDisable(GL_TEXTURE_2D);
-	}*/
+	Savebutton->Render();
 	theCamera->SetHUD( false );
 	// Flush off any entity which is not drawn yet, so that we maintain the frame rate.
 	glFlush();
