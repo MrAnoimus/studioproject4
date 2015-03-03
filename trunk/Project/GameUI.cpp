@@ -13,7 +13,7 @@ GameUI::~GameUI(void)
 
 void GameUI::Init()
 {
-	Time_Font.init("Fonts/Archistico_Bold.TTF", 42);
+	Time_Font.init("Fonts/Anagram.TTF", 42);
 	LoadTGA(&SelectionTexture[0],"Textures/UI/Btype0.tga");
 	LoadTGA(&SelectionTexture[1],"Textures/UI/Btype1.tga");
 	LoadTGA(&SelectionTexture[2],"Textures/UI/Btype2.tga");
