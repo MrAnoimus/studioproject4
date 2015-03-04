@@ -1,7 +1,8 @@
 #pragma once
+#include <stdio.h>
 #include <iostream>
 #include <string>
-using namespace std;
+
 
 class CGameTime
 {
@@ -10,8 +11,8 @@ class CGameTime
 		int Hour;
 		int Minute;
 		float Second;
-		string TimeFrame;
-		string CurrentTime;
+		std::string TimeFrame;
+		std::string CurrentTime;
 		
 	public:
 		CGameTime();
@@ -24,13 +25,13 @@ class CGameTime
 		void SetHour(int hr);
 		void SetMinute(int min);
 		void SetSecond(int sec);
-		void SetTimeFrame(string tf);
+		void SetTimeFrame(std::string tf);
 		//get
 		int GetDay(void);
 		int GetHour(void);
 		int GetMinute(void);
 		int GetSecond(void);
-		string GetTimeFrame(void);
+		std::string GetTimeFrame(void);
 		float Fincrement;
 		float Iincrement;
 		float HrIncrement;

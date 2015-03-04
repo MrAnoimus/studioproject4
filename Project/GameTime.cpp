@@ -81,7 +81,7 @@ int CGameTime::GetSecond(void)
 {
 	return Second;
 }
-string CGameTime::GetTimeFrame(void)
+std::string CGameTime::GetTimeFrame(void)
 {
 	if(Hour<12)
 	{

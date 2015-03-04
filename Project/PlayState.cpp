@@ -867,13 +867,11 @@ bool CPlayState::Init()
 		{
 			go->SetPlace("nothing",i);
 		}
-		//srand((unsigned int)deltaTime);
-		//srand((unsigned int)deltaTime);
+
 		srand((unsigned int)i);
 		Random = rand()%3+1;
 		Random2 = Random;
-		/*cout <<"Random "<<Random<<endl;
-		cout <<"Random2 "<<Random2<<endl;*/
+
 		if(Random == Random2)
 		{
 			srand((unsigned int)i*i);
@@ -897,7 +895,7 @@ bool CPlayState::Init()
 		}
 		go->SetPosition(Vector3D(100,100,0));
 		homeless++;
-
+		//hi
 		ifstream myFile;
 		myFile.open("Names/namesM.txt");
 		string rnames[50]; // holds the 50 names in the file.
@@ -1002,15 +1000,15 @@ bool CPlayState::Init()
 	ListofButtons.push_back(Choice2);
 
 	Savebutton = new ButtonClass();
-	LoadTGA(&Savebutton->button[0],"Textures/save.tga");
-	LoadTGA(&Savebutton->button[1],"Textures/save.tga");
-	Savebutton->Set(725,770,5,50);
+	LoadTGA(&Savebutton->button[0],"Textures/saveup.tga");
+	LoadTGA(&Savebutton->button[1],"Textures/savedown.tga");
+	Savebutton->Set(705,740,5,50);
 	ListofButtons.push_back(Savebutton);
-
+	
 	Homebutton = new ButtonClass();
 	LoadTGA(&Homebutton->button[0],"Textures/homeup.tga");
 	LoadTGA(&Homebutton->button[1],"Textures/homedown.tga");
-	Homebutton->Set(720,770,110,145); 
+	Homebutton->Set(745,780,5,50); 
 	ListofButtons.push_back(Homebutton);
 
 	//get amount of building etc
@@ -1200,10 +1198,10 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		returnbutton->Set(340,480,330,370);
 		Choice1->Set(300,520,460,520);
 		Choice2->Set(350,450,520,580);
-		Savebutton->Set(700,750,10,60);
+		Savebutton->Set(705,740,5,50);
+		Homebutton->Set(745,780,5,50); 
 		NormSpeed->Set(705,730,70,95);
 		HrSpeed->Set(740,790,70,95); 
-		Homebutton->Set(720,770,110,145); 
 		sizechanged = false;
 	}
 
