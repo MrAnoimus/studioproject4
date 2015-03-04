@@ -13,7 +13,9 @@ GameUI::~GameUI(void)
 
 void GameUI::Init()
 {
+	Time_Font_small.init("Fonts/Anagram.TTF", 20);
 	Time_Font.init("Fonts/Anagram.TTF", 42);
+
 	LoadTGA(&SelectionTexture[0],"Textures/UI/Btype0.tga");
 	LoadTGA(&SelectionTexture[1],"Textures/UI/Btype1.tga");
 	LoadTGA(&SelectionTexture[2],"Textures/UI/Btype2.tga");
@@ -36,11 +38,11 @@ void GameUI::Update()
 }
 void GameUI::DrawResourceData(int x , int y,int money ,int population,int worker,int MaxWorker,int angrypeople , int homelesspeople)
 {
-	print(Time_Font,x,y,"$%d", money);
-	print(Time_Font,x,y-80,"%d", population);
-	print(Time_Font,x,y-160,"%d/%d", worker,MaxWorker);
-	print(Time_Font,x,y-240,"%d", angrypeople);
-	print(Time_Font,x,y-300,"%d", homelesspeople);
+	print(Time_Font,x+20,y,"$%d", money);
+	print(Time_Font,x+20,y-100,"%d", population);
+	print(Time_Font,x+20,y-200,"%d/%d", worker,MaxWorker);
+	print(Time_Font,x+20,y-300,"%d", angrypeople);
+	print(Time_Font,x+20,y-400,"%d", homelesspeople);
 }
 void GameUI::DrawResource(int x , int y)
 {
@@ -198,16 +200,20 @@ void GameUI::DrawSelect(int x , int y ,bool mode , int type)
 
 	}
 }
-void GameUI::Draw(float x , float y,std::string Bname,int cost,bool modeon)
+void GameUI::DrawSelectionInfo(int x , int y,std::string Bname,int cost,int earning,int fees,bool modeon)
+{
+	if(modeon)
+	{
+		print(Time_Font_small,x-225,y/2+50,"%s",Bname.c_str());
+		print(Time_Font_small,x-225,y/2,"Cost:%d",cost);
+		print(Time_Font_small,x-225,y/2-50,"Earning:%d",earning);
+		print(Time_Font_small,x-225,y/2-100,"Fees:%d",fees);
+	}
+}
+void GameUI::Draw(float x , float y)
 {
 	print(Time_Font,x,y,"Day : %02d ", myGameTime.GetDay());
 	print(Time_Font,x+300,y,"TIME : %02d : %02d", myGameTime.GetHour(),myGameTime.GetMinute());
-	if(modeon)
-	{
-		print(Time_Font,x-50,y-500,"%s",Bname.c_str());
-		print(Time_Font,x-50,y-600,"Cost:\n%08d",cost);
-	}
-	
 }
 
 int GameUI::GetIconSize()
