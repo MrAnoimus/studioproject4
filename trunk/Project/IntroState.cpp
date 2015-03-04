@@ -5,6 +5,7 @@
 #include <mmsystem.h>
 #include "SettingState.h"
 #include "PlayState.h"
+#include "CreditState.h"
 
 extern "C" 
 {
@@ -274,6 +275,7 @@ bool CIntroState::Init()
 
 
 	menuGUIstart = NULL;
+	menuGUIcont = NULL;
 	menuGUIset = NULL;
 	menuGUIexit = NULL;
 	introBGM = NULL;
@@ -311,6 +313,12 @@ bool CIntroState::Init()
 	loading2 = false;
 	start = false;
 	value = 0;
+	creditbutton = new ButtonClass();
+	LoadTGA(&creditbutton->button[0],"Textures/creditup.tga");
+	LoadTGA(&creditbutton->button[1],"Textures/creditdown.tga");
+	creditbutton->Set(25,75,520,580);
+	ListofButtons.push_back(creditbutton);
+
 	return true;
 }
 void CIntroState::Cleanup()
@@ -345,7 +353,7 @@ void CIntroState::HandleEvents(CGameStateManager* theGSM)
 	}
 	if(myKeys['w'] == true)
 	{
-		theGSM->ChangeState( CResultState::Instance() );
+		theGSM->ChangeState( CCreditState::Instance() );
 	}
 }
 
@@ -359,6 +367,7 @@ void CIntroState::Update(CGameStateManager* theGSM)
 		contbutton->Set(300,520,400,460);
 		settingsbutton->Set(300,520,460,520);
 		exitbutton->Set(350,450,520,580);
+		creditbutton->Set(25,75,520,580);
 		sizechanged = false;
 	}
 
@@ -406,6 +415,12 @@ void CIntroState::Update(CGameStateManager* theGSM)
 		theGSM->ChangeState( CSettingState::Instance() );
 		mouseInfo.mLButtonUp = false;
 	}
+	if(creditbutton->buttonclicked)
+	{
+		theGSM->ChangeState( CCreditState::Instance() );
+		mouseInfo.mLButtonUp = false;
+	}
+
 	if(exitbutton->buttonclicked)
 	{
 		exit(0);
@@ -494,6 +509,26 @@ void CIntroState::Draw(CGameStateManager* theGSM)
 		glPushMatrix();
 		glDisable(GL_TEXTURE_2D);
 	}
+	glPushMatrix();
+		startbutton->Render();
+	glPopMatrix();
+
+	glPushMatrix();
+		settingsbutton->Render();
+	glPushMatrix();
+
+	glPushMatrix();
+		exitbutton->Render();
+	glPushMatrix();
+
+	glPushMatrix();
+		contbutton->Render();
+	glPushMatrix();
+
+	glPushMatrix();
+		creditbutton->Render();
+	glPushMatrix();
+	glDisable(GL_TEXTURE_2D);
 	//drawFPS();
 	
 	theCamera->SetHUD( false );

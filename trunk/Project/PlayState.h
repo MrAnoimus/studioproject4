@@ -136,6 +136,8 @@ class CPlayState : public CGameState
 		ButtonClass* Choice1;
 		ButtonClass* Choice2;
 		ButtonClass* Savebutton;
+		ButtonClass* Homebutton;
+		
 		//minigame buttons
 		ButtonClass* returnbutton;
 

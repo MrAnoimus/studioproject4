@@ -4,6 +4,7 @@
 #include <iostream>
 #include <time.h>
 #include "ResultState.h"
+#include "IntroState.h"
 extern "C"
 {
 	#include "lua.h"
@@ -969,12 +970,12 @@ bool CPlayState::Init()
 
 	//game ui buttons
 	NormSpeed = new ButtonClass();
-	LoadTGA(&NormSpeed->button[0],"Textures/normalspeedup.tga");
-	LoadTGA(&NormSpeed->button[1],"Textures/normalspeeddown.tga");
-	NormSpeed->Set(710,735,70,95); //15 ,15
+	LoadTGA(&NormSpeed->button[1],"Textures/normalspeedup.tga");
+	LoadTGA(&NormSpeed->button[0],"Textures/normalspeeddown.tga");
+	NormSpeed->Set(705,730,70,95);
 	ListofButtons.push_back(NormSpeed);
 
-	HrSpeed = new ButtonClass(); //35 , 15
+	HrSpeed = new ButtonClass();
 	LoadTGA(&HrSpeed->button[0],"Textures/hourspeedup.tga");
 	LoadTGA(&HrSpeed->button[1],"Textures/hourspeeddown.tga");
 	HrSpeed->Set(740,790,70,95); 
@@ -997,6 +998,13 @@ bool CPlayState::Init()
 	LoadTGA(&Savebutton->button[1],"Textures/save.tga");
 	Savebutton->Set(725,770,5,50);
 	ListofButtons.push_back(Savebutton);
+
+	Homebutton = new ButtonClass();
+	LoadTGA(&Homebutton->button[0],"Textures/homeup.tga");
+	LoadTGA(&Homebutton->button[1],"Textures/homedown.tga");
+	Homebutton->Set(720,770,110,145); 
+	ListofButtons.push_back(Homebutton);
+
 	//get amount of building etc
 	for(int y = 0; y < ROWS; y += 1)
 	{
@@ -1055,6 +1063,12 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 			}
 		}
 	}
+
+	if(Homebutton->buttonclicked)
+	{
+		theGSM->ChangeState(CIntroState::Instance());
+	}
+
 }
 void CPlayState::Update(CGameStateManager* theGSM)
 {
@@ -1178,10 +1192,12 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		Choice1->Set(300,520,460,520);
 		Choice2->Set(350,450,520,580);
 		Savebutton->Set(700,750,10,60);
-		NormSpeed->Set(710,735,70,95);
+		NormSpeed->Set(705,730,70,95);
 		HrSpeed->Set(740,790,70,95); 
+		Homebutton->Set(720,770,110,145); 
 		sizechanged = false;
 	}
+
 	if(OKbutton->buttonclicked)
 	{
 		theCamera->canPan = true;
@@ -1791,6 +1807,7 @@ void CPlayState::RenderUI(void)
 
 	NormSpeed->Render();
 	HrSpeed->Render();
+	Homebutton->Render();
 
 	//print(our_font,0,250,"Current Money :%.2f\nCurrent Manpower :%1i\nCurrent Citizen:%1i",PlayerResource.GetMoney() ,PlayerResource.GetManPower(),PlayerResource.GetCitizen());
 	if(minigameobjects->minigame)
