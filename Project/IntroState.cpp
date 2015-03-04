@@ -507,27 +507,12 @@ void CIntroState::Draw(CGameStateManager* theGSM)
 		glPushMatrix();
 			contbutton->Render();
 		glPushMatrix();
+
+		glPushMatrix();
+			creditbutton->Render();
+		glPushMatrix();
 		glDisable(GL_TEXTURE_2D);
 	}
-	glPushMatrix();
-		startbutton->Render();
-	glPopMatrix();
-
-	glPushMatrix();
-		settingsbutton->Render();
-	glPushMatrix();
-
-	glPushMatrix();
-		exitbutton->Render();
-	glPushMatrix();
-
-	glPushMatrix();
-		contbutton->Render();
-	glPushMatrix();
-
-	glPushMatrix();
-		creditbutton->Render();
-	glPushMatrix();
 	glDisable(GL_TEXTURE_2D);
 	//drawFPS();
 	
