@@ -124,6 +124,7 @@ class CIntroState : public CGameState
 		ButtonClass* settingsbutton;
 		ButtonClass* exitbutton;
 		ButtonClass* contbutton;
+		ButtonClass* creditbutton;
 		std::vector<ButtonClass*> ListofButtons;
 		float width, height;
 		bool loading;

@@ -90,6 +90,9 @@
     <ClCompile Include="GameTime.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="CreditState.cpp">
+      <Filter>GameState</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IntroState.h">
@@ -194,6 +197,9 @@
     </ClInclude>
     <ClInclude Include="GameTime.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="CreditState.h">
+      <Filter>GameState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

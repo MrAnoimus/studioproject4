@@ -1,1 +1,1 @@
-VOLUME = 0.6
+VOLUME = 0.4
