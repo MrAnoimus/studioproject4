@@ -2,7 +2,7 @@
 
 Citizen::Citizen(void)
 
-	:TheMoods(Citizen::SAD)
+	:TheMoods(Citizen::ENRAGE)
 	,TheFavourites(Citizen::SLACK)
 	,happy(false)
 	,HappinessLevels(0)
@@ -17,6 +17,9 @@ Citizen::Citizen(void)
 	,owner("JunHwee")
 	,sheltered(false)
 	,started(false)
+	,MoodCheck(3)
+	,MoodChange(false)
+	,TheOldMood(Citizen::ENRAGE)
 
 {
 	glEnable(GL_TEXTURE_2D);
@@ -122,6 +125,7 @@ void Citizen::MoodUpdate()
 	}
 	if(this->happy==true)
 	{
+		
 		if(this->HappinessLevels<=99)
 		{
 			this->HappinessLevels++;
@@ -129,30 +133,45 @@ void Citizen::MoodUpdate()
 	}
 	else if(this->happy==false)
 	{
+		
 		if(this->HappinessLevels>=1)
 		{
 			this->HappinessLevels--;
 		}
 	}
+	
+		
+		if(this->HappinessLevels>0)
+		{
+			
+			this->TheMoods=Citizen::ENRAGE;
+			//TheOldMood=Citizen::ENRAGE;
+		}
+		if(this->HappinessLevels>25)
+		{
+			this->TheMoods=Citizen::SAD;
+			//TheOldMood=Citizen::SAD;
+			
+		}
+		if(this->HappinessLevels>50)
+		{
+			this->TheMoods= Citizen::OKAY;
+			//TheOldMood=Citizen::OKAY;
+		}
+		if(this->HappinessLevels>75)
+		{
+			this->TheMoods=Citizen::HAPPY;
+			//TheOldMood=Citizen::HAPPY;
 
-	if(this->HappinessLevels>0)
-	{
-		this->TheMoods=Citizen::ENRAGE;
-
-	}
-	if(this->HappinessLevels>25)
-	{
-		this->TheMoods=Citizen::SAD;
-	}
-	if(this->HappinessLevels>50)
-	{
-		this->TheMoods= Citizen::OKAY;
-	}
-	if(this->HappinessLevels>75)
-	{
-		this->TheMoods=Citizen::HAPPY;
-
-	}
+		}
+		
+		if(TheOldMood!=TheMoods)
+		{
+		MoodChange=false;
+		
+		}
+		
+	
 	/*std::cout <<"Happiness Level: " << HappinessLevels << std::endl;
 	std::cout <<"TheMood: " << GetMood() << std::endl;
 	std::cout <<"TheFavourite: " << GetFavourites() << std::endl;
@@ -398,7 +417,7 @@ void Citizen::StatsBoard()
 			DrawInGameText("Name/Owner:");
 		glPopMatrix();
 		glPushMatrix();
-			glTranslatef(-30,80,TranslateZ);
+			glTranslatef(-30,60,TranslateZ);
 			DrawInGameText(owner);
 		glPopMatrix();
 		glPushMatrix();

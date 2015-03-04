@@ -36,6 +36,7 @@ void Tile::Init()
 }
 void Tile::Update()
 {
+	
 	//myHouse.Update();
 	if(ModeOn)
 	{

@@ -162,6 +162,8 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 											Citizens->Movedout=true;
 											Citizens->MovedBack=false;
 											homeless--;
+											
+								//cout <<"checker" <<checker<<endl;
 											break;
 										}
 										if(i>=1)
@@ -283,6 +285,8 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 										Citizens->SetPlace(myTile[SelectorY][SelectorX].Tag,0);
 									}
 									}
+									
+								//cout <<"checker" <<checker<<endl;
 								}
 							}
 						}
@@ -529,6 +533,8 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 									{
 										Citizens->SetPlace(myTile[SelectorY][SelectorX].Tag,0);
 									}
+									
+								//cout <<"checker" <<checker<<endl;
 								}
 							}
 					}
@@ -546,6 +552,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 }
 void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 {
+
 	myKeys[key]= true;
 	//keyboard input
 	if(myKeys[27]==true)
@@ -622,6 +629,7 @@ void CPlayState::KeyboardDown(unsigned char key, int x, int y)
 				if(Citizens->active==true)
 				{
 					Citizens->RenderMood!= Citizens->RenderMood;
+					Citizens->MoodCheck=true;
 				}
 			}
 		}
@@ -982,14 +990,14 @@ bool CPlayState::Init()
 	ListofButtons.push_back(HrSpeed);
 
 	Choice1 = new ButtonClass();
-	LoadTGA(&Choice1->button[0],"Textures/CheapTree.tga");
-	LoadTGA(&Choice1->button[1],"Textures/CheapTree.tga");
+	LoadTGA(&Choice1->button[0],"Textures/brick.tga");
+	LoadTGA(&Choice1->button[1],"Textures/brick.tga");
 	Choice1->Set(100,300,460,500);
 	ListofButtons.push_back(Choice1);
 
 	Choice2 = new ButtonClass();
-	LoadTGA(&Choice2->button[0],"Textures/ExpensiveTree.tga");
-	LoadTGA(&Choice2->button[1],"Textures/ExpensiveTree.tga");
+	LoadTGA(&Choice2->button[0],"Textures/brick2.tga");
+	LoadTGA(&Choice2->button[1],"Textures/brick2.tga");
 	Choice2->Set(500,700,460,500);
 	ListofButtons.push_back(Choice2);
 
@@ -1072,6 +1080,7 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 }
 void CPlayState::Update(CGameStateManager* theGSM)
 {
+	
 	//cout << homeless << endl;
 	if(myGameUI.myGameTime.GetDay()==1&&myGameUI.myGameTime.GetHour()==12&&myGameUI.myGameTime.GetMinute()==0&&myGameUI.myGameTime.GetSecond()==0)
 	{
@@ -1099,7 +1108,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 			}
 		}
 	}
-	checker = 0;
+	//checker = 0;
 
 	if(NormSpeed->buttonclicked)
 	{
@@ -1252,20 +1261,46 @@ void CPlayState::Update(CGameStateManager* theGSM)
 
 		Savebutton->buttonclicked = false;
 	}
-
+	
 	for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 	{
 		Citizen *Citizens = *it;
-
-		if (Citizens->GetMood() == "ENRAGED")
-		{
-			checker ++;
-			//cout <<"checker" <<checker<<endl;
-			if (checker >=5)
+		
+		if (Citizens->GetMood() == "ENRAGED"&&Citizens->MoodChange==false)
+		{	
+			Citizens->MoodChange=true;
+			checker++;
+		/*	if(checker<=0)
 			{
-				resource.SetWin(1);
-				theGSM->ChangeState( CResultState::Instance() );
+				checker=0;
+			}*/
+			if(checker>10)
+			{
+				checker=10;
 			}
+			break;
+		}
+		else if (Citizens->GetMood() != "ENRAGED"&&Citizens->TheOldMood==Citizens->ENRAGE&&Citizens->MoodChange==false)
+		{
+			Citizens->TheOldMood = Citizens->TheMoods;
+			Citizens->MoodChange=true;
+			checker--;
+			if(checker<=0)
+			{
+				checker=0;
+			}
+			//if(checker>10)
+			//{
+			//	checker=10;
+			//}
+			break;
+		}
+		
+		//cout <<"checker" <<checker<<endl;
+		if (checker >=5&&myGameUI.myGameTime.GetDay() == 8)
+		{
+			resource.SetWin(1);
+			theGSM->ChangeState( CResultState::Instance() );
 		}
 	}
 
@@ -1345,9 +1380,21 @@ void CPlayState::Update(CGameStateManager* theGSM)
 			{
 				for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 				{
+					if(resource.GetManPower()>0)
+					{
+						if(!myTile[y][x].myGaugeBar.getdone()&&(myTile[y][x].GetType()==1||myTile[y][x].GetType()==2||myTile[y][x].GetType()==3))
+						{
+							resource.SetManpower(resource.GetManPower()-1);
+						}
+						
+					}
+					if(myTile[y][x].myGaugeBar.getPercentage()==100&&(myTile[y][x].GetType()==1||myTile[y][x].GetType()==2||myTile[y][x].GetType()==3))
+					{
+						resource.SetManpower(resource.GetManPower()+1);
+					}
 					Citizen *Citizens = *it;
 					if((y-1)>=0&&(y+1)<=6&&(x-1)>=0&&(x+1)<=7)
-					{
+					{	
 						if(myTile[y-1][x].myHouse.GetOwner()==Citizens->GetName())
 						{
 							Citizens->SetPlace(myTile[y][x].Tag,3);
@@ -1364,6 +1411,8 @@ void CPlayState::Update(CGameStateManager* theGSM)
 						{
 							Citizens->SetPlace(myTile[y][x].Tag,0);
 						}
+						
+							//cout <<"checker" <<checker<<endl;
 					}
 				}
 				if(SelectorX != x && SelectorY != y)
@@ -1503,58 +1552,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 									}
 								}
 							}
-						//if(Citizens->GetPosition().x==myTile[SelectorY][SelectorX].GetPosition().x*100
-						//	&&Citizens->GetPosition().y==myTile[SelectorY][SelectorX].GetPosition().y*100)
-						//{
-						//	if(Citizens->GetName()==myTile[SelectorY][SelectorX].myHouse.GetOwner())
-						//	{
-						//		//if(Citizens->GetPosition().x!=myTile[1][1].GetPosition().x*100&&Citizens->GetPosition().y!=myTile[1][1].GetPosition().y*100)
-						//		{
-						//				px = Citizens->GetPosition().x*0.01f;
-						//				py = Citizens->GetPosition().y*0.01f;
-						//				Astar as(px,py,1,1);
-						//				//
-						//				bool result = as.Search(Map);
-						//				CNode* Node = new CNode;
-						//				Node->x = 1;
-						//				Node->y = 1;
-						//				//
-						//				as.AddCloseList(Node);
-						//				if(result)
-						//				{
-						//					for(int i=0;i<(int)as.closeList.size();i++)
-						//					{
-						//						//Citizen stuff
-						//						CNode* TheNode = new CNode();
-						//						TheNode->x = as.closeList[i]->x*100;
-						//						TheNode->y = as.closeList[i]->y*100;
-						//						for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
-						//						{
-						//						cout <<"Size: " <<(int)as.closeList.size() <<std::endl;	
-						//						int j= (int)as.closeList.size();	
-						//						if (Citizens->active == true)
-						//						{
-						//				
-						//							if(i+1>=j)
-						//							{
-						//								Citizens->CitizenDestination->DestinationList.push_back(TheNode);			
-						//								Citizens->MovedBack=true;
-						//								Citizens->Movedout=true;
-						//								break;
-						//								
-						//							}
-						//							if(i>=1)
-						//							{				
-						//								Citizens->CitizenDestination->DestinationList.push_back(TheNode);
-						//								break;
-						//							}
-						//						}
-						//						}
-						//				}
-						//			}
-						//		}
-						//	}
-						//}
+						
 					}
 				}
 

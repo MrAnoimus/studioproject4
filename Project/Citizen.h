@@ -20,6 +20,9 @@ class Citizen: public Human
 {
 
 public:
+	
+	bool MoodChange;
+	int MoodCheck;
 	int index;
 	Destination* CitizenDestination;
 	bool started;
@@ -85,11 +88,12 @@ public:
 	void SetName(std::string Name);
 
 	std::string GetName(void);
-
+	Mood TheOldMood;
 	bool Movedout;
 	bool MovedBack;
 	std::string owner;
 	bool sheltered;
+	Mood TheMoods;
 private:
 	
 	
@@ -99,7 +103,7 @@ private:
 	bool happy;
 	float HappinessLevels;
 	Favourite TheFavourites;
-	Mood TheMoods;
+
 	NearByBuilding TheBuildings[4];
 
 	std::string Name;
