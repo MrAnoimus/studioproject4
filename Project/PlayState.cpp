@@ -971,13 +971,13 @@ bool CPlayState::Init()
 	NormSpeed = new ButtonClass();
 	LoadTGA(&NormSpeed->button[0],"Textures/normalspeedup.tga");
 	LoadTGA(&NormSpeed->button[1],"Textures/normalspeeddown.tga");
-	NormSpeed->Set(710,735,140,155); //15 ,15
+	NormSpeed->Set(710,735,70,95); //15 ,15
 	ListofButtons.push_back(NormSpeed);
 
 	HrSpeed = new ButtonClass(); //35 , 15
 	LoadTGA(&HrSpeed->button[0],"Textures/hourspeedup.tga");
 	LoadTGA(&HrSpeed->button[1],"Textures/hourspeeddown.tga");
-	HrSpeed->Set(740,790,140,155); 
+	HrSpeed->Set(740,790,70,95); 
 	ListofButtons.push_back(HrSpeed);
 
 	Choice1 = new ButtonClass();
@@ -1174,8 +1174,8 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		Choice1->Set(300,520,460,520);
 		Choice2->Set(350,450,520,580);
 		Savebutton->Set(700,750,10,60);
-		NormSpeed->Set(680,695,150,165);
-		HrSpeed->Set(705,735,150,165);
+		NormSpeed->Set(710,735,70,95);
+		HrSpeed->Set(740,790,70,95); 
 		sizechanged = false;
 	}
 	if(OKbutton->buttonclicked)
