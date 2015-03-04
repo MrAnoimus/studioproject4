@@ -902,13 +902,13 @@ bool CPlayState::Init()
 		}
 		srand((unsigned int) i);
 
-		/*randNum = Math::RandIntMinMax(0, 49);*/
-		randNum = rand() % 50 + 1;
+		randNum = Math::RandIntMinMax(0, 49);
+		//randNum = rand() % 50 + 1;
 		rNAME = rnames[randNum];
 
 		myFile.close();
 
-		//go->SetName(rNAME);
+		go->SetName(rNAME);
 	}
 
 		//herez
@@ -1091,6 +1091,8 @@ void CPlayState::Update(CGameStateManager* theGSM)
 	{
 		myGameUI.myGameTime.Fincrement = 10;
 		myGameUI.myGameTime.HrIncrement = 1;
+		LoadTGA(&NormSpeed->button[0],"Textures/normalspeeddown.tga");
+		LoadTGA(&HrSpeed->button[0],"Textures/hourspeedup.tga");
 		mouseInfo.mLButtonUp = false;
 		NormSpeed->buttonclicked = false;
 	}
@@ -1099,6 +1101,8 @@ void CPlayState::Update(CGameStateManager* theGSM)
 	{
 		myGameUI.myGameTime.Fincrement = 100;
 		myGameUI.myGameTime.HrIncrement = 3;
+		LoadTGA(&NormSpeed->button[0],"Textures/normalspeedup.tga");
+		LoadTGA(&HrSpeed->button[0],"Textures/hourspeeddown.tga");
 		mouseInfo.mLButtonUp = false;
 		HrSpeed->buttonclicked = false;
 	}
@@ -1857,7 +1861,7 @@ Citizen* CPlayState::FetchObject()
 	ss << a;
 	//std::string str = go->GetName() + ss.str();
 
-	go->SetName(rNAME + ss.str());
+	//go->SetName(rNAME);
 	//go->SetName(str);
 
 	CitizenList.push_back(go);
