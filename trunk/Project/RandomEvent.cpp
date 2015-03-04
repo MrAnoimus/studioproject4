@@ -13,7 +13,7 @@ CRandomEvent::~CRandomEvent(void)
 
 int CRandomEvent::Random()
 {
-	int i = rand()% 5;
+	int i = rand()% 4;
 	type = i;
 	return type;
 }
@@ -43,21 +43,24 @@ void CRandomEvent::CreateEventz(int typez)
 		break;
 	case 3:
 		{
-			resource.SetManpower(resource.GetManPower() +100);
+			resource.SetManpower(resource.GetManPower() +5);
 			cout <<"The Amount of Man Power is "<<resource.GetManPower()<<"\n";
 		}
 		break;
 	case 4:
 		{
-			resource.SetManpower(resource.GetManPower() +100);
+			resource.SetManpower(resource.GetManPower() +5);
 			cout <<"The Amount of Man Power is "<<resource.GetManPower()<<"\n";
 		}
 		break;
 
 	default:
-		resource.SetManpower(resource.GetManPower() +100);
-		cout <<"The Amount of money is "<<resource.GetMoney()<<"\n";
+		resource.SetManpower(resource.GetManPower() +5);
 		break;
+	}
+	if(resource.GetManPower() >= resource.maxManPower)
+	{
+		resource.SetManpower(resource.maxManPower);
 	}
 }
 
@@ -196,8 +199,9 @@ void CRandomEvent::HandleREvents(int type)
 		glDisable(GL_TEXTURE_2D);
 		break;
 
+		// + Man power
 		default:
-			glEnable(GL_TEXTURE_2D);
+		glEnable(GL_TEXTURE_2D);
 		glPushMatrix();
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

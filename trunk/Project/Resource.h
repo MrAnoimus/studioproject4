@@ -9,9 +9,9 @@ private:
 	static int NumOfCitizen;
 	static int Win;
 	static int load;
-	static int maxManPower;
+	
 public:
-
+	static int maxManPower;
 
 	int GetFood();
 	int GetMoney();
