@@ -127,6 +127,7 @@ class CIntroState : public CGameState
 		std::vector<ButtonClass*> ListofButtons;
 		float width, height;
 		bool loading;
+		bool loading2;
 		int value;
 		bool start;
 };
