@@ -100,8 +100,22 @@ class CPlayState : public CGameState
 		
 	protected:
 		CPlayState()
-		:	theCamera(NULL)
-		,	minigameobjects(NULL)
+		:theCamera(NULL)
+		,minigameobjects(NULL)
+		, homeless(0)
+		, ChoiceChance(0.0f)
+		, DestoryedChance(0.0f)
+		, checker(0)
+		, Random(0)
+		, Random2(0)
+		, sizechanged(false)
+		, deltaTime(0)
+		, frameCount(0)
+		, volume(0)
+		, SelectorX(1)
+		, SelectorY(1)
+
+		
 		//,	catcher(NULL)
 		{ 
 		
