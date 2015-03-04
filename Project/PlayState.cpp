@@ -962,13 +962,13 @@ bool CPlayState::Init()
 	NormSpeed = new ButtonClass();
 	LoadTGA(&NormSpeed->button[0],"Textures/normalspeedup.tga");
 	LoadTGA(&NormSpeed->button[1],"Textures/normalspeeddown.tga");
-	NormSpeed->Set(680,695,150,165);
+	NormSpeed->Set(710,735,140,155); //15 ,15
 	ListofButtons.push_back(NormSpeed);
 
-	HrSpeed = new ButtonClass();
+	HrSpeed = new ButtonClass(); //35 , 15
 	LoadTGA(&HrSpeed->button[0],"Textures/hourspeedup.tga");
 	LoadTGA(&HrSpeed->button[1],"Textures/hourspeeddown.tga");
-	HrSpeed->Set(705,735,150,165);
+	HrSpeed->Set(740,790,140,155); 
 	ListofButtons.push_back(HrSpeed);
 
 	Choice1 = new ButtonClass();
@@ -986,7 +986,7 @@ bool CPlayState::Init()
 	Savebutton = new ButtonClass();
 	LoadTGA(&Savebutton->button[0],"Textures/save.tga");
 	LoadTGA(&Savebutton->button[1],"Textures/save.tga");
-	Savebutton->Set(750,800,5,50);
+	Savebutton->Set(725,770,5,50);
 	ListofButtons.push_back(Savebutton);
 	//get amount of building etc
 	for(int y = 0; y < ROWS; y += 1)
@@ -1115,7 +1115,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 		myGameUI.myGameTime.daycheck = false;
 		daypassed++;
 		calculateEarning();
-		if(daypassed!=2)
+		if(daypassed!=3)
 		{
 			REvent.IsDisplay = true;
 			REvent.Random();
@@ -1123,7 +1123,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 			theCamera->canPan = false;
 		}
 		
-		if(daypassed==2 && resource.GetMoney() <= 800)
+		if(daypassed==3 && resource.GetMoney() <= 800)
 		{
 			minigameobjects->Init(theCamera);
 			myGameUI.myGameTime.Fincrement = 0;
@@ -1134,12 +1134,6 @@ void CPlayState::Update(CGameStateManager* theGSM)
 			daypassed = 0;
 		}
 	}
-
-
-	
-
-
-
 
 	if(minigameobjects->minigame)
 	{
