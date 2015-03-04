@@ -66,7 +66,7 @@ void CIntroState::MouseMove(int x , int y)
 	mouseInfo.lastX = x;
 	mouseInfo.lastY = y;
 	
-	if(!loading || !loading2)
+	if(!start)
 	{
 		//check if mouse pointer is inside the button boundaries
 		for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
@@ -383,7 +383,7 @@ void CIntroState::Update(CGameStateManager* theGSM)
 	if(value>100)
 	{
 		start = true;
-		value=0;
+		//value=0;
 	}
 	if(start)
 	{
