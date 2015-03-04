@@ -6,8 +6,12 @@
 #include "GameState.h"
 #include "freeType.h"
 #include "PlayState.h"
-#include "freeType.h"
 #include "Resource.h"
+
+#include "Definitions.h"
+#include "ButtonClass.h"
+#include "IntroState.h"
+
 class CCreditState : public CGameState
 {
 	//Mouse Info
@@ -19,18 +23,8 @@ class CCreditState : public CGameState
 		int  lastX, lastY;
 	}theMouseInfo;
 
-	//texture info
-	typedef struct												// Create A Structure
-	{
-		GLubyte	*imageData;										// Image Data (Up To 32 Bits)
-		GLuint	bpp;											// Image Color Depth In Bits Per Pixel.
-		GLuint	width;											// Image Width
-		GLuint	height;											// Image Height
-		GLuint	texID;											// Texture ID Used To Select A Texture
-	}TextureImage;
-
-
 public:
+	bool sizechanged;
 	void changeSize(int w, int h);
 	void MouseMove (int x, int y);
 	void MouseClick(int button,int state,int x,int y);
@@ -69,7 +63,6 @@ protected:
 private:
 
 	static CCreditState theCreditState;
-	bool LoadTGA(TextureImage *texture, char *filename);
 	// The camera
 	Camera* theCamera;
 	// Camera
@@ -99,7 +92,9 @@ private:
 
 	TextureImage BackgroundTexture[2];	
 
-	
+	ButtonClass* Returnbutton;
+	std::vector<ButtonClass*> ListofButtons;
+
 	freetype::font_data our_font;
 	GLfloat	cnt1;
 };

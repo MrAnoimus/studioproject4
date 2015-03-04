@@ -5,6 +5,9 @@
 #include <mmsystem.h>
 #include <iostream>
 
+#include "Definitions.h"
+#include "ButtonClass.h"
+
 using namespace std;
 
 CCreditState CCreditState::theCreditState;
@@ -17,7 +20,7 @@ void CCreditState::changeSize(int w, int h)
 		h = 1;
 
 	float ratio = (float) (1.0f* w / h);
-
+	sizechanged = true;
 	// Reset the coordinate system before modifying
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -46,6 +49,11 @@ void CCreditState::MouseMove(int x , int y)
 	int diffX = x - mouseInfo.lastX;
 	int diffY = y - mouseInfo.lastY;
 
+	//check if mouse pointer is inside the button boundaries
+	for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
+	{
+		(*it)->UpdateMouseMove(x,y);
+	}
 	//Update on y axis
 	theCamera->Pitch( diffY * 3.142f / 180.0f );
 
@@ -64,8 +72,31 @@ void CCreditState::MouseClick(int button , int state , int x , int y)
 {
 	switch (button)
 	{
+	
 		case GLUT_LEFT_BUTTON:
 		{	
+			if (!mouseInfo.mLButtonUp)
+			{
+				for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
+				{
+					if ((*it)->buttonhover)
+					{
+						(*it)->buttonclicked = true;
+					}
+				}
+			}
+
+			else
+			{
+				for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
+				{
+					if ((*it)->buttonhover)
+					{
+						(*it)->buttonclicked = false;
+					}
+				}
+			}
+
 			mouseInfo.mLButtonUp = state;
 			mouseInfo.lastX = x;
 			mouseInfo.lastY = y;
@@ -82,6 +113,7 @@ void CCreditState::MouseClick(int button , int state , int x , int y)
 }
 bool CCreditState::Init()
 {
+	sizechanged = false;
 	cout << "CCreditState::Init\n" << endl;
 	
 	theCamera = new Camera( Camera::LAND_CAM );
@@ -90,6 +122,12 @@ bool CCreditState::Init()
 
 	LoadTGA(&BackgroundTexture[0],"Textures/credit.tga");
 	LoadTGA(&BackgroundTexture[1],"Textures/LosingScreen.tga");
+
+	Returnbutton = new ButtonClass();
+	LoadTGA(&Returnbutton->button[0],"Textures/returnup.tga");
+	LoadTGA(&Returnbutton->button[1],"Textures/returndown.tga");
+	Returnbutton->Set(730,780,5,50); 	
+	ListofButtons.push_back(Returnbutton);
 
 	our_font.init("Fonts/FFF_Tusj.TTF", 42);
 
@@ -113,6 +151,9 @@ bool CCreditState::Init()
 
 	mouseInfo.lastX = 800 >> 1;
 	mouseInfo.lastY = 600 >> 1;
+
+	
+	
 
 	return true;
 }
@@ -154,6 +195,18 @@ void CCreditState::Update(CGameStateManager* theGSM)
 	//cout << "CResultState::Update\n" << endl;
 	//MouseMove(mouseInfo.lastX,mouseInfo.lastY);
 	//std::cout<<mouseInfo.lastX<<","<<mouseInfo.lastY<<std::endl;
+
+	if (sizechanged)
+	{
+		Returnbutton->Set(730,780,5,50); 	
+		sizechanged = false;
+	}
+
+	if (Returnbutton->buttonclicked)
+	{
+		theGSM->ChangeState(CIntroState::Instance());
+		Returnbutton->buttonclicked = false;
+	}
 }
 
 void CCreditState::Draw(CGameStateManager* theGSM) 
@@ -179,7 +232,7 @@ void CCreditState::Draw(CGameStateManager* theGSM)
 		glPushMatrix();
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glBindTexture (GL_TEXTURE_2D, BackgroundTexture[0].texID);
+			glBindTexture (GL_TEXTURE_2D, BackgroundTexture[0].id);
 			glPushMatrix();
 				glBegin(GL_QUADS);
 					glTexCoord2f(0,0);
@@ -194,7 +247,7 @@ void CCreditState::Draw(CGameStateManager* theGSM)
 			glPopMatrix();
 			glDisable(GL_BLEND);
 		glPopMatrix();
-
+	Returnbutton->Render();
 
 	glDisable(GL_TEXTURE_2D);
 	//drawFPS();
@@ -228,6 +281,9 @@ void CCreditState::calculateFPS()
 		//  Reset frame count
 		frameCount = 0;
 	}
+
+	ButtonClass* returnbutton;
+	std::vector<ButtonClass*> ListofButtons;
 }
 
 //-------------------------------------------------------------------------
@@ -253,82 +309,4 @@ void CCreditState::drawFPS()
 	}
 	print(our_font, 0, 550,"FPS: %4.2f", fps);
 	glColor3f( 1.0f, 1.0f, 1.0f);
-}
-bool CCreditState::LoadTGA(TextureImage *texture, char *filename)			// Loads A TGA File Into Memory
-{    
-	GLubyte		TGAheader[12]={0,0,2,0,0,0,0,0,0,0,0,0};	// Uncompressed TGA Header
-	GLubyte		TGAcompare[12];								// Used To Compare TGA Header
-	GLubyte		header[6];									// First 6 Useful Bytes From The Header
-	GLuint		bytesPerPixel;								// Holds Number Of Bytes Per Pixel Used In The TGA File
-	GLuint		imageSize;									// Used To Store The Image Size When Setting Aside Ram
-	GLuint		temp;										// Temporary Variable
-	GLuint		type=GL_RGBA;								// Set The Default GL Mode To RBGA (32 BPP)
-
-	FILE *file = fopen(filename, "rb");						// Open The TGA File
-
-	if(	file==NULL ||										// Does File Even Exist?
-		fread(TGAcompare,1,sizeof(TGAcompare),file)!=sizeof(TGAcompare) ||	// Are There 12 Bytes To Read?
-		memcmp(TGAheader,TGAcompare,sizeof(TGAheader))!=0				||	// Does The Header Match What We Want?
-		fread(header,1,sizeof(header),file)!=sizeof(header))				// If So Read Next 6 Header Bytes
-	{
-		if (file == NULL)									// Did The File Even Exist? *Added Jim Strong*
-			return false;									// Return False
-		else
-		{
-			fclose(file);									// If Anything Failed, Close The File
-			return false;									// Return False
-		}
-	}
-
-	texture->width  = header[1] * 256 + header[0];			// Determine The TGA Width	(highbyte*256+lowbyte)
-	texture->height = header[3] * 256 + header[2];			// Determine The TGA Height	(highbyte*256+lowbyte)
-    
- 	if(	texture->width	<=0	||								// Is The Width Less Than Or Equal To Zero
-		texture->height	<=0	||								// Is The Height Less Than Or Equal To Zero
-		(header[4]!=24 && header[4]!=32))					// Is The TGA 24 or 32 Bit?
-	{
-		fclose(file);										// If Anything Failed, Close The File
-		return false;										// Return False
-	}
-
-	texture->bpp	= header[4];							// Grab The TGA's Bits Per Pixel (24 or 32)
-	bytesPerPixel	= texture->bpp/8;						// Divide By 8 To Get The Bytes Per Pixel
-	imageSize		= texture->width*texture->height*bytesPerPixel;	// Calculate The Memory Required For The TGA Data
-
-	texture->imageData=(GLubyte *)malloc(imageSize);		// Reserve Memory To Hold The TGA Data
-
-	if(	texture->imageData==NULL ||							// Does The Storage Memory Exist?
-		fread(texture->imageData, 1, imageSize, file)!=imageSize)	// Does The Image Size Match The Memory Reserved?
-	{
-		if(texture->imageData!=NULL)						// Was Image Data Loaded
-			free(texture->imageData);						// If So, Release The Image Data
-
-		fclose(file);										// Close The File
-		return false;										// Return False
-	}
-
-	for(GLuint i=0; i<int(imageSize); i+=bytesPerPixel)		// Loop Through The Image Data
-	{														// Swaps The 1st And 3rd Bytes ('R'ed and 'B'lue)
-		temp=texture->imageData[i];							// Temporarily Store The Value At Image Data 'i'
-		texture->imageData[i] = texture->imageData[i + 2];	// Set The 1st Byte To The Value Of The 3rd Byte
-		texture->imageData[i + 2] = temp;					// Set The 3rd Byte To The Value In 'temp' (1st Byte Value)
-	}
-
-	fclose (file);											// Close The File
-
-	// Build A Texture From The Data
-	glGenTextures(1, &texture[0].texID);					// Generate OpenGL texture IDs
-
-	glBindTexture(GL_TEXTURE_2D, texture[0].texID);			// Bind Our Texture
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);	// Linear Filtered
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);	// Linear Filtered
-	
-	if (texture[0].bpp==24)									// Was The TGA 24 Bits
-	{
-		type=GL_RGB;										// If So Set The 'type' To GL_RGB
-	}
-
-	glTexImage2D(GL_TEXTURE_2D, 0, type, texture[0].width, texture[0].height, 0, type, GL_UNSIGNED_BYTE, texture[0].imageData);
-
-	return true;											// Texture Building Went Ok, Return True
 }
