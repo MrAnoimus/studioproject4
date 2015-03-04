@@ -66,92 +66,95 @@ void CIntroState::MouseMove(int x , int y)
 	mouseInfo.lastX = x;
 	mouseInfo.lastY = y;
 	
-	//check if mouse pointer is inside the button boundaries
-	for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
-		(*it)->UpdateMouseMove(x,y);
+	if(!loading || !loading2)
+	{
+		//check if mouse pointer is inside the button boundaries
+		for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
+			(*it)->UpdateMouseMove(x,y);
 
-	if(startbutton->buttonhover)
-	{
-		hoverStart = true;
-	}
-	else
-	{
-		hoverStart = false;
-	}
-
-	if(contbutton->buttonhover)
-	{
-		hoverCont = true;
-	}
-	else
-	{
-		hoverCont = false;
-	}
-
-	if(settingsbutton->buttonhover)
-	{
-		hoverSet = true;
-	}
-	else
-	{
-		hoverSet = false;
-	}
-
-	if(exitbutton->buttonhover)
-	{
-		hoverExit = true;
-	}
-	else
-	{
-		hoverExit = false;
-	}
-
-	if(hoverStart)
-	{	
-		if(menuGUIstart == NULL)
-			{menuGUIstart = theSoundEngine->play2D ("SFX/misc_menu.wav", false, true);}		
-		/*else{menuGUIstart == NULL;
-			 menuGUIstart = theSoundEngine->play2D ("SFX/misc_menu.wav", false, true);}*/
-		if(menuGUIstart->getIsPaused() == true){menuGUIstart->setIsPaused(false);}
-		else if(menuGUIstart->isFinished() == true){menuGUIstart = NULL;}
-	}
-
-	if(hoverCont)
-	{	
-		if(menuGUIcont == NULL)
+		if(startbutton->buttonhover)
 		{
-			menuGUIcont = theSoundEngine->play2D ("SFX/misc_menu_2.wav", false, true);
-		}		
-		/*else{menuGUIcont == NULL;
-			 menuGUIcont = theSoundEngine->play2D ("SFX/misc_menu_2.wav", false, true);}*/
-		if(menuGUIcont->getIsPaused() == true)
-		{
-			menuGUIcont->setIsPaused(false);
+			hoverStart = true;
 		}
-		/*else if(menuGUIcont->isFinished() == true)
+		else
 		{
-			menuGUIcont = NULL;
-		}*/
-	}
+			hoverStart = false;
+		}
 
-	if(hoverSet)
-	{
-		if(menuGUIset == NULL)
-			{menuGUIset = theSoundEngine->play2D ("SFX/misc_menu_3.wav", false, true);}		
-		/*else{menuGUIset == NULL;
-			 menuGUIset = theSoundEngine->play2D ("SFX/misc_menu_3.wav", false, true);}*/
-		if(menuGUIset->getIsPaused() == true){menuGUIset->setIsPaused(false);}
-		else if(menuGUIset->isFinished() == true){menuGUIset = NULL;}
-	}
+		if(contbutton->buttonhover)
+		{
+			hoverCont = true;
+		}
+		else
+		{
+			hoverCont = false;
+		}
 
-	if(hoverExit)
-	{
-		if(menuGUIexit == NULL)
-			{menuGUIexit = theSoundEngine->play2D ("SFX/misc_menu_4.wav", false, true);}		
-		/*else{menuGUIexit == NULL;
-			 menuGUIexit = theSoundEngine->play2D ("SFX/misc_menu_4.wav", false, true);}*/
-		if(menuGUIexit->getIsPaused() == true){menuGUIexit->setIsPaused(false);}
-		else if(menuGUIexit->isFinished() == true){menuGUIexit = NULL;}
+		if(settingsbutton->buttonhover)
+		{
+			hoverSet = true;
+		}
+		else
+		{
+			hoverSet = false;
+		}
+
+		if(exitbutton->buttonhover)
+		{
+			hoverExit = true;
+		}
+		else
+		{
+			hoverExit = false;
+		}
+
+		if(hoverStart)
+		{	
+			if(menuGUIstart == NULL)
+				{menuGUIstart = theSoundEngine->play2D ("SFX/misc_menu.wav", false, true);}		
+			/*else{menuGUIstart == NULL;
+				 menuGUIstart = theSoundEngine->play2D ("SFX/misc_menu.wav", false, true);}*/
+			if(menuGUIstart->getIsPaused() == true){menuGUIstart->setIsPaused(false);}
+			else if(menuGUIstart->isFinished() == true){menuGUIstart = NULL;}
+		}
+
+		if(hoverCont)
+		{	
+			if(menuGUIcont == NULL)
+			{
+				menuGUIcont = theSoundEngine->play2D ("SFX/misc_menu_2.wav", false, true);
+			}		
+			/*else{menuGUIcont == NULL;
+				 menuGUIcont = theSoundEngine->play2D ("SFX/misc_menu_2.wav", false, true);}*/
+			if(menuGUIcont->getIsPaused() == true)
+			{
+				menuGUIcont->setIsPaused(false);
+			}
+			/*else if(menuGUIcont->isFinished() == true)
+			{
+				menuGUIcont = NULL;
+			}*/
+		}
+
+		if(hoverSet)
+		{
+			if(menuGUIset == NULL)
+				{menuGUIset = theSoundEngine->play2D ("SFX/misc_menu_3.wav", false, true);}		
+			/*else{menuGUIset == NULL;
+				 menuGUIset = theSoundEngine->play2D ("SFX/misc_menu_3.wav", false, true);}*/
+			if(menuGUIset->getIsPaused() == true){menuGUIset->setIsPaused(false);}
+			else if(menuGUIset->isFinished() == true){menuGUIset = NULL;}
+		}
+
+		if(hoverExit)
+		{
+			if(menuGUIexit == NULL)
+				{menuGUIexit = theSoundEngine->play2D ("SFX/misc_menu_4.wav", false, true);}		
+			/*else{menuGUIexit == NULL;
+				 menuGUIexit = theSoundEngine->play2D ("SFX/misc_menu_4.wav", false, true);}*/
+			if(menuGUIexit->getIsPaused() == true){menuGUIexit->setIsPaused(false);}
+			else if(menuGUIexit->isFinished() == true){menuGUIexit = NULL;}
+		}
 	}
 }
 void CIntroState::MouseClick(int button , int state , int x , int y)
@@ -165,24 +168,26 @@ void CIntroState::MouseClick(int button , int state , int x , int y)
 			
 			mouseInfo.lastX = x;
 			mouseInfo.lastY = y;
-			
-			if (!mouseInfo.mLButtonUp)
+			if(!loading || !loading2)
 			{
-				for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
+				if (!mouseInfo.mLButtonUp)
 				{
-					if ((*it)->buttonhover)
+					for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
 					{
-						(*it)->buttonclicked = true;
+						if ((*it)->buttonhover)
+						{
+							(*it)->buttonclicked = true;
+						}
 					}
 				}
-			}
-			else
-			{
-				for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
+				else
 				{
-					if ((*it)->buttonhover)
+					for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
 					{
-						(*it)->buttonclicked = false;
+						if ((*it)->buttonhover)
+						{
+							(*it)->buttonclicked = false;
+						}
 					}
 				}
 			}
@@ -303,6 +308,7 @@ bool CIntroState::Init()
 	exitbutton->Set(350,450,520,580);
 	ListofButtons.push_back(exitbutton);
 	loading = false;
+	loading2 = false;
 	start = false;
 	value = 0;
 	return true;
@@ -365,24 +371,35 @@ void CIntroState::Update(CGameStateManager* theGSM)
 	}
 	if(contbutton->buttonclicked)
 	{
-		loading = true;
+		loading2 = true;
 		/*resource.SetLoad(1);
 		theGSM->ChangeState( CPlayState::Instance() );	
 		mouseInfo.mLButtonUp = false;*/
 	}
-	if(loading == true)
+	if(loading == true || loading2 == true)
 	{
 		value++;
 	}
 	if(value>100)
 	{
 		start = true;
+		value=0;
 	}
 	if(start)
 	{
-		resource.SetLoad(0);
-		theGSM->ChangeState( CPlayState::Instance() );
-		mouseInfo.mLButtonUp = false;
+		if(loading)
+		{
+			resource.SetLoad(0);
+			theGSM->ChangeState( CPlayState::Instance() );
+			mouseInfo.mLButtonUp = false;
+		}
+		if(loading2)
+		{
+			resource.SetLoad(1);
+			theGSM->ChangeState( CPlayState::Instance() );	
+			mouseInfo.mLButtonUp = false;
+		}
+		
 	}
 	if(settingsbutton->buttonclicked)
 	{
@@ -411,16 +428,11 @@ void CIntroState::Draw(CGameStateManager* theGSM)
 		calculateFPS();
 		timelastcall=timeGetTime();
 	}
-
-
 	// Enable 2D text display and HUD
 	theCamera->SetHUD( true );
 
-	
-	
-
 	// Draw Background image
-	if(loading)
+	if(loading || loading2)
 	{
 		glEnable(GL_TEXTURE_2D);
 		glPushMatrix();
