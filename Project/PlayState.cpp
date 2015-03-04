@@ -1326,7 +1326,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 				for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 				{
 					Citizen *Citizens = *it;
-					if((y-1)>=0&&(y+1)<=6&&(x-1)>=0&&(x+1)<=8)
+					if((y-1)>=0&&(y+1)<=6&&(x-1)>=0&&(x+1)<=7)
 					{
 						if(myTile[y-1][x].myHouse.GetOwner()==Citizens->GetName())
 						{
@@ -1626,26 +1626,36 @@ void CPlayState::checkUIName()
 	{
 		Bnames = "House";
 		cost = myTile[SelectorY][SelectorX].myHouse.GetCost();
+		earning = myTile[SelectorY][SelectorX].myHouse.GetEarnings();
+		fees = myTile[SelectorY][SelectorX].myHouse.GetMaintenanceFee();
 	}
 	if(myTile[SelectorY][SelectorX].GetBtype() == 2)
 	{
 		Bnames = "Foodstore";
 		cost = myTile[SelectorY][SelectorX].myFCourt.GetCost();
+		earning = myTile[SelectorY][SelectorX].myFCourt.GetEarnings();
+		fees = myTile[SelectorY][SelectorX].myFCourt.GetMaintenanceFee();
 	}
 	if(myTile[SelectorY][SelectorX].GetBtype() == 3)
 	{
 		Bnames = "General store";
 		cost = myTile[SelectorY][SelectorX].myGstore.GetCost();
+		earning = myTile[SelectorY][SelectorX].myGstore.GetEarnings();
+		fees = myTile[SelectorY][SelectorX].myGstore.GetMaintenanceFee();
 	}
 	if(myTile[SelectorY][SelectorX].GetBtype() == 4)
 	{
 		Bnames = "Shelter";
 		cost = myTile[SelectorY][SelectorX].myShelter.GetCost();
+		earning = myTile[SelectorY][SelectorX].myShelter.GetEarnings();
+		fees = myTile[SelectorY][SelectorX].myShelter.GetMaintenanceFee();
 	}
 	if(myTile[SelectorY][SelectorX].GetBtype() == 5)
 	{
 		Bnames = "Tree";
 		cost = myTile[SelectorY][SelectorX].myObstacle.GetCost();
+		earning = myTile[SelectorY][SelectorX].myObstacle.GetEarnings();
+		fees = myTile[SelectorY][SelectorX].myObstacle.GetMaintenanceFee();
 	}
 }
 void CPlayState::Draw(CGameStateManager* theGSM)
@@ -1698,20 +1708,6 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
 
-	/*glPushMatrix();
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glBindTexture (GL_TEXTURE_2D, Frame.id);
-			glBegin(GL_QUADS);
-			glTexCoord2f(1,1);
-			glVertex2f(0,800);
-			glTexCoord2f(0,1);
-			glVertex2f(1000,800);
-			glTexCoord2f(0,0);
-			glVertex2f(1000,0);
-			glTexCoord2f(1,0);
-			glVertex2f(0,0);
-		glEnd();
-	glPopMatrix();*/
 	//
 	if(minigameobjects->minigame)
 	{
@@ -1728,9 +1724,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	if(!minigameobjects->minigame)
 	{
 		for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
-
 		{
-
 			//here
 			Citizen *Citizens = *it;
 			if (Citizens->active == true)
@@ -1746,7 +1740,8 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	theCamera->SetHUD( true);
 
 	checkUIName();
-	myGameUI.Draw((width/2)-300,height - 50,Bnames.c_str(),cost,myTile[SelectorY][SelectorX].GetModeOn());
+	myGameUI.Draw((width/2)-300,height - 60);
+	myGameUI.DrawSelectionInfo(width,height,Bnames,cost,earning,fees,myTile[SelectorY][SelectorX].GetModeOn());
 	myGameUI.DrawSelect(750,200,myTile[SelectorY][SelectorX].GetModeOn(),myTile[SelectorY][SelectorX].GetBtype());
 	//money manpower citizen
 	myGameUI.DrawResource(myGameUI.GetIconSize(),myGameUI.GetIconSize());

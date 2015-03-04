@@ -196,6 +196,8 @@ class CPlayState : public CGameState
 		void checkUIName();
 		std::string Bnames;
 		int cost;
+		int earning;
+		int fees;
 
 		int daypassed;
 
