@@ -1731,7 +1731,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 		minigameobjects->Draw();
 	}
 	
-	DrawTileContent();
+	
 	
 	glColor4f(1.0f,1.0f,1.0f,1.0f);
 	glPushMatrix();
@@ -1739,6 +1739,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 
 	if(!minigameobjects->minigame)
 	{
+		DrawTileContent();
 		for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 		{
 			//here
@@ -1790,7 +1791,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 		  Choice2->Render();
 		glPopMatrix();
 	}
-	Savebutton->Render();
+	
 	theCamera->SetHUD( false );
 	// Flush off any entity which is not drawn yet, so that we maintain the frame rate.
 	glFlush();
@@ -1800,9 +1801,9 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 }
 void CPlayState::RenderUI(void)
 {
-
 	NormSpeed->Render();
 	HrSpeed->Render();
+	Savebutton->Render();
 	Homebutton->Render();
 
 	//print(our_font,0,250,"Current Money :%.2f\nCurrent Manpower :%1i\nCurrent Citizen:%1i",PlayerResource.GetMoney() ,PlayerResource.GetManPower(),PlayerResource.GetCitizen());
