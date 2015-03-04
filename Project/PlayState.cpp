@@ -424,14 +424,18 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 					{
 						if(myTile[SelectorY][SelectorX].GetBtype() == 1)
 						{
+							ClearTileMap();
 							for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 							{
 									Citizen *Citizens = *it;
 									{
-										if(Citizens->GetName()==myTile[SelectorY][SelectorX].myHouse.GetOwner()
+										if(
+										Citizens->GetName()==myTile[SelectorY][SelectorX].myHouse.GetOwner()
 										&&Citizens->GetPosition().x!=myTile[1][1].GetPosition().x*100
 										&&Citizens->GetPosition().y!=myTile[1][1].GetPosition().y*100)
 										{
+										px = Citizens->GetPosition().x*0.01f;
+										py = Citizens->GetPosition().y*0.01f;
 										Astar as(px,py,1,1);
 										//
 										bool result = as.Search(Map);
@@ -448,32 +452,37 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 												CNode* TheNode = new CNode();
 												TheNode->x = as.closeList[i]->x*100;
 												TheNode->y = as.closeList[i]->y*100;
-												cout <<"Size: " <<(int)as.closeList.size() <<std::endl;
-												
-												int j= (int)as.closeList.size();	
-												if (Citizens->active == true)
+												for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+												{
+													cout <<"Size: " <<(int)as.closeList.size() <<std::endl;	
+													int j= (int)as.closeList.size();	
+													if (Citizens->active == true&&Citizens->started==true)
 													{
 										
-														if(i+1>=j)
-														{
-															Citizens->CitizenDestination->DestinationList.push_back(TheNode);			
-															Citizens->MovedBack=false;
-															Citizens->Movedout=true;
-															
-															break;
-														}
-														if(i>=1)
-														{				
-															Citizens->CitizenDestination->DestinationList.push_back(TheNode);
-															break;
+															if(i+1>=j)
+															{
+																Citizens->CitizenDestination->DestinationList.push_back(TheNode);			
+																Citizens->MovedBack=true;
+																Citizens->Movedout=true;
+																Citizens->AnimationInvert=false;
+																homeless++;
+																break;
+														
+															}
+															if(i>=1)
+															{				
+																Citizens->CitizenDestination->DestinationList.push_back(TheNode);
+																break;
+															}
 														}
 													}
-												}
-											
+											}
 										}
-										}
+									}
+										
 								}
-								}
+									
+							}
 							myTile[SelectorY][SelectorX].SetEmpty(true);
 							myTile[SelectorY][SelectorX].myObstacle.SetDiff(false);
 							Map[SelectorY][SelectorX]=219;
@@ -1369,7 +1378,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 				Citizens->MoodUpdate();
 				px = Citizens->GetPosition().x*0.01f;
 				py = Citizens->GetPosition().y*0.01f;
-				//Citizens->Position.x++;
+			
 				if(myTile[SelectorY][SelectorX].GetModeOn()==false)
 				{
 					if(Citizens->CitizenDestination->DestinationList.size()>=1)
@@ -1388,7 +1397,15 @@ void CPlayState::Update(CGameStateManager* theGSM)
 									Vector3D direction(position - Citizens->GetPosition());
 									Citizens->Position.x += direction.Normalized().x;
 									Citizens->Position.y += direction.Normalized().y;
-									Citizens->AnimationInvert=false;
+									
+									if(Citizens->started==true)
+									{
+										Citizens->AnimationInvert=true;
+									}
+									else
+									{
+										Citizens->AnimationInvert=false;
+									}
 								}
 								if(Citizens->GetPosition().x== position.x && Citizens->GetPosition().y == position.y)
 								{
@@ -1396,7 +1413,9 @@ void CPlayState::Update(CGameStateManager* theGSM)
 									{
 										Citizens->index++;
 									}
+									
 								}
+
 							}
 							else
 							{
@@ -1426,6 +1445,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 											Citizens->CitizenDestination->DestinationList[Citizens->index]->x=100;
 											Citizens->CitizenDestination->DestinationList[Citizens->index]->y=100;
 										}
+										Citizens->CitizenDestination->DestinationList.clear();
 									}
 								}
 							}
@@ -1436,6 +1456,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 				{
 					for(int x = 0; x < COLS; x += 1)
 					{
+
 						if(myTile[y][x].GetModeOn()==false)
 						{
 							Citizens->RenderMood=false;
@@ -1462,8 +1483,62 @@ void CPlayState::Update(CGameStateManager* theGSM)
 									}
 								}
 							}
+						//if(Citizens->GetPosition().x==myTile[SelectorY][SelectorX].GetPosition().x*100
+						//	&&Citizens->GetPosition().y==myTile[SelectorY][SelectorX].GetPosition().y*100)
+						//{
+						//	if(Citizens->GetName()==myTile[SelectorY][SelectorX].myHouse.GetOwner())
+						//	{
+						//		//if(Citizens->GetPosition().x!=myTile[1][1].GetPosition().x*100&&Citizens->GetPosition().y!=myTile[1][1].GetPosition().y*100)
+						//		{
+						//				px = Citizens->GetPosition().x*0.01f;
+						//				py = Citizens->GetPosition().y*0.01f;
+						//				Astar as(px,py,1,1);
+						//				//
+						//				bool result = as.Search(Map);
+						//				CNode* Node = new CNode;
+						//				Node->x = 1;
+						//				Node->y = 1;
+						//				//
+						//				as.AddCloseList(Node);
+						//				if(result)
+						//				{
+						//					for(int i=0;i<(int)as.closeList.size();i++)
+						//					{
+						//						//Citizen stuff
+						//						CNode* TheNode = new CNode();
+						//						TheNode->x = as.closeList[i]->x*100;
+						//						TheNode->y = as.closeList[i]->y*100;
+						//						for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
+						//						{
+						//						cout <<"Size: " <<(int)as.closeList.size() <<std::endl;	
+						//						int j= (int)as.closeList.size();	
+						//						if (Citizens->active == true)
+						//						{
+						//				
+						//							if(i+1>=j)
+						//							{
+						//								Citizens->CitizenDestination->DestinationList.push_back(TheNode);			
+						//								Citizens->MovedBack=true;
+						//								Citizens->Movedout=true;
+						//								break;
+						//								
+						//							}
+						//							if(i>=1)
+						//							{				
+						//								Citizens->CitizenDestination->DestinationList.push_back(TheNode);
+						//								break;
+						//							}
+						//						}
+						//						}
+						//				}
+						//			}
+						//		}
+						//	}
+						//}
 					}
 				}
+
+				
 			}
 		}
 	}
