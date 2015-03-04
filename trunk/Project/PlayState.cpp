@@ -263,7 +263,7 @@ void CPlayState::MouseClick(int button , int state , int x , int y)
 								for (std::vector<Citizen *>::iterator it = CitizenList.begin(); it != CitizenList.end(); ++it)
 								{
 									Citizen *Citizens = *it;
-									if((SelectorY-1)>=0&&(SelectorY+1)<=6&&(SelectorX-1)>=0&&(SelectorX+1)<=8)
+									if((SelectorY-1)>=0&&(SelectorY+1)<=6&&(SelectorX-1)>=0&&(SelectorX+1)<=7)
 									{
 									if(myTile[SelectorY-1][SelectorX].myHouse.GetOwner()==Citizens->GetName())
 									{
