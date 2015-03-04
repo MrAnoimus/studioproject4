@@ -200,7 +200,7 @@ bool CIntroState::Init()
 	theCamera->SetPosition( 0.0, 2.0, -5.0 );
 	theCamera->SetDirection( 0.0, 0.0, 1.0 );
 
-	LoadTGA(&BackgroundTexture,"Textures/bg.tga");
+	LoadTGA(&BackgroundTexture,"Textures/bgtest.tga");
 	our_font.init("Fonts/FFF_Tusj.TTF", 42);
 
 	//  The number of frames
