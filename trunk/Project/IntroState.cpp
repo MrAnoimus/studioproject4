@@ -33,7 +33,7 @@ void CIntroState::changeSize(int w, int h)
 	glViewport(0, 0, w, h);
 
 	// Set the correct perspective.
-	gluPerspective(45,ratio,1,10000);
+	gluPerspective(45,ratio,1,1000);
 	glMatrixMode(GL_MODELVIEW);
 }
 void CIntroState::KeyboardDown(unsigned char key, int x, int y)
@@ -70,31 +70,41 @@ void CIntroState::MouseMove(int x , int y)
 	for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
 		(*it)->UpdateMouseMove(x,y);
 
-	if(startbutton->buttonhover){hoverStart = true;}
-	else{hoverStart = false;}
+	if(startbutton->buttonhover)
+	{
+		hoverStart = true;
+	}
+	else
+	{
+		hoverStart = false;
+	}
 
-	if(contbutton->buttonhover){hoverCont = true;}
-	else{hoverCont = false;}
+	if(contbutton->buttonhover)
+	{
+		hoverCont = true;
+	}
+	else
+	{
+		hoverCont = false;
+	}
 
-	if(settingsbutton->buttonhover){hoverSet = true;}
-	else{hoverSet = false;}
+	if(settingsbutton->buttonhover)
+	{
+		hoverSet = true;
+	}
+	else
+	{
+		hoverSet = false;
+	}
 
-	if(exitbutton->buttonhover){hoverExit = true;}
-	else{hoverExit = false;}
-
-
-	//Checking mouse boundary. //	 800 is the window width. You may need to change this to suit your program.
-	//if  (mouseInfo.lastX > 800-20 || mouseInfo.lastX < 20)
-	//{
-	//	mouseInfo.lastX = (800 >> 1);
-	//	glutWarpPointer(mouseInfo.lastX, mouseInfo.lastY);
-	//}
-	////	 600 is the window height. You may need to change this to suit your program.
-	//if (mouseInfo.lastY > 600-20 || mouseInfo.lastY < 20)
-	//{
-	//	mouseInfo.lastY = (600 >> 1);
-	//	glutWarpPointer(mouseInfo.lastX, mouseInfo.lastY);
-	//}
+	if(exitbutton->buttonhover)
+	{
+		hoverExit = true;
+	}
+	else
+	{
+		hoverExit = false;
+	}
 
 	if(hoverStart)
 	{	
@@ -109,11 +119,19 @@ void CIntroState::MouseMove(int x , int y)
 	if(hoverCont)
 	{	
 		if(menuGUIcont == NULL)
-			{menuGUIcont = theSoundEngine->play2D ("SFX/misc_menu_2.wav", false, true);}		
+		{
+			menuGUIcont = theSoundEngine->play2D ("SFX/misc_menu_2.wav", false, true);
+		}		
 		/*else{menuGUIcont == NULL;
 			 menuGUIcont = theSoundEngine->play2D ("SFX/misc_menu_2.wav", false, true);}*/
-		if(menuGUIcont->getIsPaused() == true){menuGUIcont->setIsPaused(false);}
-		else if(menuGUIcont->isFinished() == true){menuGUIcont = NULL;}
+		if(menuGUIcont->getIsPaused() == true)
+		{
+			menuGUIcont->setIsPaused(false);
+		}
+		/*else if(menuGUIcont->isFinished() == true)
+		{
+			menuGUIcont = NULL;
+		}*/
 	}
 
 	if(hoverSet)
@@ -153,20 +171,21 @@ void CIntroState::MouseClick(int button , int state , int x , int y)
 				for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
 				{
 					if ((*it)->buttonhover)
+					{
 						(*it)->buttonclicked = true;
+					}
 				}
 			}
-
 			else
 			{
 				for (vector<ButtonClass*>::iterator it = ListofButtons.begin(); it != ListofButtons.end(); ++it)
 				{
 					if ((*it)->buttonhover)
+					{
 						(*it)->buttonclicked = false;
+					}
 				}
 			}
-
-
 		}break;
 		case GLUT_RIGHT_BUTTON:
 		{
@@ -201,8 +220,8 @@ bool CIntroState::Init()
 	theCamera->SetDirection( 0.0, 0.0, 1.0 );
 
 	LoadTGA(&BackgroundTexture,"Textures/bgtest.tga");
+	LoadTGA(&LoadingTexture,"Textures/loading.tga");
 	our_font.init("Fonts/FFF_Tusj.TTF", 42);
-
 	//  The number of frames
 	frameCount = 0;
 	//  Number of frames per second
@@ -232,14 +251,21 @@ bool CIntroState::Init()
 	theSoundEngine->setSoundVolume(volume);
 
 	if(introBGM == NULL)
-	{introBGM = theSoundEngine->play2D ("SFX/introbgm.mp3", false, true);}		
-	else
-	{introBGM == NULL;
-	 introBGM = theSoundEngine->play2D ("SFX/introbgm.mp3", false, true);}
+	{
+		introBGM = theSoundEngine->play2D ("SFX/introbgm.mp3", false, true);
+	}else
+	{
+		introBGM == NULL;
+		introBGM = theSoundEngine->play2D ("SFX/introbgm.mp3", false, true);
+	}
 	if(introBGM->getIsPaused() == true)
-	{introBGM->setIsPaused(false);}
+	{
+		introBGM->setIsPaused(false);
+	}
 	else if(introBGM->isFinished() == true)
-	{introBGM = NULL;}
+	{
+		introBGM = NULL;
+	}
 
 
 	menuGUIstart = NULL;
@@ -276,7 +302,9 @@ bool CIntroState::Init()
 	LoadTGA(&exitbutton->button[1],"Textures/exitdown.tga");
 	exitbutton->Set(350,450,520,580);
 	ListofButtons.push_back(exitbutton);
-
+	loading = false;
+	start = false;
+	value = 0;
 	return true;
 }
 void CIntroState::Cleanup()
@@ -317,6 +345,8 @@ void CIntroState::HandleEvents(CGameStateManager* theGSM)
 
 void CIntroState::Update(CGameStateManager* theGSM)
 {
+	width = glutGet(GLUT_SCREEN_WIDTH);
+	height = glutGet(GLUT_SCREEN_HEIGHT);
 	if (sizechanged)
 	{
 		startbutton->Set(240,580,340,400);
@@ -328,29 +358,41 @@ void CIntroState::Update(CGameStateManager* theGSM)
 
 	if(startbutton->buttonclicked)
 	{
+		loading = true;
+		/*resource.SetLoad(0);
+		theGSM->ChangeState( CPlayState::Instance() );
+		mouseInfo.mLButtonUp = false;*/
+	}
+	if(contbutton->buttonclicked)
+	{
+		loading = true;
+		/*resource.SetLoad(1);
+		theGSM->ChangeState( CPlayState::Instance() );	
+		mouseInfo.mLButtonUp = false;*/
+	}
+	if(loading == true)
+	{
+		value++;
+	}
+	if(value>100)
+	{
+		start = true;
+	}
+	if(start)
+	{
 		resource.SetLoad(0);
 		theGSM->ChangeState( CPlayState::Instance() );
 		mouseInfo.mLButtonUp = false;
 	}
-
-	if(contbutton->buttonclicked)
-	{
-		resource.SetLoad(1);
-		theGSM->ChangeState( CPlayState::Instance() );	
-		mouseInfo.mLButtonUp = false;
-	}
-
 	if(settingsbutton->buttonclicked)
 	{
 		theGSM->ChangeState( CSettingState::Instance() );
 		mouseInfo.mLButtonUp = false;
 	}
-
 	if(exitbutton->buttonclicked)
 	{
 		exit(0);
 	}
-
 	//cout << "CIntroState::Update\n" << endl;
 	//MouseMove(mouseInfo.lastX,mouseInfo.lastY);
 	//std::cout<<mouseInfo.lastX<<","<<mouseInfo.lastY<<std::endl;
@@ -369,17 +411,22 @@ void CIntroState::Draw(CGameStateManager* theGSM)
 		calculateFPS();
 		timelastcall=timeGetTime();
 	}
+
+
 	// Enable 2D text display and HUD
 	theCamera->SetHUD( true );
 
 	
-	glEnable(GL_TEXTURE_2D);
+	
 
 	// Draw Background image
-	glPushMatrix();
+	if(loading)
+	{
+		glEnable(GL_TEXTURE_2D);
+		glPushMatrix();
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glBindTexture (GL_TEXTURE_2D, BackgroundTexture.id);
+		glBindTexture (GL_TEXTURE_2D, LoadingTexture.id);
 		glPushMatrix();
 			glBegin(GL_QUADS);
 				glTexCoord2f(0,0);
@@ -392,28 +439,51 @@ void CIntroState::Draw(CGameStateManager* theGSM)
 				glVertex2f(0,0);				
 			glEnd();
 		glPopMatrix();
-		//glDisable(GL_BLEND);
-	glPopMatrix();
+		glDisable(GL_BLEND);
+		glPopMatrix();
+		//Sleep(1000);
+		glDisable(GL_TEXTURE_2D);
+	}else
+	{
+		glEnable(GL_TEXTURE_2D);
+		glPushMatrix();
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture (GL_TEXTURE_2D, BackgroundTexture.id);
+			glPushMatrix();
+				glBegin(GL_QUADS);
+					glTexCoord2f(0,0);
+					glVertex2f(0,600);
+					glTexCoord2f(1,0);
+					glVertex2f(800,600);
+					glTexCoord2f(1,1);
+					glVertex2f(800,0);
+					glTexCoord2f(0,1);
+					glVertex2f(0,0);				
+				glEnd();
+			glPopMatrix();
+			glDisable(GL_BLEND);
+		glPopMatrix();
+		glEnable(GL_TEXTURE_2D);
+		glPushMatrix();
+			startbutton->Render();
+		glPopMatrix();
 
-	glPushMatrix();
-		startbutton->Render();
-	glPopMatrix();
+		glPushMatrix();
+			settingsbutton->Render();
+		glPushMatrix();
 
-	glPushMatrix();
-		settingsbutton->Render();
-	glPushMatrix();
+		glPushMatrix();
+			exitbutton->Render();
+		glPushMatrix();
 
-	glPushMatrix();
-		exitbutton->Render();
-	glPushMatrix();
-
-	glPushMatrix();
-		contbutton->Render();
-	glPushMatrix();
-
-	glDisable(GL_TEXTURE_2D);
+		glPushMatrix();
+			contbutton->Render();
+		glPushMatrix();
+		glDisable(GL_TEXTURE_2D);
+	}
 	//drawFPS();
-	//print(our_font,750,100,"Money: %d",resource.GetMoney());
+	
 	theCamera->SetHUD( false );
 	// Flush off any entity which is not drawn yet, so that we maintain the frame rate.
 	glFlush();

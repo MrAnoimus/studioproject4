@@ -107,7 +107,7 @@ class CIntroState : public CGameState
 		double volume;
 		theMouseInfo mouseInfo;
 		TextureImage BackgroundTexture;	
-
+		TextureImage LoadingTexture;	
 		freetype::font_data our_font;
 		GLfloat	cnt1;
 
@@ -125,7 +125,10 @@ class CIntroState : public CGameState
 		ButtonClass* exitbutton;
 		ButtonClass* contbutton;
 		std::vector<ButtonClass*> ListofButtons;
-
+		float width, height;
+		bool loading;
+		int value;
+		bool start;
 };
 
 #endif
